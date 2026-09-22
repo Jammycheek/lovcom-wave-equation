@@ -22,3 +22,5 @@ This import intentionally excludes exploratory parameter estimates, superseded f
 - Recorded the Subject 7 H7-3 shadow failure without promoting it to formal evidence.
 - Split character-belief fields, clarified Subject 6 qualified IEs, and removed the `J` symbol collision.
 - Marked Tension Bridge v0.1 as a preregistered concept whose experiment is not frozen.
+- Added and implemented the Subject 6 probabilistic-comparison addendum without activating M_C.
+- Fixed the Samuwan control's information-exposure boundary at the end of comic volume 3 as of 2026-09-21; exact prospective source-unit identifiers and coder access controls remain pending.

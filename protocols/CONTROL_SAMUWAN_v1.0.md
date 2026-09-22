@@ -4,9 +4,25 @@
 
 This control asks whether RCWE can correctly avoid detecting oscillation when a relationship is comparatively stable. Only material unread at the freeze date is eligible for prospective scoring; previously discussed material is development data.
 
+## Frozen information-exposure boundary
+
+```yaml
+freeze_date: 2026-09-21
+user_declared_last_read_boundary: "コミック単行本 第3巻の最後まで"
+development_corpus:
+  - "コミック単行本 第1巻〜第3巻"
+  - "第3巻より後を含め、ユーザーがfreeze以前に内容を知っていた範囲"
+prospective_eligible_material: "コミック単行本 第3巻より後の内容のうち、2026-09-21時点でユーザーが未読・未確認だったもの"
+exact_first_prospective_chapter: "未確認。publication structureから推測しない。"
+```
+
+Eligibility is defined by information exposure, not publication date. Material published before the freeze date may remain prospectively eligible if it was unread and unconfirmed at freeze. Conversely, any post-volume-3 content known before freeze is `CONTAMINATED` and cannot be scored prospectively. If prior exposure cannot be established, classify the unit as `UNRESOLVED` rather than eligible.
+
+The declaration above fixes the conceptual boundary but does not identify the exact chapter or other source-unit identifier that follows volume 3. Verify that identifier from the actual edition metadata before opening or coding prospective material. Do not infer it from publication structure, a different edition, or an online chapter sequence.
+
 ## Procedure
 
-1. Record the exact work version and publication/episode boundary before opening new material. The prior calendar date alone does not establish an eligible source boundary.
+1. Record the exact work version and source-unit identifier before opening new material, then confirm that the unit lies after the declared volume-3 boundary and was unread at freeze. The calendar date and publication order alone do not establish eligibility.
 2. Use the same IE definition, four-channel codebook, provenance fields, two-coder blind process, and reliability gates as the main studies.
 3. Analyse consecutive IEs rather than selecting romantic highlights.
 4. Freeze the expected phase as stable-equilibrium/low-AC (`E`). Do not change the label after holdout access.
@@ -29,6 +45,8 @@ As a secondary, cross-work hypothesis, predict lower channel AC power than Subje
 
 If strong oscillation is reproducibly observed, record control failure rather than redefining the work as a non-control. Report C1, C2, and C3 separately.
 
-## Pending freeze metadata
+## Boundary status and remaining activation metadata
 
-Before this protocol is used, fill in the exact work version, unread boundary, eligible units, and coder access controls. No result may be called prospective until those fields are committed. The predictions above may be preserved while the protocol remains inactive; missing boundary metadata must not be inferred from publication dates or conversation timestamps.
+The user-declared unread boundary and freeze date are now fixed. Before this protocol is activated, commit the exact edition/work version, the first eligible source-unit identifier after volume 3, the resulting eligible-unit list, an exposure/contamination log, and coder access controls. No result may be called prospective until those remaining fields are committed.
+
+The C1/C2/C3 predictions remain preserved while the protocol is inactive. Missing source-unit metadata must not be inferred from publication dates, conversation timestamps, another edition, or assumptions about chapter numbering.
