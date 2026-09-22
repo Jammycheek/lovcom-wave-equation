@@ -66,8 +66,22 @@ def test_converged_requires_cross_start_likelihood_agreement(monkeypatch):
         )
 
     monkeypatch.setattr(fit_module, "minimize", fake_minimize)
+    monkeypatch.setattr(
+        fit_module,
+        "_log_likelihood_and_gradient",
+        lambda _observed, vector, _lower: (float(vector[0]), np.zeros(6)),
+    )
     fitted = fit_rcwe(OBSERVED, starts=predefined_starts(OBSERVED, LOWER)[:2])
     assert fitted.successful_starts == 2
-    assert fitted.top_two_log_likelihood_gap == 1.0
+    assert fitted.top_two_log_likelihood_gap == 0.5
     assert not fitted.optimizer_agreement
     assert not fitted.converged
+
+
+def test_invalid_region_penalty_is_finite_and_has_consistent_gradient():
+    invalid = np.array([5.0, np.log(100.0), np.log(100.0), 12.0, 10.0, np.log(5.0)])
+    likelihood, gradient = _log_likelihood_and_gradient(OBSERVED, invalid, LOWER)
+    assert np.isfinite(likelihood)
+    assert np.all(np.isfinite(gradient))
+    assert likelihood < -1e6
+    assert np.allclose(gradient, -2.0 * invalid)

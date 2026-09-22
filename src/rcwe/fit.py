@@ -31,6 +31,7 @@ FROZEN_OPTIMIZER = {
     "maxiter": 80,
     "ftol": 1e-12,
     "gtol": 1e-7,
+    "stationarity_tolerance": 1e-4,
     "start_agreement_log_likelihood_tolerance": 1e-6,
 }
 
@@ -39,6 +40,9 @@ FROZEN_OPTIMIZER = {
 class StartResult:
     initial_vector: tuple[float, ...]
     converged: bool
+    optimizer_reported_success: bool
+    stationary: bool
+    projected_gradient_inf_norm: float
     status: int
     message: str
     iterations: int
@@ -182,7 +186,21 @@ def _log_likelihood_and_gradient(
             raise FloatingPointError("non-finite likelihood gradient")
         return likelihood, gradient
     except (ValueError, RuntimeError, FloatingPointError, OverflowError):
-        return -1e300, np.zeros(6, dtype=float)
+        # A 1e300 flat sentinel destroys L-BFGS-B line-search interpolation and
+        # can produce a false success without moving off the initial point.
+        # Keep the invalid region finite and give it a consistent inward slope.
+        penalty = 1e6 * (len(observed) + 1) + float(np.dot(vector, vector))
+        return -penalty, -2.0 * np.asarray(vector, dtype=float)
+
+
+def _projected_gradient_inf_norm(vector: np.ndarray, objective_gradient: np.ndarray) -> float:
+    projected = np.asarray(objective_gradient, dtype=float).copy()
+    for index, ((lower, upper), value) in enumerate(zip(_BOUNDS, vector)):
+        if np.isclose(value, lower, atol=1e-10) and projected[index] >= 0:
+            projected[index] = 0.0
+        elif np.isclose(value, upper, atol=1e-10) and projected[index] <= 0:
+            projected[index] = 0.0
+    return float(np.max(np.abs(projected)))
 
 
 def predefined_starts(observed, sigma_lower_bound: float) -> list[np.ndarray]:
@@ -245,10 +263,19 @@ def fit_rcwe(
             options={"maxiter": maxiter, "ftol": FROZEN_OPTIMIZER["ftol"], "gtol": FROZEN_OPTIMIZER["gtol"]},
         )
         log_likelihood = -float(result.fun)
+        final_likelihood, final_gradient = _log_likelihood_and_gradient(y, np.asarray(result.x), sigma_lower_bound)
+        if np.isfinite(final_likelihood):
+            log_likelihood = final_likelihood
+        projected_gradient = _projected_gradient_inf_norm(np.asarray(result.x), -final_gradient)
+        stationary = projected_gradient <= float(FROZEN_OPTIMIZER["stationarity_tolerance"])
+        accepted = bool(result.success) and stationary
         records.append(
             StartResult(
                 initial_vector=tuple(float(x) for x in initial),
-                converged=bool(result.success),
+                converged=accepted,
+                optimizer_reported_success=bool(result.success),
+                stationary=stationary,
+                projected_gradient_inf_norm=projected_gradient,
                 status=int(result.status),
                 message=str(result.message),
                 iterations=int(result.nit),

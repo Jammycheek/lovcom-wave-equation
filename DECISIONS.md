@@ -23,3 +23,5 @@
 19. The Tension Bridge confirmatory experiment uses mechanically derived non-overlapping five-IE windows, future-blind raters with timestamp audit, deterministic question-order randomization, within-work-centered repeated split-half reliability, and Leave-One-Work-Out predictive validation. Human rating data remain uncollected.
 20. A Static Tension Challenge failure overrides the final Bridge verdict while preserving the regression-only verdict as a diagnostic.
 21. Subject 6 exposure labels and Direction outcomes are frozen in distinct commits and joined only after an exact-ID and chronology audit; the confirmatory corpus is capped at the first 10 qualified IEs per pair.
+22. The Tension Bridge discriminant pilot passes only when the within-work-centered `|r(T,D)|` point estimate and deterministic work-cluster-bootstrap 95% upper bound are both below `.85`; pilot works and raters are excluded from confirmation by ID/hash comparison.
+23. An optimizer start is successful only when L-BFGS-B reports success and the projected-gradient infinity norm is at most `1e-4`; invalid ODE trials use a finite quadratic penalty rather than a flat extreme sentinel.

@@ -1,4 +1,5 @@
 import math
+import hashlib
 from pathlib import Path
 import json
 import subprocess
@@ -7,7 +8,7 @@ import sys
 import numpy as np
 import pytest
 
-from scripts.run_tension_bridge_analysis import parse_ratings, parse_windows
+from scripts.run_tension_bridge_analysis import parse_ratings, parse_windows, validate_discriminant_pilot
 
 from rcwe.tension_bridge import (
     AggregatedWindow,
@@ -155,6 +156,26 @@ def test_future_blind_status_is_derived_from_timestamp_order():
         "next_source_opened_at": "2026-01-01T01:30:00+09:00", "valid_primary": "true",
     }
     assert not parse_ratings([row])[0].future_blind
+
+
+def test_discriminant_pilot_requires_hash_match_and_independent_people_and_works():
+    result_hash = "a" * 64
+    protocol_hash = "b" * 64
+    pilot = {
+        "status": "PILOT_PASS", "protocol_sha256": protocol_hash,
+        "pilot_work_ids": ["PILOT-WORK"],
+        "pilot_rater_id_hashes": [hashlib.sha256(b"PILOT-RATER").hexdigest()],
+    }
+    ready, independent = validate_discriminant_pilot(
+        pilot, result_hash=result_hash, protocol_hash=protocol_hash, manifest_hashes={result_hash},
+        confirmatory_work_ids={"CONFIRMATORY-WORK"}, confirmatory_rater_ids={"CONFIRMATORY-RATER"},
+    )
+    assert ready and independent
+    reused, independent = validate_discriminant_pilot(
+        pilot, result_hash=result_hash, protocol_hash=protocol_hash, manifest_hashes={result_hash},
+        confirmatory_work_ids={"PILOT-WORK"}, confirmatory_rater_ids={"CONFIRMATORY-RATER"},
+    )
+    assert not reused and not independent
 
 
 def test_coder_and_rater_cannot_overlap_for_same_work():

@@ -15,6 +15,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+DISCRIMINANT_PROTOCOL = ROOT / "protocols" / "TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.1.md"
 
 import numpy as np
 import scipy
@@ -46,6 +47,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--windows", type=Path, default=ROOT / "data" / "tension_bridge_windows_template.csv")
     parser.add_argument("--ratings", type=Path, default=ROOT / "data" / "tension_bridge_ratings_template.csv")
     parser.add_argument("--manifest", type=Path, default=ROOT / "data" / "tension_bridge_work_manifest_template.csv")
+    parser.add_argument("--pilot-result", type=Path, default=ROOT / "results" / "tension_bridge_discriminant_pilot" / "summary.json")
     parser.add_argument("--master-seed", default="RCWE-TB-v1.0")
     parser.add_argument("--output", type=Path, default=ROOT / "results" / "tension_bridge")
     return parser.parse_args()
@@ -218,6 +220,7 @@ def parse_manifest(rows: list[dict[str, str]]):
     adjudicators: dict[str, set[str]] = {}
     frozen_times = []
     ethics_ready = []
+    pilot_result_hashes = set()
     for row in rows:
         work = row["work_id"].strip()
         coders.setdefault(work, set()).update(split_ids(row["channel_coder_ids"]))
@@ -228,14 +231,37 @@ def parse_manifest(rows: list[dict[str, str]]):
         if parse_bool(row["copyright_content_stored"], "copyright_content_stored"):
             raise ValueError("repository manifest indicates copyrighted source content was stored")
         ethics_hash = row["ethics_record_sha256"].strip().lower()
-        pilot_hash = row["discriminant_pilot_spec_sha256"].strip().lower()
+        pilot_hash = row["discriminant_pilot_result_sha256"].strip().lower()
+        pilot_result_hashes.add(pilot_hash)
         ethics_ready.append(
             row["ethics_status"].strip().lower() not in ("", "pending", "unassessed", "unknown")
             and len(ethics_hash) == 64 and all(character in "0123456789abcdef" for character in ethics_hash)
-            and parse_bool(row["discriminant_pilot_passed"], "discriminant_pilot_passed")
             and len(pilot_hash) == 64 and all(character in "0123456789abcdef" for character in pilot_hash)
         )
-    return coders, adjudicators, frozen_times, bool(rows) and all(ethics_ready)
+    return coders, adjudicators, frozen_times, pilot_result_hashes, bool(rows) and all(ethics_ready)
+
+
+def validate_discriminant_pilot(
+    pilot_result: dict[str, object],
+    *,
+    result_hash: str | None,
+    protocol_hash: str,
+    manifest_hashes: set[str],
+    confirmatory_work_ids: set[str],
+    confirmatory_rater_ids: set[str],
+) -> tuple[bool, bool]:
+    pilot_work_ids = set(pilot_result.get("pilot_work_ids", []))
+    pilot_rater_hashes = set(pilot_result.get("pilot_rater_id_hashes", []))
+    confirmatory_rater_hashes = {hashlib.sha256(rater_id.encode()).hexdigest() for rater_id in confirmatory_rater_ids}
+    independent = not (pilot_work_ids & confirmatory_work_ids) and not (pilot_rater_hashes & confirmatory_rater_hashes)
+    ready = (
+        pilot_result.get("status") == "PILOT_PASS"
+        and pilot_result.get("protocol_sha256") == protocol_hash
+        and result_hash is not None
+        and manifest_hashes == {result_hash}
+        and independent
+    )
+    return ready, independent
 
 
 def main() -> int:
@@ -246,21 +272,36 @@ def main() -> int:
     window_raw, window_rows = read_csv(args.windows.resolve())
     rating_raw, rating_rows = read_csv(args.ratings.resolve())
     manifest_raw, manifest_rows = read_csv(args.manifest.resolve())
+    pilot_result_path = args.pilot_result.resolve()
+    pilot_result_raw = pilot_result_path.read_bytes() if pilot_result_path.exists() else b""
+    pilot_result = json.loads(pilot_result_raw) if pilot_result_raw else {"status": "NO_DATA"}
+    pilot_result_hash = file_hash(pilot_result_raw) if pilot_result_raw else None
+    discriminant_protocol_hash = file_hash(DISCRIMINANT_PROTOCOL.read_bytes())
     input_hashes = {
         "channels_sha256": file_hash(channel_raw),
         "windows_sha256": file_hash(window_raw),
         "ratings_sha256": file_hash(rating_raw),
         "manifest_sha256": file_hash(manifest_raw),
+        "pilot_result_sha256": pilot_result_hash,
     }
     channel_ies, channel_metadata, raw_coders, raw_adjudicators, channel_reliability_result = parse_channels(channel_rows)
     windows, window_freeze_times = parse_windows(window_rows, build_windows(channel_ies), channel_metadata)
     ratings = parse_ratings(rating_rows)
-    coders, adjudicators, manifest_freeze_times, ethics_ready = parse_manifest(manifest_rows)
+    coders, adjudicators, manifest_freeze_times, pilot_result_hashes, ethics_ready = parse_manifest(manifest_rows)
     if raw_coders != coders or raw_adjudicators != adjudicators:
         raise ValueError("work manifest role assignments must exactly match raw channel rows")
     first_rating_time = min((parse_timestamp(row["rating_timestamp"], "rating_timestamp") for row in rating_rows), default=None)
     freeze_ready = bool(first_rating_time) and all(
         frozen_at < first_rating_time for frozen_at in [*window_freeze_times, *manifest_freeze_times]
+    )
+    confirmatory_work_ids = set(coders) | {rating.work_id for rating in ratings}
+    pilot_ready, pilot_independence_passed = validate_discriminant_pilot(
+        pilot_result,
+        result_hash=pilot_result_hash,
+        protocol_hash=discriminant_protocol_hash,
+        manifest_hashes=pilot_result_hashes,
+        confirmatory_work_ids=confirmatory_work_ids,
+        confirmatory_rater_ids={rating.rater_id for rating in ratings},
     )
     command = " ".join([Path(sys.executable).name, *sys.argv])
     config = {
@@ -271,6 +312,7 @@ def main() -> int:
             "windows": str(args.windows.resolve()),
             "ratings": str(args.ratings.resolve()),
             "manifest": str(args.manifest.resolve()),
+            "pilot_result": str(pilot_result_path),
         },
         "input_hashes": input_hashes,
         "window_size": 5,
@@ -285,6 +327,13 @@ def main() -> int:
     dump_json(output / "environment.json", environment)
 
     warnings = []
+    pilot_audit = {
+        "ready": pilot_ready,
+        "status": pilot_result.get("status"),
+        "protocol_sha256": discriminant_protocol_hash,
+        "result_sha256": pilot_result_hash,
+        "independence_passed": pilot_independence_passed,
+    }
     exclusions = {"non_primary_ratings": 0, "window_status": {}}
     fold_rows: list[dict[str, object]] = []
     reliability = {}
@@ -296,6 +345,7 @@ def main() -> int:
         model_summary = {
             "status": status,
             "channel_reliability": channel_reliability_result,
+            "discriminant_pilot": pilot_audit,
             "scores": None,
             "delta_ls_primary": None,
             "delta_ls_love": None,
@@ -316,7 +366,7 @@ def main() -> int:
             aggregates,
             reliability,
             channel_reliability_passed=bool(channel_reliability_result["passed"]),
-            manifest_frozen=freeze_ready and ethics_ready,
+            manifest_frozen=freeze_ready and ethics_ready and pilot_ready,
             role_separation_passed=role_separation_passed,
         )
         static = static_tension_challenge(aggregates)
@@ -345,17 +395,18 @@ def main() -> int:
                     "status": status,
                     "primary_model_status": primary_model_status,
                     "channel_reliability": channel_reliability_result,
+                    "discriminant_pilot": pilot_audit,
                     "activation_gate": gate.as_dict(),
                     **analysis,
                     "static_tension_challenge": static,
                 }
             except ModelIdentificationError as exc:
                 status = "MODEL_IDENTIFICATION_FAILURE"
-                model_summary = {"status": status, "channel_reliability": channel_reliability_result, "activation_gate": gate.as_dict(), "scores": None, "delta_ls_primary": None, "delta_ls_love": None, "beta_pac_full": None, "static_tension_challenge": static, "identification_error": str(exc)}
+                model_summary = {"status": status, "channel_reliability": channel_reliability_result, "discriminant_pilot": pilot_audit, "activation_gate": gate.as_dict(), "scores": None, "delta_ls_primary": None, "delta_ls_love": None, "beta_pac_full": None, "static_tension_challenge": static, "identification_error": str(exc)}
                 warnings.append(f"Frozen linear model could not be identified: {exc}")
         else:
             status = gate.status
-            model_summary = {"status": status, "channel_reliability": channel_reliability_result, "activation_gate": gate.as_dict(), "scores": None, "delta_ls_primary": None, "delta_ls_love": None, "beta_pac_full": None, "static_tension_challenge": static}
+            model_summary = {"status": status, "channel_reliability": channel_reliability_result, "discriminant_pilot": pilot_audit, "activation_gate": gate.as_dict(), "scores": None, "delta_ls_primary": None, "delta_ls_love": None, "beta_pac_full": None, "static_tension_challenge": static}
             warnings.append(f"Confirmatory analysis was not activated: {status}.")
 
     reliability_json = {key: value.as_dict() for key, value in reliability.items()}

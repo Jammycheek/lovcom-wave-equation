@@ -31,7 +31,7 @@ The FIT terminal state is the state at the last FIT interaction index. The first
 
 The likelihood optimizer uses L-BFGS-B with `maxiter=80`, `ftol=1e-12`, and `gtol=1e-7`, plus the four data-independent starts frozen in the scoring specification. It uses broad finite guards declared as `fit.OPTIMIZER_GUARDS` to avoid exponent overflow and pathological ODE calls. The baseline optimizers use analogous `[-5, 5]` coefficient and scale-transform guards. These are implementation safeguards, not scientific parameter bounds. Every baseline guard hit is emitted into the fit artifact and benchmark warning summary. A solution at a guard is not evidence for a scientific boundary.
 
-`converged` is a cross-start agreement result, not a synonym for one optimizer's `success` flag. It requires at least two successful starts whose two best log likelihoods agree within `1e-6`; per-start status remains available for diagnosis.
+`converged` is a cross-start agreement result, not a synonym for one optimizer's `success` flag. A start must have both the optimizer success flag and projected-gradient infinity norm at most `1e-4`; at least two such starts must then agree in log likelihood within `1e-6`. Per-start raw status, stationarity, and gradient norm remain available for diagnosis. Invalid ODE trial points receive a finite quadratic penalty with a consistent gradient. The former flat `1e300` objective sentinel is prohibited because it can collapse line-search interpolation and falsely report success without moving from the initial point.
 
 ## Synthetic benchmark
 
@@ -43,7 +43,7 @@ From the repository root:
 
 ```text
 python -m pytest
-python scripts/run_synthetic_recovery.py --replicates 20 --seed-base 260901
+python scripts/run_synthetic_recovery.py --replicates 20 --seed-base 260901 --workers 8
 ```
 
 The runner writes `config.json`, `environment.json`, `replicates.csv`, `predictions.csv`, `fit_details.json`, `summary.json`, and `REPORT.md` below `results/synthetic_recovery/`. Fixed seeds and a fixed command produce deterministic numerical content within the recorded frozen Python/NumPy/SciPy/platform environment. Cross-platform reproductions are compared using the numerical tolerances above; byte identity is not promised for JSON formatting, platform metadata, optimizer messages, or floating-point serialization. The files are generated artifacts and must not be hand-edited.

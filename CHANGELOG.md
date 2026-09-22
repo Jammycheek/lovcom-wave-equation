@@ -29,3 +29,5 @@ This import intentionally excludes exploratory parameter estimates, superseded f
 - Split Subject 6 exposure and outcome inputs across distinct commits, capped the confirmatory corpus at the first 10 qualified IEs per pair, and compute Direction kappa from raw double coding.
 - Closed Samuwan C1/C3 underspecification and added external provenance for the unread-boundary declaration.
 - Reran the frozen 40-replicate synthetic benchmark: strict cross-start agreement failed in all 40 fits, recorded as `F-07`; no thresholds or model terms were changed to rescue the result.
+- Diagnosed `F-07` as a false-termination defect caused by a flat `1e300` invalid-point penalty; replaced it with a finite quadratic penalty, added an explicit projected-gradient stationarity gate, and preserved the invalidated run in the audit log.
+- Added the independent Tension Bridge T/D discriminant-validity pilot, frozen `.85` work-cluster-bootstrap gate, raw runner, data templates, result hashing, and confirmatory non-reuse checks.

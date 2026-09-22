@@ -139,7 +139,7 @@ Before activation, the responsible study operator must document applicable conse
 
 The same rater supplies `L_obs`, `T_obs`, and `D_obs` at one endpoint. Question-order randomization reduces order effects but does not eliminate shared-rater/common-method covariance. The primary analysis must report this limitation and must not interpret a positive `P_AC` coefficient as proof that the constructs are psychometrically independent. Split-rater or multi-method replication is a v2.1 candidate, not an unregistered rescue analysis.
 
-`T_obs` / `D_obs` discriminant validity is not yet frozen. Before the first confirmatory rating, a separately versioned pilot specification must define its sample, analysis, and acceptance threshold without access to confirmatory data. Until that document and pilot decision are committed, this experiment remains inactive; the implementation must not invent a threshold or use the confirmatory correlation to choose one.
+`T_obs` / `D_obs` discriminant validity is frozen separately in `TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.1.md`. Before the first confirmatory rating, that independent pilot must return `PILOT_PASS`. The confirmatory work manifest stores the exact generated pilot-result SHA-256, and the runner also verifies that the result's protocol hash matches the current pilot specification. Pilot works and raters cannot be reused. Until these checks pass, this experiment remains inactive; the implementation must not use the confirmatory correlation to choose or revise the threshold.
 
 ## Reproducibility and freeze discipline
 

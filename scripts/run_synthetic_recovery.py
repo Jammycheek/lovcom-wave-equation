@@ -37,7 +37,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--replicates", type=int, default=20, help="replicates per scenario")
     parser.add_argument("--seed-base", type=int, default=260901)
-    parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--output", type=Path, default=ROOT / "results" / "synthetic_recovery")
     return parser.parse_args()
 
@@ -74,6 +74,14 @@ def summarize(rows: list[dict[str, object]], scenarios) -> dict[str, object]:
             "replicates": len(subset),
             "converged": len(converged),
             "convergence_rate": len(converged) / len(subset) if subset else None,
+            "optimizer_reported_successful_starts_distribution": {
+                str(count): sum(int(row.get("optimizer_reported_successful_starts", 0)) == count for row in subset)
+                for count in sorted({int(row.get("optimizer_reported_successful_starts", 0)) for row in subset})
+            },
+            "stationary_starts_distribution": {
+                str(count): sum(int(row.get("stationary_starts", 0)) == count for row in subset)
+                for count in sorted({int(row.get("stationary_starts", 0)) for row in subset})
+            },
             "regime_recovery_rate_among_converged": len(recovered) / len(converged) if converged else None,
             "median_absolute_error_Delta": float(np.median(numeric("absolute_error_Delta"))) if converged else None,
             "median_absolute_error_R": float(np.median(numeric("absolute_error_R"))) if converged else None,
@@ -118,6 +126,8 @@ def run_one(task):
             "seed": seed,
             "converged": fitted.converged,
             "successful_starts": fitted.successful_starts,
+            "optimizer_reported_successful_starts": sum(start.optimizer_reported_success for start in fitted.starts),
+            "stationary_starts": sum(start.stationary for start in fitted.starts),
             "optimizer_agreement": fitted.optimizer_agreement,
             "top_two_log_likelihood_gap": fitted.top_two_log_likelihood_gap,
             "truth_Delta": scenario.parameters.Delta,
@@ -239,7 +249,9 @@ def main() -> int:
     warnings.append(
         f"Baseline optimizer guard hits: {len(baseline_guard_failures)} of {len(rows)} replicates; affected comparisons require caution."
     )
-    if regime_failures:
+    if not any(row.get("converged") for row in rows):
+        warnings.append("Regime recovery was not evaluated because no replicate met strict convergence.")
+    elif regime_failures:
         failures = "; ".join(
             f"{row['scenario']} seed={row['seed']} truth={row['truth_regime']} "
             f"fitted={row['fitted_local_regime']} fitted_G={float(row['fitted_G']):.12g}"
