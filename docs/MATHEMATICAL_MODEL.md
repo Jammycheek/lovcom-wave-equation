@@ -31,7 +31,7 @@ Hence
 \qquad G=\Omega R,
 \]
 
-and a Hopf candidate occurs at
+and, where the determinant is positive and the crossing is transversal, a Hopf candidate occurs at
 
 \[
 G_H=\cosh^2s^*\ge1.
@@ -41,7 +41,7 @@ The familiar `G = 1` threshold is only the symmetric case `s* = 0`, equivalently
 
 ## Symmetric near-Hopf result
 
-At `Delta = 1/2`, the small-cycle amplitude immediately beyond a supercritical Hopf is approximated by
+At `Delta = 1/2` with `0 < R < 1/4`, the small-cycle amplitude immediately beyond the supercritical Hopf is approximated by
 
 \[
 A_s\simeq2\sqrt{\frac{G-1}{G}}.
@@ -73,4 +73,4 @@ For a coded series,
 p_{D,n}^{obs}=\sigma(s_n)+\epsilon_n.
 \]
 
-Observation error must be estimated from coder disagreement in the training interval and frozen before opening a holdout.
+The bounded discrete observation distribution, numerical integration, FIT-only estimation, and open-loop holdout rules are defined in `PREDICTIVE_SCORING_SPEC_v0.1.md`.

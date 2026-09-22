@@ -1,5 +1,7 @@
 # Romantic Tension Bridge v0.1
 
+**Status: preregistered concept; experiment not frozen.** The hypothesis and metrics are retained, but rater count, blinding, rating interface, window presentation, aggregation, inter-rater reliability, and train/holdout design must be frozen before confirmatory use.
+
 ## External ratings
 
 For each preregistered window, collect independent 0–100 ratings:
@@ -23,7 +25,7 @@ P_{AC}(W)=\frac1N\sum_{n\in W}\|\mathbf p_n-\bar{\mathbf p}_W\|_2^2.
 The secondary switching metric is
 
 \[
-J_W=\frac1{N-1}\sum_{n=2}^{N}\|\mathbf p_n-\mathbf p_{n-1}\|_2^2.
+P_{switch}(W)=\frac1{N-1}\sum_{n=2}^{N}\|\mathbf p_n-\mathbf p_{n-1}\|_2^2.
 \]
 
 Use consecutive five-IE windows unless a pilot, completed before the main test, freezes another size. Do not select windows around confessions or climaxes.

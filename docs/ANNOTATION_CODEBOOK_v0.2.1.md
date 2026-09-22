@@ -28,9 +28,9 @@ Generic romantic performance carried out as a role is normally `S`, not `D`, unl
 ## Independent attributes
 
 - `M_mask ∈ {0,1}`: concealed identity, proxy voice, or masked persona.
-- `R_dir ∈ {+1,0,-1,mixed}`: approach, maintenance, withdrawal, or explicit coexistence.
+- `R_dir ∈ {+1,0,-1,mixed}`: approach, maintenance, withdrawal, or clear approach and withdrawal within the same IE.
 - Event tags: `disclosure`, `concealment`, `correction`, `misunderstanding`, `third-party`, `constraint-change`, `joint-event`, `none`; multiple tags allowed.
-- Character belief: `known`, `believed`, `uncertain`, `false-belief`, or `unknown`, only with explicit dialogue, narration, or action evidence.
+- Character belief state: `known`, `believed`, `uncertain`, `false-belief`, or `unknown`, only with explicit dialogue, narration, or action evidence.
 - Source quality `Q_src`: 3 original text/video; 2 complete transcript; 1 official synopsis/PV; 0 secondary or fan material.
 
 Do not directly code `psi`, `h`, or `U`. Do not call analyst posterior and character belief by the same name.
@@ -54,6 +54,14 @@ for categorical or weighted-ordinal fields, and
 
 for channel vectors. If the gate fails, revise and repilot the codebook before analysing the model.
 
+## Character-belief schema
+
+Do not compress a belief into a single context-free cell. Record each supported belief assertion in a linked table with:
+
+`IE_ID, Believer, Proposition, Target, Belief_State, Evidence_Type, Evidence_Locator`
+
+Multiple belief rows may link to one IE. Pair-external observations may update a character belief but are event-layer records, not dyadic IEs.
+
 ## Minimum row schema
 
-`IE_ID, Work_ID, Version_ID, Edition, Unit, Locator, Pair, D, S, C, P, Mask, Direction, Event_Tags, Character_Belief, Gap_Before, Q_src, Coder_ID, Coding_Date, Future_Blind, Theory_Blind, Short_Summary`
+`IE_ID, Work_ID, Version_ID, Edition, Unit, Locator, Pair, D, S, C, P, Mask, Direction, Event_Tags, Gap_Before, Q_src, Coder_ID, Coding_Date, Future_Blind, Theory_Blind, Short_Summary`

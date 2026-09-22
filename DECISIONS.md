@@ -14,3 +14,8 @@
 10. External forcing discovered after seeing a subject may not be inserted into the frozen differential equation. Event-triggered jump tests are used instead.
 11. Network coupling is a v2.1 candidate and is considered only after shared and endogenous interventions fail.
 12. Failures remain visible; they are not rewritten as successes.
+13. Primary holdout scoring is open-loop. Holdout observations do not update states or parameters.
+14. `J_n^TV` denotes an IE-to-IE Total Variation jump; `P_switch(W)` denotes the Tension Bridge squared-L2 switching metric.
+15. Pair-external information updates are event-layer records, not dyadic IEs.
+16. Tension Bridge v0.1 freezes a concept and metric, not an experiment; its rater design remains open.
+17. The first eligible tag is `v2.0-spec-freeze`, and only after the scoring reference implementation and recovery test pass.

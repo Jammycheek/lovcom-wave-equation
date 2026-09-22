@@ -17,16 +17,18 @@ The working slogan is **Love is DC; Rom-Com is AC**. It does not claim that affe
 
 - RCWE v2.0 mathematical core: frozen
 - Annotation Codebook v0.2.1: frozen candidate; reliability pilot still required
-- Tension Bridge v0.1: preregistered candidate
+- Predictive Scoring Specification v0.1: candidate; reference implementation and recovery test required
+- Tension Bridge v0.1: preregistered concept; experiment not frozen
 - Subject 5: retrospective blind-validation protocol
-- Subject 6 and the control: prospective protocols
+- Subject 6: prospective protocol; probabilistic model-comparison addendum still required
+- Control: inactive prospective protocol pending exact unread-boundary metadata
 - Subject 7: shadow holdout completed; formal blind replication remains
 
 No quoted scripts, transcripts, manga pages, novel text, or other copyrighted source text are stored here. Data should contain only locators, short summaries, annotations, provenance, and derived values.
 
 ## Repository map
 
-- `docs/`: frozen theory, mathematics, phase diagram, codebook, tension bridge
+- `docs/`: frozen theory, mathematics, phase diagram, codebook, predictive scoring, tension bridge
 - `protocols/`: validation and control protocols
 - `registry/`: failures, observations, and post-freeze candidates
 - `data/`: data policy and future schemas
@@ -34,4 +36,4 @@ No quoted scripts, transcripts, manga pages, novel text, or other copyrighted so
 
 ## Freeze discipline
 
-Do not change v2.0 to rescue a failed validation. Record failures in `registry/FAIL_LOG.md`; place possible revisions in `registry/V2.1_CANDIDATES.md`. Any future tag named `v2.0-freeze` should be created only after review of this snapshot.
+Do not change v2.0 to rescue a failed validation. Record failures in `registry/FAIL_LOG.md`; place possible revisions in `registry/V2.1_CANDIDATES.md`. Do not create `v2.0-freeze`. A future `v2.0-spec-freeze` tag may be created only after review, a scoring reference implementation, and synthetic recovery verification; it denotes a specification freeze, not completed validation.

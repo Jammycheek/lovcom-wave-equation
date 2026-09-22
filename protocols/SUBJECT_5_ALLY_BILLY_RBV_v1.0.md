@@ -15,9 +15,11 @@ Blind coders proceed in broadcast order without later episodes, summaries, RCWE 
 
 ## Primary model and baselines
 
-The primary target is `p_D` under the frozen minimal system. Estimate only `Delta, R, Omega, s0, v0` and observation error from FIT, with positive `R` and `Omega`. After opening S3, parameters cannot be re-estimated; state updating only is allowed.
+The primary target is `p_D` under the frozen minimal system. Estimate only `Delta, R, Omega, s0, v0` and predictive error from FIT, with positive `R` and `Omega`.
 
-Compare prequential predictions with:
+Primary evaluation follows `docs/PREDICTIVE_SCORING_SPEC_v0.1.md`. At the FIT boundary, freeze all parameters, the terminal state, predictive scale, numerical settings, and baseline fits. Forecast all of S3 open-loop: no holdout state updating, refitting, recalibration, or forecast reset is allowed.
+
+Compare open-loop predictions with:
 
 1. persistence;
 2. AR(1);
@@ -35,7 +37,13 @@ Also report MAE. Direction is observed but not scored as an RCWE prediction.
 
 ## Forced versus intrinsic dynamics
 
-Mark clear intervening events `X_n`. Compare event-linked and event-free jump distributions using `J_n`; use permutation testing. Fit intrinsic dynamics only to event-free windows. Do not insert a new force term into v2.0.
+Mark clear intervening events `X_n`. Compare event-linked and event-free jump distributions using
+
+\[
+J_n^{TV}=\frac12\sum_k|p_{k,n}-p_{k,n-1}|;
+\]
+
+use permutation testing. Fit intrinsic dynamics only to event-free windows. Do not insert a new force term into v2.0.
 
 ## Anomaly challenge
 

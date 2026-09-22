@@ -5,11 +5,12 @@ Do not store copyrighted source text, screenshots, full transcripts, manga pages
 Recommended tables:
 
 - `interactions.csv`: one row per IE using the Codebook v0.2.1 minimum schema.
-- `events.csv`: event ID, interval, type, pair relevance, endogenous/exogenous status, short summary, provenance.
+- `events.csv`: event ID, interval, type, pair relevance, endogenous/exogenous status, affected or observing character, short summary, provenance. Pair-external observations live here and do not count as dyadic IEs.
+- `character_beliefs.csv`: IE/event link, believer, proposition, target, belief state, evidence type, and evidence locator.
 - `coder_ratings.csv`: raw coder-specific values; never overwrite disagreement.
 - `adjudication.csv`: adjudicated values plus rationale and links to raw rows.
 - `windows.csv`: preregistered tension windows and external ratings.
-- `predictions.csv`: prediction timestamp, model version, training boundary, target, distribution, and reveal timestamp.
+- `predictions.csv`: prediction timestamp, model/code version, training boundary, target, full five-bin distribution, forecast mode, and reveal timestamp.
 
 Suggested directories:
 

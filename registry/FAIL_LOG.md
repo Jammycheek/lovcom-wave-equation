@@ -15,5 +15,6 @@ Failures are retained even when they motivate later revisions.
 | O-03 | observation | A pair-external observed event can update character belief without a dyadic interaction. |
 | O-04 | observation | Narrative forcing omitted from analysis can masquerade as self-excitation. |
 | O-05 | observation | Character emotional volatility need not imply dyadic channel volatility. |
+| SHADOW-S7-01 | non-blind exploratory failure | Subject 7 H7-3 predicted `N_+ - N_- >= 2`; the shadow holdout was unsupported / FAIL-leaning. This is not a formal result; blind validation remains pending. |
 
 New entries should state the frozen prediction, eligible data, observed contradiction, impact, and whether a v2.1 proposal was registered.

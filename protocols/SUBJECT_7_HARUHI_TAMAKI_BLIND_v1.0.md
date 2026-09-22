@@ -14,10 +14,10 @@ Existing work is a non-blind shadow run based partly on secondary transcripts. I
 ## Frozen holdout predictions
 
 1. **No intrinsic repeated reversal:** no event-free `+ -> - -> +` or `- -> + -> -`; one occurrence fails.
-2. **Large jumps are event-linked:** any `J_n >= .5` without an event at that IE or the immediately preceding IE fails.
-3. **Approach dominates:** predict `N_+ - N_- >= 2`; `N_+ <= N_-` fails.
+2. **Large jumps are event-linked:** any `J_n^TV >= .5` without an event at that IE or the immediately preceding IE fails, where `J_n^TV` is the Total Variation jump defined in the frozen specification.
+3. **Approach dominates:** predict `N_+ - N_- >= 2`; `N_+ <= N_-` fails; a difference of 1 is indeterminate.
 4. **No Direct monopoly:** predict mean `p_D < .5`; `>= .5` fails.
-5. **No channel lock:** three consecutive IEs with `p_D >= .90` or `p_D <= .10` and the other channels nearly absent fails.
+5. **No Direct-boundary lock:** neither a D-saturated lock (`p_D >= .90` for three consecutive IEs) nor a D-suppressed lock (`p_D <= .10` for three consecutive IEs) occurs. Either sequence fails; the allocation among `S/C/P` is irrelevant to the suppressed case.
 
 Preregistered phase label: **E region with forced excursions**.
 

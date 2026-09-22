@@ -4,13 +4,13 @@
 
 Known material ends at volume 4. Volume 5 is the prospective holdout. Primary edges are Kotaro–Mifuru (`KM`), Kotaro–Tsukino (`KT`), and Kotaro–Bushi (`KB`). Hangui (`H`) is first treated as an intervention node; `KH` remains dormant unless romantic evidence activates it.
 
-For each pair, the primary window is its first 10 qualified IEs in volume 5, or all qualified IEs if fewer than 10. Coders must not know later parts of the volume while coding earlier IEs.
+For each pair, the primary window is its first 10 qualified IEs in volume 5, or all qualified IEs if fewer than 10. A qualified IE requires direct interaction between Kotaro and the named counterpart under the Codebook IE definition. Pair-external information or observation events do not count toward the 10 IEs; record them in the event layer as context for the next qualified IE. Coders must not know later parts of the volume while coding earlier IEs.
 
 ## Preregistered predictions
 
-- `KM`: `N_approach - N_withdrawal <= 0`; failure if the value is at least 2.
-- `KT`: `N_approach - N_withdrawal >= 1`; failure if the value is at most -1.
-- `KB`: mean `p_P + p_S > p_D`; failure if mean `p_D > p_P + p_S`.
+- `KM`: `N_approach - N_withdrawal <= 0`; failure if the value is at least 2; a value of 1 is indeterminate.
+- `KT`: `N_approach - N_withdrawal >= 1`; failure if the value is at most -1; a value of 0 is indeterminate.
+- `KB`: mean `p_P + p_S > p_D`; failure if mean `p_D > p_P + p_S`; equality is indeterminate.
 - Persona observation: if both “princess” and ordinary modes have at least three IEs, predict `E[p_D+p_S|princess] - E[p_D+p_S|ordinary] >= .25`; non-positive difference is failure; an intermediate difference is indeterminate.
 
 ## Intervention classification
@@ -28,7 +28,7 @@ If at least 50% of H interventions are endogenous, the “primarily exogenous co
 - `M_B`: `M_A` plus genuinely exogenous shared events.
 - `M_C`: direct inter-pair coupling; v2.1 candidate only.
 
-Use prequential log score. `M_B` receives practical support over `M_A` at `Delta LS >= 2`, is indeterminate inside `(-2,2)`, and loses at `Delta LS <= -2`.
+The pair-level preregistered predictions above are the primary Subject 6 tests. The `M_A`/`M_B` probabilistic comparison is secondary and must not run until its target distributions and prequential update rule are frozen in a subject-specific scoring addendum. Once frozen, `M_B` receives practical support over `M_A` at `Delta LS >= 2`, is indeterminate inside `(-2,2)`, and loses at `Delta LS <= -2`.
 
 Consider `M_C` only if a cross-lag of the same sign occurs at least twice, predicts another pair out of sample, and cannot be explained by a shared event or endogenous H mediation.
 
