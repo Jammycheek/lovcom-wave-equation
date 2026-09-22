@@ -1,0 +1,6442 @@
+[
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -50.75676478107482,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1268179985431824
+      },
+      {
+        "coefficients": {
+          "alpha": 0.41622332345490215,
+          "phi": 0.17738116301644133
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -35.109563640232786,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.0923609140126423
+      },
+      {
+        "coefficients": {
+          "a": 0.4794595619933582,
+          "b": 0.0009977016342137407,
+          "c": 0.019615121761376447,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -37.72670106420348,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.09583811078018822
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.2169201691319407,
+          "s": 0.003992430577906051,
+          "trace": -0.011093092484429024,
+          "v": 0.5009981063187005
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -16.39298816071851,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5005506360206545,
+        "G": 0.9889226702828714,
+        "Omega": 8.82334346642167,
+        "R": 0.11208026458976005,
+        "s0": -1.6721857541018785,
+        "v0": 0.15528133841383907
+      },
+      "seed": 260901,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.03979456691151826,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -30.681426746578254,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5005506360206545,
+            -2.1885400162338304,
+            2.17740087601244,
+            -1.6721857541018785,
+            0.15528133841383907,
+            -3.224050015145141
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 35,
+          "log_likelihood": -16.39298816071851,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.22969073155576822,
+        0.5325516341934569
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260901
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -56.083582539528756,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1402301191112248
+      },
+      {
+        "coefficients": {
+          "alpha": 0.39168903750849954,
+          "phi": 0.20275684891070853
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -40.70491912908296,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.10186809512585406
+      },
+      {
+        "coefficients": {
+          "a": 0.46379899353168513,
+          "b": -0.0062484274254951296,
+          "c": 0.022002194300125268,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -43.068930926929255,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.10515572934831617
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.1999999999999995,
+          "s": 0.0,
+          "trace": -0.20000000000000007,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -38.037686509352866,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 0.7999999999999999,
+        "Omega": 7.999999999999998,
+        "R": 0.10000000000000002,
+        "s0": -1.0986122886681098,
+        "v0": 0.25
+      },
+      "seed": 260902,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -38.037686509352866,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -76.29048185590072,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.0016404012267329867,
+        0.49993137424201445
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260902
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -48.175241206744886,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.12320840724629409
+      },
+      {
+        "coefficients": {
+          "alpha": 0.5913371342873711,
+          "phi": -0.14582561228813715
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -25.182111979959878,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.07719308850783253
+      },
+      {
+        "coefficients": {
+          "a": 0.5086618181491351,
+          "b": -0.001425772166932274,
+          "c": 0.0018072317517867774,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -28.840933011689593,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.08259108653253197
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.3184683217973194,
+          "s": 0.06624392374967995,
+          "trace": -0.1987712353058153,
+          "v": 0.516554927439861
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -14.004516458470256,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5102835604894101,
+        "G": 0.8047499088220373,
+        "Omega": 8.488093524509875,
+        "R": 0.09480926506031939,
+        "s0": -0.9526103801642716,
+        "v0": 0.20525945283628502
+      },
+      "seed": 260903,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.056291148637827505,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -28.42473577114494,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5102835604894101,
+            -2.3558881417928994,
+            2.1386644196899374,
+            -0.9526103801642716,
+            0.20525945283628502,
+            -2.877235738937162
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 38,
+          "log_likelihood": -14.004516458470256,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.06403340429455383,
+        0.5165531765004447
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260903
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -58.46444808441287,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.14683806090970503
+      },
+      {
+        "coefficients": {
+          "alpha": 0.5301948449591906,
+          "phi": -0.02194175945402202
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -37.432397153953616,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.09623316887079215
+      },
+      {
+        "coefficients": {
+          "a": 0.5131476718622704,
+          "b": 0.0015380353928762123,
+          "c": 0.0005044714900360379,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -40.02855852697343,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.100022457162085
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.153072681839773,
+          "s": 0.056362127169865606,
+          "trace": -0.14314633587653836,
+          "v": 0.5140868028734661
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -32.218064696342644,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5080719030735771,
+        "G": 0.8595785055504439,
+        "Omega": 8.046091985948038,
+        "R": 0.10683180195449421,
+        "s0": -1.0524616746494726,
+        "v0": 0.3036090170854277
+      },
+      "seed": 260904,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.08442104580177619,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5080719030735771,
+            -2.236499625671564,
+            2.0851865059688377,
+            -1.0524616746494726,
+            0.3036090170854277,
+            -2.4719503960814238
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 36,
+          "log_likelihood": -32.218064696342644,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5117335961648839,
+            -2.552480710379478,
+            2.3219679760362983,
+            -1.1394125910804525,
+            0.44351923924851444,
+            -2.439511139188789
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 30,
+          "log_likelihood": -33.631979350815364,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.05063100621817619,
+        0.5121960721939858
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260904
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -60.889485951218845,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.15568697198335862
+      },
+      {
+        "coefficients": {
+          "alpha": 0.5529810102079481,
+          "phi": -0.08552138246678098
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -37.74998478865328,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.09711642157171592
+      },
+      {
+        "coefficients": {
+          "a": 0.4975044899029131,
+          "b": -0.021160990631924833,
+          "c": 0.005313144426177067,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -39.39427292323106,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.0987416641787565
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.1451609537839817,
+          "s": -0.005779168030522297,
+          "trace": -0.22636796979273333,
+          "v": 0.4985552120135472
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -28.73594319568316,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.49913774120665877,
+        "G": 0.77365786886332,
+        "Omega": 7.675236021494093,
+        "R": 0.10079922841417932,
+        "s0": -1.106189519833917,
+        "v0": 0.11431233380713389
+      },
+      "seed": 260905,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.07940144550904413,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -34.559816760395925,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.49913774120665877,
+            -2.2946245779954024,
+            2.037999044986629,
+            -1.106189519833917,
+            0.11431233380713389,
+            -2.533251299799648
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 37,
+          "log_likelihood": -28.73594319568316,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.006583982766669866,
+        0.49829849132996346
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260905
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -50.7567647810748,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1268179985472105
+      },
+      {
+        "coefficients": {
+          "alpha": 0.5212086006122213,
+          "phi": -0.010905735338933988
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -30.925445519869555,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.08592676460286666
+      },
+      {
+        "coefficients": {
+          "a": 0.48481158859481366,
+          "b": 0.0027508053465680154,
+          "c": 0.024340212403274178,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -32.730219460971014,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.08719919052680444
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.1999999999999995,
+          "s": 0.0,
+          "trace": -0.20000000000000007,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -34.05344676514625,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 0.7999999999999999,
+        "Omega": 7.999999999999998,
+        "R": 0.10000000000000002,
+        "s0": -1.0986122886681098,
+        "v0": 0.25
+      },
+      "seed": 260906,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -34.05344676514625,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": false,
+          "final_vector": [
+            0.5065142746119915,
+            -7.207224409545127,
+            1.735084824601845,
+            -0.9999468538675557,
+            -0.029918567618852837,
+            -2.533171341460349
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 50,
+          "log_likelihood": -26.708756131947528,
+          "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+          "status": 1
+        }
+      ],
+      "terminal_state": [
+        0.0016404012267329867,
+        0.49993137424201445
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260906
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -66.6739538130515,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.17408424049269366
+      },
+      {
+        "coefficients": {
+          "alpha": 0.49511939087901796,
+          "phi": -0.006119631654468036
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -46.08239218851316,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.11662436919528593
+      },
+      {
+        "coefficients": {
+          "a": 0.4794204581947986,
+          "b": -0.014969832133401494,
+          "c": 0.007974193741569987,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -47.45941697407191,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.11711961451687028
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.2225439607932138,
+          "s": -0.07782136320301543,
+          "trace": -0.04494208172191938,
+          "v": 0.4805544719853101
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -32.85255852481954,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.4891087768016832,
+        "G": 0.9608535918992444,
+        "Omega": 8.723602088660348,
+        "R": 0.110144133367596,
+        "s0": -1.1724059087180752,
+        "v0": 0.20139426721754633
+      },
+      "seed": 260907,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.08085395423170548,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -39.23332307816704,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.4891087768016832,
+            -2.2059654675462146,
+            2.1660322361873288,
+            -1.1724059087180752,
+            0.20139426721754633,
+            -2.515123153964173
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 42,
+          "log_likelihood": -32.85255852481954,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.038659326683223236,
+        0.4995500545912985
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260907
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -56.262428432773405,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.14203710038094913
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4262407408193187,
+          "phi": 0.14149782057846613
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -39.51134978439328,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.10031238204365356
+      },
+      {
+        "coefficients": {
+          "a": 0.47588744323206705,
+          "b": 0.02504412104770565,
+          "c": 0.015386584445440455,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -40.704250349837615,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.10006424690006993
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.1999999999999995,
+          "s": 0.0,
+          "trace": -0.20000000000000007,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -37.85070473973891,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 0.7999999999999999,
+        "Omega": 7.999999999999998,
+        "R": 0.10000000000000002,
+        "s0": -1.0986122886681098,
+        "v0": 0.25
+      },
+      "seed": 260908,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -37.85070473973891,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": false,
+          "final_vector": [
+            0.49449926576008546,
+            -2.2005331464116504,
+            2.18825258338854,
+            -0.6808580117674103,
+            0.267903142340554,
+            -2.663721871890583
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 50,
+          "log_likelihood": -28.758961097149694,
+          "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+          "status": 1
+        }
+      ],
+      "terminal_state": [
+        0.0016404012267329867,
+        0.49993137424201445
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260908
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -50.7567647810748,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.12681799854619982
+      },
+      {
+        "coefficients": {
+          "alpha": 0.49527540611821885,
+          "phi": -0.0008935613048214142
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -31.382216986169944,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.08720293858150593
+      },
+      {
+        "coefficients": {
+          "a": 0.4771751747566678,
+          "b": 0.013043494595191928,
+          "c": 0.013152937866019287,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -33.155490170704,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.08805048476564709
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.197498297522654,
+          "s": -0.03706182356952704,
+          "trace": -0.05160294732922821,
+          "v": 0.49073560453141707
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -24.034195087982543,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.49483289678852255,
+        "G": 0.949700347286383,
+        "Omega": 8.586529294468603,
+        "R": 0.1106035179892969,
+        "s0": -0.8236856129130969,
+        "v0": 0.32420721392007523
+      },
+      "seed": 260909,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.06665026066806075,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -32.0028728353768,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.49483289678852255,
+            -2.2018033821782823,
+            2.150194614125077,
+            -0.8236856129130969,
+            0.32420721392007523,
+            -2.708311325171221
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 39,
+          "log_likelihood": -24.034195087982543,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.04864356926112962,
+        0.49418644888158497
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260909
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -60.785563920181374,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.15461772604464571
+      },
+      {
+        "coefficients": {
+          "alpha": 0.408712833114029,
+          "phi": 0.18634733351947574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -45.218195294762886,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.11422031035894437
+      },
+      {
+        "coefficients": {
+          "a": 0.5196667116917253,
+          "b": -0.001380977556159734,
+          "c": -0.02268822067820787,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -47.46223993921032,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.11786440029256845
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.152374840217062,
+          "s": -0.03240338846445364,
+          "trace": -0.12907861128017895,
+          "v": 0.49189986161981125
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -33.54430483922148,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.49538837090208204,
+        "G": 0.8718361584932005,
+        "Omega": 8.095309521369874,
+        "R": 0.10769645758346123,
+        "s0": -1.2291451517104102,
+        "v0": 0.15211507646604105
+      },
+      "seed": 260910,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.08569684123721466,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -37.84910458561664,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.49538837090208204,
+            -2.228438586879198,
+            2.0912848225159575,
+            -1.2291451517104102,
+            0.15211507646604105,
+            -2.4569509815428687
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 33,
+          "log_likelihood": -33.54430483922148,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.035285400008689564,
+        0.48920871236341695
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260910
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -50.7567647810748,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.12681799854621248
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4162007085285863,
+          "phi": 0.17890825117914044
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -35.09389074917954,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.09224769055194199
+      },
+      {
+        "coefficients": {
+          "a": 0.5118354627109406,
+          "b": 0.008367284236385882,
+          "c": -0.010736819073759387,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -37.987108754222874,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.09665499540644135
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.1120368392239421,
+          "s": 0.0044106170649096015,
+          "trace": -0.05603087816325192,
+          "v": 0.5011026524786865
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -18.728170606162305,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5005963893471439,
+        "G": 0.9439874854996286,
+        "Omega": 8.224063840907753,
+        "R": 0.11478357947613323,
+        "s0": -0.6857182393176297,
+        "v0": 0.17865492196498012
+      },
+      "seed": 260911,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.057706416389641586,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -31.726005492754744,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5005963893471439,
+            -2.1647068412494685,
+            2.107064471438972,
+            -0.6857182393176297,
+            0.17865492196498012,
+            -2.852404238302832
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 41,
+          "log_likelihood": -18.728170606162305,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.06226845355705043,
+        0.48361407141878976
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260911
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -68.3440185820411,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1789622912198971
+      },
+      {
+        "coefficients": {
+          "alpha": 0.45008553406061824,
+          "phi": 0.15152924082617397
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -51.33806978302304,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.12563942687568888
+      },
+      {
+        "coefficients": {
+          "a": 0.5329074244983335,
+          "b": -0.002283097422920633,
+          "c": -0.007828962021891291,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -54.13215906919558,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.13072227157904875
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.1272013765785127,
+          "s": 0.09909418996439434,
+          "trace": -0.041710496672994535,
+          "v": 0.5247532950634071
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -37.62393512967528,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5133231883261744,
+        "G": 0.9677304205782119,
+        "Omega": 8.362459091230463,
+        "R": 0.11572318740465358,
+        "s0": -1.1615320311545347,
+        "v0": 0.1340956451523255
+      },
+      "seed": 260912,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.09006929457725502,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -44.63011798384504,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5133231883261744,
+            -2.156554255141423,
+            2.123752533511794,
+            -1.1615320311545347,
+            0.1340956451523255,
+            -2.4071870677805878
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 38,
+          "log_likelihood": -37.62393512967528,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.029293071097884524,
+        0.5013013215744759
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260912
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -54.82649927856667,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.13689350756324747
+      },
+      {
+        "coefficients": {
+          "alpha": 0.5180900005805614,
+          "phi": -0.0047984370135901976
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -30.927580598438322,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.08593011538063193
+      },
+      {
+        "coefficients": {
+          "a": 0.519775679209986,
+          "b": 0.0072531684169373,
+          "c": -0.015828747534078594,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -40.79181779566065,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.10455399907914283
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.7371124122292376,
+          "s": 0.047232261150456416,
+          "trace": -0.5019451359882212,
+          "v": 0.5118058705727818
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -26.87661974231374,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5091722729360909,
+        "G": 0.4991667943755469,
+        "Omega": 8.94565643652856,
+        "R": 0.05579990668289659,
+        "s0": -2.467084076083297,
+        "v0": 0.19029144833546743
+      },
+      "seed": 260913,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.07797525695315981,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -9.21024036697585,
+            0.0001,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -9.21024036697585,
+            0.0001,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -68.83108132037947,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5091722729360909,
+            -2.8859830819457937,
+            2.191168100129286,
+            -2.467084076083297,
+            0.19029144833546743,
+            -2.5513765458294766
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 33,
+          "log_likelihood": -26.87661974231374,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.04723192317218902,
+        0.5118057563257451
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260913
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -58.60124173149356,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.14832399445044964
+      },
+      {
+        "coefficients": {
+          "alpha": 0.48031747249931084,
+          "phi": 0.06574315039722818
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -39.66354132321327,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.10052234871215392
+      },
+      {
+        "coefficients": {
+          "a": 0.5197151929192725,
+          "b": 0.012396705485052914,
+          "c": -0.01010009651493605,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -41.70686598296819,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.10300115321979199
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.0383563046612354,
+          "s": 0.03065030168423402,
+          "trace": -0.04955568087496309,
+          "v": 0.507661975599286
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -28.976613057439334,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.503998610856229,
+        "G": 0.9513374851200119,
+        "Omega": 7.95707100225112,
+        "R": 0.11955875281882879,
+        "s0": -0.45020401897063334,
+        "v0": 0.23867124131875125
+      },
+      "seed": 260914,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.07402411170236506,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -36.74273863587621,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.503998610856229,
+            -2.1239473730457927,
+            2.0740609675994115,
+            -0.45020401897063334,
+            0.23867124131875125,
+            -2.6033779142375697
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 37,
+          "log_likelihood": -28.976613057439334,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.01878751352828471,
+        0.5145121202228129
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260914
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -66.68454561143825,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.17391208332025537
+      },
+      {
+        "coefficients": {
+          "alpha": 0.47714647319827747,
+          "phi": 0.054304367092099105
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -47.171000996876636,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.11610009083367893
+      },
+      {
+        "coefficients": {
+          "a": 0.4984161636492513,
+          "b": -0.007815723171523339,
+          "c": 0.0012069503764882187,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -49.13457862923877,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.11873294973049513
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.1932065506594673,
+          "s": -0.015869689127074777,
+          "trace": -0.07577311849795354,
+          "v": 0.4960326609814286
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -32.623170830327915,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.49776456104942335,
+        "G": 0.9244596648409091,
+        "Omega": 8.47026700916545,
+        "R": 0.1091417382522388,
+        "s0": -1.2449518937228279,
+        "v0": 0.08864782711424395
+      },
+      "seed": 260915,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.08341410724773705,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -39.02553998814118,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.49776456104942335,
+            -2.215107890539091,
+            2.1365620322716286,
+            -1.2449518937228279,
+            0.08864782711424395,
+            -2.483949820722121
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 36,
+          "log_likelihood": -32.623170830327915,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.046608449667385594,
+        0.4998817836048501
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260915
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -47.76601047583381,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.12011064663494664
+      },
+      {
+        "coefficients": {
+          "alpha": 0.45537605993976593,
+          "phi": 0.1447812112142536
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -31.276827672073377,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.08420100449361737
+      },
+      {
+        "coefficients": {
+          "a": 0.5070732274529578,
+          "b": 0.0027390687582763435,
+          "c": 0.01602331021529535,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -34.57773759222566,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.08994465804773943
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.1537818316788933,
+          "s": 0.14491295632297063,
+          "trace": -0.14049590498509845,
+          "v": 0.5361649732255799
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -16.19996198083017,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5205631694951717,
+        "G": 0.8776801775138918,
+        "Omega": 8.095496276343612,
+        "R": 0.10841585834319008,
+        "s0": -1.1151017126379748,
+        "v0": 0.15099697517224117
+      },
+      "seed": 260916,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.053219674512457765,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -29.81283278990137,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5205631694951717,
+            -2.221780905997739,
+            2.0913078917783623,
+            -1.1151017126379748,
+            0.15099697517224117,
+            -2.9333459195590255
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 41,
+          "log_likelihood": -16.19996198083017,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.14228722946739722,
+        0.5340304305205831
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260916
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -44.52423392209915,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.11347257046584514
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4724262574841377,
+          "phi": 0.09722688916955233
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -27.68633734045584,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.08019987273064699
+      },
+      {
+        "coefficients": {
+          "a": 0.5024573967425682,
+          "b": 0.006517752982543442,
+          "c": 0.012560576566270552,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -30.73363619381349,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.08452729233086995
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.242491050748134,
+          "s": 0.08459439682858264,
+          "trace": -0.18176716969830775,
+          "v": 0.5211359962377795
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -17.35290632591882,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5127136726782284,
+        "G": 0.8241022588222608,
+        "Omega": 8.257651297586094,
+        "R": 0.09979862664619484,
+        "s0": -1.2300038768214256,
+        "v0": 0.19163966742092536
+      },
+      "seed": 260917,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.059792528775688386,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -29.00129343782415,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5127136726782284,
+            -2.304600856819575,
+            2.1111402005595306,
+            -1.2300038768214256,
+            0.19163966742092536,
+            -2.816891287329598
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 29,
+          "log_likelihood": -17.35290632591882,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.08876720443319992,
+        0.5218316789471097
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260917
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -58.464448084412865,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.14683806090990442
+      },
+      {
+        "coefficients": {
+          "alpha": 0.47836426449115427,
+          "phi": 0.06959226449947377
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -39.65621594740222,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.10046888766719153
+      },
+      {
+        "coefficients": {
+          "a": 0.47851481402165696,
+          "b": 0.02170104085563894,
+          "c": 0.02954271062574896,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -39.99725670840965,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.09843429990737526
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.1999999999999995,
+          "s": 0.0,
+          "trace": -0.20000000000000007,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -38.30191345044156,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 0.7999999999999999,
+        "Omega": 7.999999999999998,
+        "R": 0.10000000000000002,
+        "s0": -1.0986122886681098,
+        "v0": 0.25
+      },
+      "seed": 260918,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -38.30191345044156,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -75.33454299490828,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.0016404012267329867,
+        0.49993137424201445
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260918
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -60.68363802025722,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1533322853957653
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4584698600594578,
+          "phi": 0.0663855007837996
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -41.7896170987522,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.10464438059944217
+      },
+      {
+        "coefficients": {
+          "a": 0.4768382871910827,
+          "b": 0.010616420018555187,
+          "c": 0.010429622323807876,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -43.53177634496307,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.10645418832692942
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.5645820815029927,
+          "s": -0.06160436997662708,
+          "trace": -0.07420587587944227,
+          "v": 0.4846037763798565
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -32.95294899610792,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.4903381666476205,
+        "G": 0.9293120508367962,
+        "Omega": 9.970959034652946,
+        "R": 0.0932018723181067,
+        "s0": -1.3767765217451906,
+        "v0": 0.37856166122977625
+      },
+      "seed": 260919,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.08290137729360382,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -37.19723161695032,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.4903381666476205,
+            -2.372987468242306,
+            2.299676771389008,
+            -1.3767765217451906,
+            0.37856166122977625,
+            -2.4901156656618135
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 31,
+          "log_likelihood": -32.95294899610792,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.05972423012422814,
+        0.4925520574486757
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260919
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -47.766010475833816,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.12011064663494402
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4295900415311008,
+          "phi": 0.17778284926768892
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -32.09376705790351,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.0865260379322755
+      },
+      {
+        "coefficients": {
+          "a": 0.526760545035314,
+          "b": 0.0016519520363919209,
+          "c": -0.011746257414173645,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -35.548054638654065,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.09201685144540568
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.2086388394953302,
+          "s": 0.06679847289746564,
+          "trace": -0.1542966228777628,
+          "v": 0.5166934114690455
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -23.023730244388155,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5098059596902241,
+        "G": 0.849482551945976,
+        "Omega": 8.226538824321905,
+        "R": 0.1032612341698876,
+        "s0": -0.7826676286092629,
+        "v0": 0.20174114484325573
+      },
+      "seed": 260920,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.06891024532978365,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -32.41231597715313,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5098059596902241,
+            -2.2704932475403936,
+            2.107365370255045,
+            -0.7826676286092629,
+            0.20174114484325573,
+            -2.674964925207111
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 39,
+          "log_likelihood": -23.023730244388155,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        0.07590485727728433,
+        0.5175430390407535
+      ]
+    },
+    "scenario": "strong_stable",
+    "seed": 260920
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -84.19515623966561,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.24124399994240112
+      },
+      {
+        "coefficients": {
+          "alpha": 0.46491041179948595,
+          "phi": 0.12197970104525648
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -67.06705526094517,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.17322100462279533
+      },
+      {
+        "coefficients": {
+          "a": 0.5197403204046522,
+          "b": -0.0016287129977605966,
+          "c": 0.005085904010227875,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -69.19668131548386,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.17665893942097938
+      }
+    ],
+    "local_regime": {
+      "classification": "stable_focus",
+      "equilibria": [
+        {
+          "classification": "stable_focus",
+          "determinant": 1.8206264621647923,
+          "s": -0.11181032914199586,
+          "trace": -0.034764689854763664,
+          "v": 0.47207650223794434
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -53.64375003810728,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.48181187296938605,
+        "G": 0.9773526163822069,
+        "Omega": 11.178310977011831,
+        "R": 0.08743294209582558,
+        "s0": -1.0179958057361005,
+        "v0": 0.010455765898904124
+      },
+      "seed": 260901,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11377276538369197,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.48181187296938605,
+            -2.4368831554825245,
+            2.413975380912469,
+            -1.0179958057361005,
+            0.010455765898904124,
+            -2.173560895422555
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 14,
+          "log_likelihood": -53.64375003810728,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": false,
+          "final_vector": [
+            0.518251125978783,
+            -2.3088343635622115,
+            2.4872676989983185,
+            -0.9357564840538648,
+            0.3134454491965239,
+            -2.9602599767976123
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 50,
+          "log_likelihood": -22.162139112583493,
+          "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+          "status": 1
+        }
+      ],
+      "terminal_state": [
+        -0.18859403587578177,
+        0.48271408529419074
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260901
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -89.24043619914171,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.2691867107890452
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4221952855365281,
+          "phi": 0.14108293231290164
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -72.9611429396368,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1960363143360558
+      },
+      {
+        "coefficients": {
+          "a": 0.4885092158492712,
+          "b": -0.002791553315197731,
+          "c": -0.0009627816645232873,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -74.93714959911689,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.19878703777878182
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7999999999999996,
+          "s": 0.0,
+          "trace": 0.20000000000000018,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -39.88752232693185,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 1.2000000000000002,
+        "Omega": 12.0,
+        "R": 0.10000000000000002,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "seed": 260902,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -89.96798319081869,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -39.88752232693185,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.8042105701337829,
+        0.48736009679583264
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260902
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -87.8904287437509,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.2582264980208061
+      },
+      {
+        "coefficients": {
+          "alpha": 0.43688458327648233,
+          "phi": 0.16148048616125874
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -71.80861675220751,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.19025525659109319
+      },
+      {
+        "coefficients": {
+          "a": 0.5308418048644512,
+          "b": -0.011712121941867128,
+          "c": -0.01427891613512433,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -73.95572977001916,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.19367247094249634
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.784148307266067,
+          "s": 0.09839293335344364,
+          "trace": 0.24841107331897305,
+          "v": 0.5245784075599562
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -19.664923153455558,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5144112185797568,
+        "G": 1.2605362051572921,
+        "Omega": 12.159619936425837,
+        "R": 0.10366575696837202,
+        "s0": -0.7425529467827566,
+        "v0": 0.24531885326228214
+      },
+      "seed": 260903,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.051971917535478564,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -90.4433493208257,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5144112185797568,
+            -2.2665834307342223,
+            2.4981206208214277,
+            -0.7425529467827566,
+            0.24531885326228214,
+            -2.957070995018953
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 42,
+          "log_likelihood": -19.664923153455558,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.6879800332035363,
+        0.5355757635862591
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260903
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -85.0742897272691,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.24665238397388842
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4384571620353182,
+          "phi": 0.13708729813285656
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -68.4654635068482,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.17881286361620544
+      },
+      {
+        "coefficients": {
+          "a": 0.5041220191619366,
+          "b": -0.00665792029048588,
+          "c": -0.0002200455676658145,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -70.51758595317338,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.18192751329495443
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7999999999999996,
+          "s": 0.0,
+          "trace": 0.20000000000000018,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -38.97833817708713,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 1.2000000000000002,
+        "Omega": 12.0,
+        "R": 0.10000000000000002,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "seed": 260904,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.4774145632817863,
+            -2.401115414287192,
+            2.4880544098621007,
+            -1.0402896816238014,
+            0.40397495193203575,
+            -1.729725097221668
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 26,
+          "log_likelihood": -56.29582226616872,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -38.97833817708713,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.8042105701337829,
+        0.48736009679583264
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260904
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -96.50497653326661,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.30689656575592006
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4613211700606846,
+          "phi": 0.07848426412003082
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -78.51164932854493,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.2183603828614229
+      },
+      {
+        "coefficients": {
+          "a": 0.4679612063311303,
+          "b": -0.019567385267601507,
+          "c": 0.028537637418312032,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -79.52755054181506,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.21738355925216038
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7607071396954068,
+          "s": -0.04333959731440618,
+          "trace": 0.2829986144992793,
+          "v": 0.48916679630420845
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -38.995232067012765,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.4937375537541831,
+        "G": 1.285410006571237,
+        "Omega": 12.180540967215485,
+        "R": 0.1055297962570776,
+        "s0": -0.6366042792067692,
+        "v0": 0.1972636150629349
+      },
+      "seed": 260905,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.09241599554307114,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": false,
+          "final_vector": [
+            0.49173883691411296,
+            -2.2540396946226817,
+            2.502759231537079,
+            -0.8357617949036429,
+            0.13438513934225996,
+            -2.374191975025643
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 50,
+          "log_likelihood": -39.49813514962872,
+          "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+          "status": 1
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.4937375537541831,
+            -2.2487619369645326,
+            2.499839675680969,
+            -0.6366042792067692,
+            0.1972636150629349,
+            -2.381466024074826
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 35,
+          "log_likelihood": -38.995232067012765,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.7698459982157873,
+        0.5281527124259711
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260905
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -89.53189480640049,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.26730973023056526
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4950069934636685,
+          "phi": 0.07292133203790661
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -71.19756394780609,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.18869120959652194
+      },
+      {
+        "coefficients": {
+          "a": 0.5191224067548421,
+          "b": 0.010539705615205884,
+          "c": 0.01011404294453344,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -72.88307568427686,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.19042764466836018
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7999999999999996,
+          "s": 0.0,
+          "trace": 0.20000000000000018,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -41.97006798375838,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 1.2000000000000002,
+        "Omega": 12.0,
+        "R": 0.10000000000000002,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "seed": 260906,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -88.34577517018573,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -41.97006798375838,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.8042105701337829,
+        0.48736009679583264
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260906
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -90.5611850651326,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.2783279929413526
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4307836120357527,
+          "phi": 0.1384327702746083
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -74.38969075143058,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.20165175974681873
+      },
+      {
+        "coefficients": {
+          "a": 0.4959612179906473,
+          "b": -0.004899160456762128,
+          "c": -0.00011763130740779471,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -76.37166398263703,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.2043385128463029
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.8039855891271694,
+          "s": -0.04238060836293688,
+          "trace": 0.22573332850033534,
+          "v": 0.48940643346796703
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -33.96853493861907,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.4936961219990783,
+        "G": 1.2279362061016554,
+        "Omega": 12.1243182115745,
+        "R": 0.10127878406634067,
+        "s0": -1.3321824905312198,
+        "v0": 0.11961404350140543
+      },
+      "seed": 260907,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.08012078265386229,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -91.68401933882042,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.4936961219990783,
+            -2.2898783263224325,
+            2.4952132052693456,
+            -1.3321824905312198,
+            0.11961404350140543,
+            -2.524232480945784
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 42,
+          "log_likelihood": -33.96853493861907,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.9216628744614863,
+        0.472965393653481
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260907
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -88.74976456776896,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.26237027983974953
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4338759755034407,
+          "phi": 0.16047269485923552
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -72.6461331821198,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.19339753103068047
+      },
+      {
+        "coefficients": {
+          "a": 0.5165077897402152,
+          "b": 0.02738294064813952,
+          "c": -0.004069306604956566,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -74.4364951551641,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1954709027514523
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.779723768791968,
+          "s": 0.059240145397514946,
+          "trace": 0.26823247032031583,
+          "v": 0.5148057066800786
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -23.943880917714175,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.508634346526267,
+        "G": 1.2726884076820362,
+        "Omega": 12.202524566854208,
+        "R": 0.10429713955578074,
+        "s0": -0.828397386585208,
+        "v0": 0.2620048226581029
+      },
+      "seed": 260908,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.061816041562192836,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -92.3334646572933,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.508634346526267,
+            -2.2605113425117866,
+            2.5016428620411593,
+            -0.828397386585208,
+            0.2620048226581029,
+            -2.783608553159276
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 46,
+          "log_likelihood": -23.943880917714175,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.7577525516185786,
+        0.5274109586784468
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260908
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -88.99514857279374,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.27004830730502055
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4140546519034307,
+          "phi": 0.16488987367390223
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -73.46707091341466,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.19802502489432505
+      },
+      {
+        "coefficients": {
+          "a": 0.473713834044522,
+          "b": -0.016410105413555413,
+          "c": 0.017981628836815092,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -75.33852895315961,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.2004097568561929
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7999999999999996,
+          "s": 0.0,
+          "trace": 0.20000000000000018,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -39.5077247353375,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 1.2000000000000002,
+        "Omega": 12.0,
+        "R": 0.10000000000000002,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "seed": 260909,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.492350680659389,
+            -3.1590273579371715,
+            2.4329869354939446,
+            -1.4409238391583081,
+            -0.415878030627043,
+            -1.7098314158448198
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 28,
+          "log_likelihood": -69.66334575328908,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -39.5077247353375,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.8042105701337829,
+        0.48736009679583264
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260909
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -90.57320372823504,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.2792486791417184
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4383766327377134,
+          "phi": 0.11719410054316785
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -73.86186560528488,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.200264624295897
+      },
+      {
+        "coefficients": {
+          "a": 0.5022425154170878,
+          "b": -0.024146240942749343,
+          "c": -0.009898416116232753,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -75.2456356211225,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.20073107483783484
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7904157307612034,
+          "s": -0.06969135822801549,
+          "trace": 0.2068512478323683,
+          "v": 0.48258420874767466
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -37.36251645297857,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.4896137232621739,
+        "G": 1.212722281805962,
+        "Omega": 12.003631189552914,
+        "R": 0.10102961867584095,
+        "s0": -1.1273666731240428,
+        "v0": 0.12243834502193209
+      },
+      "seed": 260910,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.08832948281049202,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -90.73874728897754,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.4896137232621739,
+            -2.2923415509152436,
+            2.485209203143527,
+            -1.1273666731240428,
+            0.12243834502193209,
+            -2.426692654751056
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 35,
+          "log_likelihood": -37.36251645297857,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.7573922908883188,
+        0.5038646042499352
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260910
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -87.85621674229685,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.2591643082787685
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4336363979696341,
+          "phi": 0.12582122054555098
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -70.94447967289624,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.18776229454104507
+      },
+      {
+        "coefficients": {
+          "a": 0.48933657543046827,
+          "b": -0.014950070061762204,
+          "c": 0.002559905498210932,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -72.68003239238259,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.18966549292571158
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7999999999999996,
+          "s": 0.0,
+          "trace": 0.20000000000000018,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -37.85500836969579,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 1.2000000000000002,
+        "Omega": 12.0,
+        "R": 0.10000000000000002,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "seed": 260911,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -82.16135997601587,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -37.85500836969579,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.8042105701337829,
+        0.48736009679583264
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260911
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -86.86920090880288,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.25607459549306594
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4651005828242923,
+          "phi": 0.11543482854939606
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -69.79291224775353,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.18421699629683874
+      },
+      {
+        "coefficients": {
+          "a": 0.5237990627438214,
+          "b": 0.004598014127988821,
+          "c": -0.002603705785033828,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -71.79312389093856,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1871179305020724
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.8019978732688136,
+          "s": 0.08925472292238236,
+          "trace": 0.17899787776970855,
+          "v": 0.5222988792027874
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -35.11994480416694,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5134444148827432,
+        "G": 1.1884152206871486,
+        "Omega": 11.947746594876193,
+        "R": 0.09946772901902706,
+        "s0": -0.7429831412347787,
+        "v0": 0.20989939499959123
+      },
+      "seed": 260912,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.08102910117552409,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -80.35570712716041,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5134444148827432,
+            -2.30792201889148,
+            2.480542691129635,
+            -0.7429831412347787,
+            0.20989939499959123,
+            -2.512959256382444
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 39,
+          "log_likelihood": -35.11994480416694,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.6530479260742522,
+        0.5130146466055584
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260912
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -89.86190127479266,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.2698118260532094
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4888680971238239,
+          "phi": 0.04720522933891131
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -69.68480518156626,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.18315221524776384
+      },
+      {
+        "coefficients": {
+          "a": 0.5121561938798593,
+          "b": -0.01083219473631006,
+          "c": -0.008009264909922459,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -73.50085243216257,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.19337356448167495
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.8082737779846778,
+          "s": 0.005744894630618192,
+          "trace": 0.1633002217464563,
+          "v": 0.501436219707596
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -39.63273739131747,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5008739647291943,
+        "G": 1.163338615513347,
+        "Omega": 11.886394072470784,
+        "R": 0.0978714493580245,
+        "s0": -1.1748368939310745,
+        "v0": 0.16731696828945478
+      },
+      "seed": 260913,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.08908588966173811,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5279295523347931,
+            -2.3727024764985094,
+            2.477336027915548,
+            -9.47440288267122,
+            1.3671442237881701,
+            -1.4038203504245028
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -9.21024036697585,
+            0.0001,
+            -2.120271869568147
+          ],
+          "iterations": 41,
+          "log_likelihood": -72.15302920329233,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5008739647291943,
+            -2.3241004026418564,
+            2.4753943907336597,
+            -1.1748368939310745,
+            0.16731696828945478,
+            -2.418165547419816
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 35,
+          "log_likelihood": -39.63273739131747,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.6932572822087912,
+        0.495652885777324
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260913
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.5
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -87.41966048573559,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.25704833095181534
+      },
+      {
+        "coefficients": {
+          "alpha": 0.5050229943853867,
+          "phi": 0.05459358967084798
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -68.07628271597208,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.17744458785338782
+      },
+      {
+        "coefficients": {
+          "a": 0.5338259411121634,
+          "b": 0.005818633107829782,
+          "c": -0.004557269755027897,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -69.84734054207193,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.17955773323894786
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.818249039483889,
+          "s": 0.1013320281449822,
+          "trace": 0.12184515532596274,
+          "v": 0.5253113522819347
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -34.7890617753386,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5156037288320333,
+        "G": 1.1334039446936048,
+        "Omega": 11.790592036810088,
+        "R": 0.09612782302662422,
+        "s0": -0.7790813599510169,
+        "v0": 0.11502591412794506
+      },
+      "seed": 260914,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.07639229717208136,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -77.73298968885967,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5156037288320333,
+            -2.3420764833001906,
+            2.4673019284547903,
+            -0.7790813599510169,
+            0.11502591412794506,
+            -2.5718865006582456
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 45,
+          "log_likelihood": -34.7890617753386,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.5052402356262536,
+        0.5179210371353583
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260914
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -84.1157434686652,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.24227886799259232
+      },
+      {
+        "coefficients": {
+          "alpha": 0.44116146435517717,
+          "phi": 0.13889219590885757
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -67.552893354689,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.17563916754404696
+      },
+      {
+        "coefficients": {
+          "a": 0.5355578123469159,
+          "b": -0.009541467563374966,
+          "c": -0.02749782915059579,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -69.1300366082206,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1770804203948574
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7999999999999996,
+          "s": 0.0,
+          "trace": 0.20000000000000018,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -37.53901602739551,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 1.2000000000000002,
+        "Omega": 12.0,
+        "R": 0.10000000000000002,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "seed": 260915,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -76.34964849150118,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -37.53901602739551,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.8042105701337829,
+        0.48736009679583264
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260915
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -85.16134992066347,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.24556423004354228
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4395359421087312,
+          "phi": 0.11351707450137073
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -67.82165282069758,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.17586214085482602
+      },
+      {
+        "coefficients": {
+          "a": 0.47705943025522485,
+          "b": 0.002407640497293871,
+          "c": 0.01465433973896724,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -69.51994723560396,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1777676056993324
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7999999999999996,
+          "s": 0.0,
+          "trace": 0.20000000000000018,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -35.091427888398435,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 1.2000000000000002,
+        "Omega": 12.0,
+        "R": 0.10000000000000002,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "seed": 260916,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -75.63773209652611,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -35.091427888398435,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.8042105701337829,
+        0.48736009679583264
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260916
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -88.70014015094807,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.26314816405660185
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4467242844612352,
+          "phi": 0.12188696224460392
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -71.6780834112584,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1904442924500466
+      },
+      {
+        "coefficients": {
+          "a": 0.4990519811408871,
+          "b": -0.008625850362463603,
+          "c": 0.005318809038560078,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -73.54997225187181,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.19287026955929087
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7999999999999996,
+          "s": 0.0,
+          "trace": 0.20000000000000018,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -34.836691146617476,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 1.2000000000000002,
+        "Omega": 12.0,
+        "R": 0.10000000000000002,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "seed": 260917,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -84.8694275709313,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -34.836691146617476,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.8042105701337829,
+        0.48736009679583264
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260917
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -89.40003359983862,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.26861744011940053
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4320732114770647,
+          "phi": 0.15816663339622797
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -73.43139047931695,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1977979759574711
+      },
+      {
+        "coefficients": {
+          "a": 0.4800051684139316,
+          "b": 0.011261381158190484,
+          "c": 0.028730030571443327,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -75.16070916605254,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1997246347721699
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7999999999999996,
+          "s": 0.0,
+          "trace": 0.20000000000000018,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -39.08006367238721,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 1.2000000000000002,
+        "Omega": 12.0,
+        "R": 0.10000000000000002,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "seed": 260918,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -93.11602824103001,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -39.08006367238721,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.8042105701337829,
+        0.48736009679583264
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260918
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -86.10072678749945,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.24988162211157142
+      },
+      {
+        "coefficients": {
+          "alpha": 0.4613673722209168,
+          "phi": 0.08495921497207129
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -67.9920310664564,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.17646379689658012
+      },
+      {
+        "coefficients": {
+          "a": 0.49002653629007026,
+          "b": -0.009998075009876877,
+          "c": 0.00993899937869637,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -69.574165897122,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1779611664238914
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7999999999999996,
+          "s": 0.0,
+          "trace": 0.20000000000000018,
+          "v": 0.5
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -36.57570593590342,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.5,
+        "G": 1.2000000000000002,
+        "Omega": 12.0,
+        "R": 0.10000000000000002,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "seed": 260919,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.11999999999999997,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -79.6318818828176,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -36.57570593590342,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.8042105701337829,
+        0.48736009679583264
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260919
+  },
+  {
+    "baselines": [
+      {
+        "coefficients": {
+          "last_fit": 0.25
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -90.96964502284322,
+        "name": "persistence",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.2766641151849468
+      },
+      {
+        "coefficients": {
+          "alpha": 0.44651282529163105,
+          "phi": 0.1144244005334867
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -73.88837919968981,
+        "name": "ar1",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.1995680577300094
+      },
+      {
+        "coefficients": {
+          "a": 0.4955953927511626,
+          "b": 0.0019956551227628787,
+          "c": 0.004402559269923032,
+          "fit_index_mean": 29.5,
+          "fit_index_sd": 17.318102282486574
+        },
+        "converged": true,
+        "fit_count": 60,
+        "fit_log_likelihood": -75.71726222881391,
+        "name": "quadratic_narrative_position",
+        "sigma_lower_bound": 1e-06,
+        "sigma_pred": 0.20179068958453755
+      }
+    ],
+    "local_regime": {
+      "classification": "unstable_focus",
+      "equilibria": [
+        {
+          "classification": "unstable_focus",
+          "determinant": 1.7979540551566564,
+          "s": -0.017032223720915868,
+          "trace": 0.2255901414195558,
+          "v": 0.4957420470040965
+        }
+      ]
+    },
+    "rcwe": {
+      "converged": true,
+      "environment": {
+        "numpy": "2.5.3",
+        "python": "3.12.14",
+        "scipy": "1.18.1"
+      },
+      "fit_log_likelihood": -28.783311415567855,
+      "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+      "optimizer_guards": {
+        "Delta": [
+          -5.0,
+          5.0
+        ],
+        "log_Omega": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_R": [
+          -9.210340371976182,
+          4.605170185988092
+        ],
+        "log_sigma_excess": [
+          -18.420680743952367,
+          1.6094379124341003
+        ],
+        "s0": [
+          -12.0,
+          12.0
+        ],
+        "v0": [
+          -10.0,
+          10.0
+        ]
+      },
+      "parameters": {
+        "Delta": 0.497468253677061,
+        "G": 1.2259457153891893,
+        "Omega": 12.095053927536256,
+        "R": 0.1013592599697414,
+        "s0": -0.7955035368491715,
+        "v0": 0.10814957582539118
+      },
+      "seed": 260920,
+      "sigma_lower_bound": 1e-06,
+      "sigma_pred": 0.06915521433839081,
+      "solver": {
+        "atol": 1e-11,
+        "max_step": 0.05,
+        "method": "DOP853",
+        "rtol": 1e-09
+      },
+      "starts": [
+        {
+          "converged": true,
+          "final_vector": [
+            0.497468253677061,
+            -2.2890840440047713,
+            2.492796602715652,
+            -0.7955035368491715,
+            0.10814957582539118,
+            -2.6714162778493185
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.0794415416798357,
+            -1.0986122886681098,
+            0.25,
+            -2.120271869568147
+          ],
+          "iterations": 43,
+          "log_likelihood": -28.783311415567855,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        },
+        {
+          "converged": true,
+          "final_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "initial_vector": [
+            0.5,
+            -2.3025850929940455,
+            2.4849066497880004,
+            -1.0,
+            0.2,
+            -2.120271869568147
+          ],
+          "iterations": 1,
+          "log_likelihood": -35.919100817793556,
+          "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+          "status": 0
+        }
+      ],
+      "terminal_state": [
+        -0.9122358866287293,
+        0.4725485323574324
+      ]
+    },
+    "scenario": "strong_oscillatory",
+    "seed": 260920
+  }
+]
