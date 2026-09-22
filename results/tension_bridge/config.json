@@ -1,0 +1,25 @@
+{
+  "command": "python.exe scripts\\run_tension_bridge_analysis.py",
+  "cross_validation": "Leave-One-Work-Out",
+  "input_files": {
+    "manifest": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_work_manifest_template.csv",
+    "ratings": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_ratings_template.csv",
+    "windows": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_windows_template.csv"
+  },
+  "input_hashes": {
+    "manifest_sha256": "26b20df60f8f344d2a587b16e2958fa176098d3d751e6b4f1e7fa2689de658b8",
+    "ratings_sha256": "137192dc954844f36e930d62d386cce49a35106496619890557858d4608afa2f",
+    "windows_sha256": "af0eabdbe4368e7ce9e4f4a3863b4c341422fae9fb046f66014aa01e016543bd"
+  },
+  "master_seed": "RCWE-TB-v1.0",
+  "minimum_raters": 12,
+  "models": [
+    "ML",
+    "MLAC",
+    "M0",
+    "M1"
+  ],
+  "reliability_gate": 0.7,
+  "reliability_repeats": 1000,
+  "window_size": 5
+}
