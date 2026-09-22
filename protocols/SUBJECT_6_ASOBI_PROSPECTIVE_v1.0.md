@@ -28,7 +28,7 @@ If at least 50% of H interventions are endogenous, the “primarily exogenous co
 - `M_B`: `M_A` plus genuinely exogenous shared events.
 - `M_C`: direct inter-pair coupling; v2.1 candidate only.
 
-The pair-level preregistered predictions above are the primary Subject 6 tests. The `M_A`/`M_B` probabilistic comparison is secondary and must not run until its target distributions and prequential update rule are frozen in a subject-specific scoring addendum. Once frozen, `M_B` receives practical support over `M_A` at `Delta LS >= 2`, is indeterminate inside `(-2,2)`, and loses at `Delta LS <= -2`.
+The pair-level preregistered predictions above are the primary Subject 6 tests. The `M_A`/`M_B` probabilistic comparison is secondary; its target distributions and prequential update rule are frozen by `SUBJECT_6_PROBABILISTIC_COMPARISON_ADDENDUM_v0.1.md`. `M_B` receives practical support over `M_A` at `Delta LS >= 2`, is indeterminate inside `(-2,2)`, and loses at `Delta LS <= -2`.
 
 Consider `M_C` only if a cross-lag of the same sign occurs at least twice, predicts another pair out of sample, and cannot be explained by a shared event or endogenous H mediation.
 
