@@ -17,6 +17,7 @@
 13. Primary holdout scoring is open-loop. Holdout observations do not update states or parameters.
 14. `J_n^TV` denotes an IE-to-IE Total Variation jump; `P_switch(W)` denotes the Tension Bridge squared-L2 switching metric.
 15. Pair-external information updates are event-layer records, not dyadic IEs.
-16. Tension Bridge v0.1 freezes a concept and metric, not an experiment; its rater design remains open.
+16. Tension Bridge v0.1 freezes the concept and metric; the confirmatory rater design is frozen separately by `TENSION_BRIDGE_EXPERIMENT_v1.0.md`, while human rating data remain uncollected.
 17. The first eligible tag is `v2.0-spec-freeze`, and only after the scoring reference implementation and recovery test pass.
 18. Prospective-control eligibility is determined by information exposure, not publication date. For Samuwan Herutsu, the user-declared last-read boundary is the end of comic volume 3 at the 2026-09-21 freeze; later content known before freeze is contaminated, and the exact first prospective chapter remains unconfirmed until its source-unit identifier is verified.
+19. The Tension Bridge confirmatory experiment uses non-overlapping five-IE windows, independent future-blind raters, deterministic question-order randomization, repeated split-half reliability, and Leave-One-Work-Out predictive validation. Human rating data remain uncollected.

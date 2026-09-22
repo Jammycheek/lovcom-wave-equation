@@ -1,6 +1,6 @@
 # Romantic Tension Bridge v0.1
 
-**Status: preregistered concept; experiment not frozen.** The hypothesis and metrics are retained, but rater count, blinding, rating interface, window presentation, aggregation, inter-rater reliability, and train/holdout design must be frozen before confirmatory use.
+**Status: hypothesis frozen; confirmatory experiment design frozen; human rating data not yet collected.** See `protocols/TENSION_BRIDGE_EXPERIMENT_v1.0.md` and `protocols/TENSION_BRIDGE_RATING_FORM_v1.0.md`.
 
 ## External ratings
 
@@ -28,7 +28,7 @@ The secondary switching metric is
 P_{switch}(W)=\frac1{N-1}\sum_{n=2}^{N}\|\mathbf p_n-\mathbf p_{n-1}\|_2^2.
 \]
 
-Use consecutive five-IE windows unless a pilot, completed before the main test, freezes another size. Do not select windows around confessions or climaxes.
+The confirmatory protocol freezes non-overlapping consecutive five-IE windows. Do not select windows around confessions or climaxes.
 
 ## Primary hypothesis
 

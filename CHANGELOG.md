@@ -24,3 +24,4 @@ This import intentionally excludes exploratory parameter estimates, superseded f
 - Marked Tension Bridge v0.1 as a preregistered concept whose experiment is not frozen.
 - Added and implemented the Subject 6 probabilistic-comparison addendum without activating M_C.
 - Fixed the Samuwan control's information-exposure boundary at the end of comic volume 3 as of 2026-09-21; exact prospective source-unit identifiers and coder access controls remain pending.
+- Froze the Tension Bridge confirmatory experiment, rating instrument, data schemas, reliability gates, work-level holdout analysis, and static-tension challenge; human ratings remain pending.
