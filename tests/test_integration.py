@@ -42,7 +42,7 @@ def test_gap_does_not_advance_interaction_clock():
 
 def test_holdout_values_cannot_modify_rcwe_state():
     fit_means, states = forecast_means(PARAMS, 8)
-    fit = RCWEFit(PARAMS, 0.1, 1e-6, tuple(states[-1]), -1.0, True, (), 7)
+    fit = RCWEFit(PARAMS, 0.1, 1e-6, tuple(states[-1]), -1.0, True, True, 2, 0.0, (), 7)
     predictions_before = forecast_holdout(fit, 5)
     holdout_a = np.array([0.0, 0.0, 0.0, 0.0, 0.0])
     holdout_b = np.array([1.0, 1.0, 1.0, 1.0, 1.0])

@@ -18,9 +18,13 @@ These denote withdrawal, neutral/maintenance, approach, and mixed. `mixed` is re
 
 A qualified IE is a direct dyadic interaction between Kotaro and the named `KM`, `KT`, or `KB` counterpart under `SUBJECT_6_ASOBI_PROSPECTIVE_v1.0.md` and the Codebook. Pair-external observations do not count as IEs, but an eligible event may form exposure for the next qualified IE. If categorical Direction reliability is below the Codebook gate `kappa >= 0.70`, the comparison is not performed and its status is `MEASUREMENT_FAILURE`.
 
+The confirmatory corpus is the first 10 qualified IEs for each pair, capped at 30 rows. Complete qualified-IE coding for Volume 5 must be declared and committed before scoring, so the corpus cannot stop when a favorable score appears. If a pair has fewer than 10 qualified IEs after complete coding, retain all available rows and report the ordinary activation result; never substitute later volumes or selected highlights.
+
 ## Shared-event exposure
 
 For each target IE `n`, freeze `X_shared,n in {0,1}` before revealing its Direction. It is one exactly when at least one eligible event occurred after the preceding qualified IE for that pair ended and before the target IE began.
+
+Exposure and outcome live in separate committed files. Each exposure row records an offset-aware freeze timestamp and exposure-freeze commit; each outcome row records a later reveal timestamp and a distinct outcome commit. The runner rejects rows whose exposure was not frozen strictly before outcome reveal and joins the files only after validating an exact IE-ID match.
 
 An eligible genuinely exogenous shared event must:
 
@@ -106,12 +110,14 @@ This is a secondary empirical test. Its result never overwrites any primary Subj
 
 ## Confirmatory input schema
 
-The minimum CSV columns are:
+Three files are required:
 
-`global_order, ie_id, pair, r_dir, x_shared, source_locator, direction_adjudicated, shared_event_adjudicated`
+- exposure file: `global_order, pair_ie_order, ie_id, pair, x_shared, source_locator, shared_event_adjudicated, exposure_frozen_at, exposure_commit`;
+- outcome file: `ie_id, r_dir, direction_coder_a, direction_coder_b, direction_adjudicated, outcome_revealed_at, outcome_commit`;
+- manifest: `work_id, version_id, edition, volume, qualified_ie_coding_complete, exposure_freeze_commit, outcome_commit, notes`.
 
-`pair` is one of `KM`, `KT`, or `KB`; `r_dir` is one of `-1`, `0`, `+1`, or `mixed`; and `x_shared` is zero or one. Both adjudication fields must be explicit true values. The scorer rejects invalid categories, pairs, duplicate ordering, and non-adjudicated rows. Direction reliability `kappa` is supplied as run-level provenance because it cannot be inferred from adjudicated rows alone.
+`pair` is one of `KM`, `KT`, or `KB`; `r_dir` and both raw direction codes are one of `-1`, `0`, `+1`, or `mixed`; and `x_shared` is zero or one. `pair_ie_order` is contiguous from 1 and cannot exceed 10. Both adjudication fields must be explicit true values. The scorer rejects invalid categories, pairs, duplicate ordering, non-adjudicated rows, mismatched commits, incomplete corpus declarations, and outcome-before-freeze chronology. Direction reliability Cohen's kappa is computed from the two raw coder columns; it cannot be supplied on the command line.
 
 ## Reproducible output
 
-The reference runner writes configuration, input SHA-256, per-IE predictions, pooled and pair summaries, activation status, software and Git provenance, and warnings. Empty template input returns `NO_DATA`; an absent reliability statistic returns `DIRECTION_RELIABILITY_NOT_ASSESSED`; and `kappa < 0.70` returns `MEASUREMENT_FAILURE`. None of these states is represented as an A/B verdict.
+The reference runner writes configuration, all three input SHA-256 hashes, per-IE predictions, pooled and pair summaries, activation status, software and Git provenance, and warnings. Header-only templates return `NO_DATA`; non-identifiable raw reliability returns `DIRECTION_RELIABILITY_NOT_IDENTIFIABLE`; and computed `kappa < 0.70` returns `MEASUREMENT_FAILURE`. None of these states is represented as an A/B verdict.

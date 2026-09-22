@@ -26,6 +26,13 @@ OPTIMIZER_GUARDS = {
     "log_sigma_excess": (float(np.log(1e-8)), float(np.log(5.0))),
 }
 _BOUNDS = list(OPTIMIZER_GUARDS.values())
+FROZEN_OPTIMIZER = {
+    "method": "L-BFGS-B",
+    "maxiter": 80,
+    "ftol": 1e-12,
+    "gtol": 1e-7,
+    "start_agreement_log_likelihood_tolerance": 1e-6,
+}
 
 
 @dataclass(frozen=True)
@@ -50,6 +57,9 @@ class RCWEFit:
     terminal_state: tuple[float, float]
     fit_log_likelihood: float
     converged: bool
+    optimizer_agreement: bool
+    successful_starts: int
+    top_two_log_likelihood_gap: float | None
     starts: tuple[StartResult, ...]
     seed: int | None
 
@@ -61,10 +71,14 @@ class RCWEFit:
             "terminal_state": list(self.terminal_state),
             "fit_log_likelihood": self.fit_log_likelihood,
             "converged": self.converged,
+            "optimizer_agreement": self.optimizer_agreement,
+            "successful_starts": self.successful_starts,
+            "top_two_log_likelihood_gap": self.top_two_log_likelihood_gap,
             "starts": [start.as_dict() for start in self.starts],
             "seed": self.seed,
             "solver": REFERENCE_SOLVER.as_dict(),
             "optimizer": "scipy.optimize.minimize/L-BFGS-B",
+            "optimizer_settings": FROZEN_OPTIMIZER,
             "optimizer_guards": OPTIMIZER_GUARDS,
             "environment": software_versions(),
         }
@@ -88,17 +102,6 @@ def _decode(vector: np.ndarray, sigma_lower_bound: float) -> tuple[RCWEParameter
     )
     sigma = float(sigma_lower_bound + np.exp(vector[5]))
     return params, sigma
-
-
-def _log_likelihood(observed: np.ndarray, vector: np.ndarray, sigma_lower_bound: float) -> float:
-    try:
-        params, sigma = _decode(vector, sigma_lower_bound)
-        means, _states = forecast_means(params, len(observed))
-        values = [observation_log_probability(float(y), float(mu), sigma) for y, mu in zip(observed, means)]
-        result = float(np.sum(values))
-        return result if np.isfinite(result) else -np.inf
-    except (ValueError, RuntimeError, FloatingPointError, OverflowError):
-        return -np.inf
 
 
 def _trajectory_with_sensitivities(params: RCWEParameters, count: int) -> tuple[np.ndarray, np.ndarray]:
@@ -183,13 +186,13 @@ def _log_likelihood_and_gradient(
 
 
 def predefined_starts(observed, sigma_lower_bound: float) -> list[np.ndarray]:
-    y = np.asarray(observed, dtype=float)
-    first = float(np.clip(y[0], 1e-4, 1 - 1e-4))
-    s_guess = float(np.log(first / (1.0 - first)))
-    sigma_excess = max(0.12 - sigma_lower_bound, 1e-5)
+    del observed  # Frozen starts must not encode a synthetic truth or the first outcome.
+    sigma = lambda value: np.log(max(value - sigma_lower_bound, 1e-5))
     return [
-        np.array([0.50, np.log(0.10), np.log(8.0), s_guess, first, np.log(sigma_excess)]),
-        np.array([0.50, np.log(0.10), np.log(12.0), -1.0, 0.20, np.log(sigma_excess)]),
+        np.array([0.25, np.log(0.03), np.log(3.0), -2.0, 0.80, sigma(0.20)]),
+        np.array([0.75, np.log(0.30), np.log(20.0), 2.0, 0.20, sigma(0.05)]),
+        np.array([0.40, np.log(0.05), np.log(15.0), 1.5, 0.80, sigma(0.15)]),
+        np.array([0.60, np.log(0.25), np.log(5.0), -1.5, 0.20, sigma(0.30)]),
     ]
 
 
@@ -200,7 +203,7 @@ def fit_rcwe(
     starts: list[np.ndarray] | None = None,
     random_starts: int = 0,
     seed: int | None = None,
-    maxiter: int = 350,
+    maxiter: int = int(FROZEN_OPTIMIZER["maxiter"]),
 ) -> RCWEFit:
     """Fit only the supplied FIT observations using multiple starts."""
     y = np.asarray(observed, dtype=float)
@@ -239,7 +242,7 @@ def fit_rcwe(
             method="L-BFGS-B",
             jac=True,
             bounds=_BOUNDS,
-            options={"maxiter": maxiter, "ftol": 1e-12, "gtol": 1e-7},
+            options={"maxiter": maxiter, "ftol": FROZEN_OPTIMIZER["ftol"], "gtol": FROZEN_OPTIMIZER["gtol"]},
         )
         log_likelihood = -float(result.fun)
         records.append(
@@ -258,6 +261,9 @@ def fit_rcwe(
     converged = [(record, result) for record, result in zip(records, optimizer_results) if record.converged]
     candidates = converged or list(zip(records, optimizer_results))
     best_record, best_result = max(candidates, key=lambda pair: pair[0].log_likelihood)
+    ranked_likelihoods = sorted((record.log_likelihood for record, _ in converged), reverse=True)
+    gap = ranked_likelihoods[0] - ranked_likelihoods[1] if len(ranked_likelihoods) >= 2 else None
+    agreement = gap is not None and gap <= float(FROZEN_OPTIMIZER["start_agreement_log_likelihood_tolerance"])
     params, sigma = _decode(best_result.x, sigma_lower_bound)
     _means, states = forecast_means(params, len(y))
     return RCWEFit(
@@ -266,7 +272,10 @@ def fit_rcwe(
         sigma_lower_bound=sigma_lower_bound,
         terminal_state=tuple(float(x) for x in states[-1]),
         fit_log_likelihood=best_record.log_likelihood,
-        converged=bool(converged),
+        converged=agreement,
+        optimizer_agreement=agreement,
+        successful_starts=len(converged),
+        top_two_log_likelihood_gap=gap,
         starts=tuple(records),
         seed=seed,
     )

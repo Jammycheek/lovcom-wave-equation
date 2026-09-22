@@ -19,3 +19,9 @@ def test_g_is_derived_and_strong_cases_have_expected_local_stability():
     assert np.isclose(oscillatory.G, 1.2)
     assert str(classify_local_regime(stable)["classification"]).startswith("stable")
     assert classify_local_regime(oscillatory)["classification"] == "unstable_focus"
+
+
+def test_multiple_equilibria_are_reported_without_arbitrary_root_selection():
+    result = classify_local_regime(RCWEParameters(0.5, 0.3, 1.0, 0.0, 0.5))
+    assert len(result["equilibria"]) > 1
+    assert result["classification"] == "multistable"

@@ -6,6 +6,8 @@ import sys
 
 import pytest
 
+from scripts.run_subject6_comparison import parse_and_join
+
 from rcwe.subject6_compare import (
     CATEGORIES,
     PAIRS,
@@ -18,6 +20,7 @@ from rcwe.subject6_compare import (
 def row(order, pair="KM", category="0", exposure=0, **overrides):
     values = {
         "global_order": order,
+        "pair_ie_order": order % 10 + 1,
         "ie_id": f"IE-{order}",
         "pair": pair,
         "r_dir": category,
@@ -128,6 +131,21 @@ def test_non_adjudicated_exposure_is_rejected():
         row(0, shared_event_adjudicated=False)
 
 
+def test_exposure_must_be_frozen_before_outcome_reveal():
+    exposures = [{
+        "global_order": "0", "pair_ie_order": "1", "ie_id": "IE-0", "pair": "KM", "x_shared": "0",
+        "source_locator": "loc", "shared_event_adjudicated": "true",
+        "exposure_frozen_at": "2026-01-03T00:00:00+09:00", "exposure_commit": "exp",
+    }]
+    outcomes = [{
+        "ie_id": "IE-0", "r_dir": "+1", "direction_coder_a": "+1", "direction_coder_b": "+1",
+        "direction_adjudicated": "true", "outcome_revealed_at": "2026-01-02T00:00:00+09:00", "outcome_commit": "out",
+    }]
+    manifest = [{"qualified_ie_coding_complete": "true", "exposure_freeze_commit": "exp", "outcome_commit": "out"}]
+    with pytest.raises(ValueError, match="before outcome reveal"):
+        parse_and_join(exposures, outcomes, manifest)
+
+
 def test_activation_gate_passes_exact_frozen_boundary():
     gate = activation_gate(activation_rows())
     assert gate.passed
@@ -170,7 +188,7 @@ def test_event_independent_toy_sequence_is_scoreable_without_forced_winner():
 
 def test_strongly_event_conditioned_toy_sequence_favors_model_b():
     data = []
-    for i in range(36):
+    for i in range(30):
         exposure = i % 2
         data.append(row(i, pair=PAIRS[i % 3], category="+1" if exposure else "-1", exposure=exposure))
     result = compare(data)
@@ -186,8 +204,6 @@ def test_empty_template_runner_finishes_without_pretending_result(tmp_path):
         [
             sys.executable,
             str(root / "scripts" / "run_subject6_comparison.py"),
-            "--input",
-            str(root / "data" / "subject6_comparison_template.csv"),
             "--output",
             str(output),
         ],
@@ -205,16 +221,29 @@ def test_empty_template_runner_finishes_without_pretending_result(tmp_path):
 
 def test_runner_enforces_direction_reliability_gate(tmp_path):
     root = Path(__file__).resolve().parents[1]
-    input_path = tmp_path / "one-row.csv"
-    input_path.write_text(
-        "global_order,ie_id,pair,r_dir,x_shared,source_locator,direction_adjudicated,shared_event_adjudicated\n"
-        "0,IE-0,KM,+1,0,locator-0,true,true\n",
+    exposures = tmp_path / "exposures.csv"
+    outcomes = tmp_path / "outcomes.csv"
+    manifest = tmp_path / "manifest.csv"
+    exposures.write_text(
+        "global_order,pair_ie_order,ie_id,pair,x_shared,source_locator,shared_event_adjudicated,exposure_frozen_at,exposure_commit\n"
+        "0,1,IE-0,KM,0,locator-0,true,2026-01-01T00:00:00+09:00,exposure-commit\n",
+        encoding="utf-8",
+    )
+    manifest.write_text(
+        "work_id,version_id,edition,volume,qualified_ie_coding_complete,exposure_freeze_commit,outcome_commit,notes\n"
+        "S6,v1,comic,5,true,exposure-commit,outcome-commit,complete\n",
+        encoding="utf-8",
+    )
+    outcomes.write_text(
+        "ie_id,r_dir,direction_coder_a,direction_coder_b,direction_adjudicated,outcome_revealed_at,outcome_commit\n"
+        "IE-0,+1,+1,-1,true,2026-01-02T00:00:00+09:00,outcome-commit\n",
         encoding="utf-8",
     )
     failed_output = tmp_path / "failed"
     subprocess.run(
-        [sys.executable, str(root / "scripts" / "run_subject6_comparison.py"), "--input", str(input_path),
-         "--direction-kappa", "0.69", "--output", str(failed_output)],
+        [sys.executable, str(root / "scripts" / "run_subject6_comparison.py"),
+         "--exposures", str(exposures), "--outcomes", str(outcomes), "--manifest", str(manifest),
+         "--output", str(failed_output)],
         check=True,
         cwd=root,
     )
@@ -222,10 +251,16 @@ def test_runner_enforces_direction_reliability_gate(tmp_path):
     assert failed["status"] == "MEASUREMENT_FAILURE"
     assert failed["pooled"] is None
 
+    outcomes.write_text(
+        "ie_id,r_dir,direction_coder_a,direction_coder_b,direction_adjudicated,outcome_revealed_at,outcome_commit\n"
+        "IE-0,+1,+1,+1,true,2026-01-02T00:00:00+09:00,outcome-commit\n",
+        encoding="utf-8",
+    )
     passed_output = tmp_path / "passed"
     subprocess.run(
-        [sys.executable, str(root / "scripts" / "run_subject6_comparison.py"), "--input", str(input_path),
-         "--direction-kappa", "0.70", "--output", str(passed_output)],
+        [sys.executable, str(root / "scripts" / "run_subject6_comparison.py"),
+         "--exposures", str(exposures), "--outcomes", str(outcomes), "--manifest", str(manifest),
+         "--output", str(passed_output)],
         check=True,
         cwd=root,
     )

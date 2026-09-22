@@ -24,4 +24,7 @@ This import intentionally excludes exploratory parameter estimates, superseded f
 - Marked Tension Bridge v0.1 as a preregistered concept whose experiment is not frozen.
 - Added and implemented the Subject 6 probabilistic-comparison addendum without activating M_C.
 - Fixed the Samuwan control's information-exposure boundary at the end of comic volume 3 as of 2026-09-21; exact prospective source-unit identifiers and coder access controls remain pending.
-- Froze the Tension Bridge confirmatory experiment, rating instrument, data schemas, reliability gates, work-level holdout analysis, and static-tension challenge; human ratings remain pending.
+- Wired the Tension Bridge experiment to raw double-coded channels, mechanically derived windows, auditable freeze/future-blind timestamps, within-work reliability, role separation, and static-challenge precedence. Activation remains pending a separately frozen discriminant-validity pilot.
+- Replaced truth-matching synthetic starts with four data-independent starts, froze optimizer settings, added cross-start agreement, direct fit/gradient tests, and baseline guard warnings.
+- Split Subject 6 exposure and outcome inputs across distinct commits, capped the confirmatory corpus at the first 10 qualified IEs per pair, and compute Direction kappa from raw double coding.
+- Closed Samuwan C1/C3 underspecification and added external provenance for the unread-boundary declaration.

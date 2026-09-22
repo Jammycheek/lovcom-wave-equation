@@ -26,7 +26,7 @@ from rcwe.baselines import (
     forecast_narrative_position,
     forecast_persistence,
 )
-from rcwe.fit import OPTIMIZER_GUARDS, fit_rcwe, forecast_holdout
+from rcwe.fit import FROZEN_OPTIMIZER, OPTIMIZER_GUARDS, fit_rcwe, forecast_holdout
 from rcwe.integrate import REFERENCE_SOLVER
 from rcwe.model import classify_local_regime
 from rcwe.scoring import score_predictions
@@ -37,8 +37,6 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--replicates", type=int, default=20, help="replicates per scenario")
     parser.add_argument("--seed-base", type=int, default=260901)
-    parser.add_argument("--random-starts", type=int, default=0)
-    parser.add_argument("--maxiter", type=int, default=80)
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--output", type=Path, default=ROOT / "results" / "synthetic_recovery")
     return parser.parse_args()
@@ -90,7 +88,7 @@ def summarize(rows: list[dict[str, object]], scenarios) -> dict[str, object]:
 
 def run_one(task):
     """Run one independent replicate; top-level for Windows process spawning."""
-    scenario, seed, random_starts, maxiter = task
+    scenario, seed = task
     truth_regime = regime_group(str(classify_local_regime(scenario.parameters)["classification"]))
     prediction_rows = []
     fit_detail = None
@@ -98,7 +96,7 @@ def run_one(task):
     fit_y = series.coded_observation[: scenario.fit_count]
     holdout_y = series.coded_observation[scenario.fit_count :]
     try:
-        fitted = fit_rcwe(fit_y, random_starts=random_starts, seed=seed, maxiter=maxiter)
+        fitted = fit_rcwe(fit_y, seed=seed)
         rcwe_mu = forecast_holdout(fitted, scenario.holdout_count)
         rcwe_score = score_predictions(holdout_y, rcwe_mu, fitted.sigma_pred, start_index=scenario.fit_count)
         persistence = fit_persistence(fit_y)
@@ -119,6 +117,9 @@ def run_one(task):
             "scenario": scenario.name,
             "seed": seed,
             "converged": fitted.converged,
+            "successful_starts": fitted.successful_starts,
+            "optimizer_agreement": fitted.optimizer_agreement,
+            "top_two_log_likelihood_gap": fitted.top_two_log_likelihood_gap,
             "truth_Delta": scenario.parameters.Delta,
             "fitted_Delta": fitted.parameters.Delta,
             "truth_R": scenario.parameters.R,
@@ -140,6 +141,8 @@ def run_one(task):
             "delta_LS_persistence": rcwe_score.LS_total - baseline_scores["persistence"].LS_total,
             "delta_LS_ar1": rcwe_score.LS_total - baseline_scores["ar1"].LS_total,
             "delta_LS_narrative": rcwe_score.LS_total - baseline_scores["quadratic_narrative_position"].LS_total,
+            "baseline_guard_hit_count": sum(len(item.guard_hits) for item, _ in baseline_items),
+            "baseline_guard_hits": ";".join(f"{item.name}:{','.join(item.guard_hits)}" for item, _ in baseline_items if item.guard_hits),
             "error": "",
         }
         fit_detail = {
@@ -184,8 +187,7 @@ def main() -> int:
         "replicates_per_scenario": args.replicates,
         "seed_base": args.seed_base,
         "seeds": seeds,
-        "random_starts": args.random_starts,
-        "maxiter": args.maxiter,
+        "optimizer": FROZEN_OPTIMIZER,
         "workers": args.workers,
         "scenarios": [scenario.as_dict() for scenario in scenarios],
         "solver": REFERENCE_SOLVER.as_dict(),
@@ -202,7 +204,7 @@ def main() -> int:
     json_dump(output / "config.json", config)
     json_dump(output / "environment.json", environment)
 
-    tasks = [(scenario, seed, args.random_starts, args.maxiter) for scenario in scenarios for seed in seeds]
+    tasks = [(scenario, seed) for scenario in scenarios for seed in seeds]
     with ProcessPoolExecutor(max_workers=args.workers) as executor:
         completed = list(executor.map(run_one, tasks))
     rows = [result[0] for result in completed]
@@ -229,9 +231,13 @@ def main() -> int:
         "Poor parameter or regime recovery is reported without changing the frozen model.",
     ]
     convergence_failures = [row for row in rows if not row["converged"]]
+    baseline_guard_failures = [row for row in rows if int(row.get("baseline_guard_hit_count", 0)) > 0]
     regime_failures = [row for row in rows if row.get("converged") and not row.get("regime_recovered")]
     warnings.append(
         f"Convergence failures: {len(convergence_failures)} of {len(rows)} replicates."
+    )
+    warnings.append(
+        f"Baseline optimizer guard hits: {len(baseline_guard_failures)} of {len(rows)} replicates; affected comparisons require caution."
     )
     if regime_failures:
         failures = "; ".join(

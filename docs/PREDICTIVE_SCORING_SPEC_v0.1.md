@@ -32,7 +32,9 @@ An implementation using another solver is acceptable only if its forecast means 
 
 ## FIT estimation and freeze boundary
 
-Estimate `Delta, R, Omega, s0, v0` and predictive scale `sigma_pred` using FIT only, with `R > 0`, `Omega > 0`, and `sigma_pred > 0`. Use the discretized observation likelihood defined below. Optimizers must use multiple starting points; retain the converged solution with the largest FIT likelihood and preserve all starts, convergence codes, fitted values, software versions, and random seeds. Independent implementations are considered numerically equivalent only when their maximum FIT log likelihoods agree within `1e-6` and their holdout forecast means agree within `1e-8`.
+Estimate `Delta, R, Omega, s0, v0` and predictive scale `sigma_pred` using FIT only, with `R > 0`, `Omega > 0`, and `sigma_pred > 0`. Use the discretized observation likelihood defined below. The frozen reference optimizer is L-BFGS-B with `maxiter=80`, `ftol=1e-12`, and `gtol=1e-7`, using four data-independent starts in `(Delta,R,Omega,s0,v0,sigma_pred)` coordinates: `(0.25,.03,3,-2,.8,.20)`, `(.75,.30,20,2,.2,.05)`, `(.40,.05,15,1.5,.8,.15)`, and `(.60,.25,5,-1.5,.2,.30)`. The implementation converts positive coordinates to its logged parameterization and adjusts the scale coordinate for the coder lower bound.
+
+Retain the successful solution with the largest FIT likelihood and preserve every start, termination code, fitted value, software version, and seed. A fit is marked `converged` only when at least two starts terminate successfully and their two best FIT log likelihoods differ by no more than `1e-6`. Otherwise forecasts may be retained for diagnosis, but the run is an optimizer-agreement failure and cannot count as confirmatory evidence. Independent implementations are numerically equivalent only when maximum FIT log likelihoods agree within `1e-6` and holdout forecast means agree within `1e-8` under the same frozen dependency/runtime family.
 
 Coder disagreement provides a measurement-scale lower bound:
 

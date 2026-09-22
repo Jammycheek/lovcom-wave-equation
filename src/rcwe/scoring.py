@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+import math
 
 import numpy as np
 
@@ -56,16 +57,10 @@ def score_predictions(observed, predicted_mu, sigma: float, *, start_index: int 
                 absolute_error=abs(float(actual - forecast)),
             )
         )
-    total = float(math_fsum(row.log_probability for row in rows))
+    total = float(math.fsum(row.log_probability for row in rows))
     return ScoreResult(
         rows=tuple(rows),
         LS_total=total,
         LS_mean_per_IE=total / len(rows),
         MAE=float(np.mean([row.absolute_error for row in rows])),
     )
-
-
-def math_fsum(values) -> float:
-    import math
-
-    return math.fsum(values)

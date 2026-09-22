@@ -7,6 +7,8 @@ import sys
 import numpy as np
 import pytest
 
+from scripts.run_tension_bridge_analysis import parse_ratings, parse_windows
+
 from rcwe.tension_bridge import (
     AggregatedWindow,
     ChannelIE,
@@ -15,7 +17,9 @@ from rcwe.tension_bridge import (
     WindowMetric,
     activation_gate,
     aggregate_ratings,
+    bridge_verdict,
     build_windows,
+    channel_reliability,
     channel_metrics,
     deterministic_question_order,
     leave_one_work_out,
@@ -116,11 +120,53 @@ def test_p_switch_fixture():
     assert channel_metrics([BASE, BASE, BASE, BASE, SHIFT])[1] == pytest.approx(0.03125)
 
 
+def test_off_grid_channel_values_are_rejected():
+    with pytest.raises(ValueError, match="0.25 grid"):
+        ChannelIE("W", "P", 0, "IE", (0.6, 0.4, 0.0, 0.0))
+
+
+def test_channel_reliability_is_computed_from_raw_double_codes():
+    result = channel_reliability([BASE, BASE], [BASE, SHIFT])
+    assert result == {"median_d_tv": 0.125, "row_count": 2, "passed": True}
+
+
+def test_submitted_window_metrics_cannot_override_derived_values():
+    derived = build_windows(ies(5))
+    metadata = {
+        f"IE-{index}": {"work_id": "W1", "pair": "P1", "version_id": "v1", "edition": "comic", "source_locator": f"loc-{index}"}
+        for index in range(5)
+    }
+    row = {
+        "window_id": "W1::P1::W001", "work_id": "W1", "version_id": "v1", "edition": "comic", "pair": "P1",
+        **{f"ie_{index + 1}": f"IE-{index}" for index in range(5)},
+        "window_end_locator": "loc-4", "p_ac": "0.5", "p_switch": "0",
+        "window_frozen_at": "2026-01-01T00:00:00+09:00", "window_freeze_commit": "abc",
+    }
+    with pytest.raises(ValueError, match="mechanically derived"):
+        parse_windows([row], derived, metadata)
+
+
+def test_future_blind_status_is_derived_from_timestamp_order():
+    row = {
+        "rater_id": "R", "work_id": "W", "window_id": "WIN", "prior_exposure": "no", "knows_future": "no",
+        "exposure_uncertain": "no", "question_order": deterministic_question_order("seed", "W", "WIN", "R"),
+        "l_obs": "1", "t_obs": "2", "d_obs": "3", "eligibility_decided_at": "2026-01-01T00:00:00+09:00",
+        "window_endpoint_reached_at": "2026-01-01T01:00:00+09:00", "rating_timestamp": "2026-01-01T02:00:00+09:00",
+        "next_source_opened_at": "2026-01-01T01:30:00+09:00", "valid_primary": "true",
+    }
+    assert not parse_ratings([row])[0].future_blind
+
+
 def test_coder_and_rater_cannot_overlap_for_same_work():
     metric = window()
     ratings = [rating("person-1", metric)]
     with pytest.raises(ValueError, match="roles overlap"):
         validate_role_separation({"W1": {"person-1"}}, {"W1": set()}, ratings)
+
+
+def test_coder_and_adjudicator_cannot_overlap_for_same_work():
+    with pytest.raises(ValueError, match="coder and adjudicator"):
+        validate_role_separation({"W1": {"person-1"}}, {"W1": {"person-1"}}, [])
 
 
 def test_prior_familiar_rater_is_excluded():
@@ -256,6 +302,20 @@ def test_static_tension_rule_exact():
     assert static_tension_challenge(data[:2])["status"] == "NOT_TRIGGERED"
 
 
+@pytest.mark.parametrize(
+    ("beta", "delta", "static_failed", "expected"),
+    [
+        (0.1, 2.0, False, "SUPPORT"),
+        (0.1, 1.999, False, "INDETERMINATE"),
+        (0.0, 3.0, False, "FAIL"),
+        (0.1, 0.0, False, "FAIL"),
+        (0.1, 3.0, True, "FAIL_STATIC_TENSION_CHALLENGE"),
+    ],
+)
+def test_bridge_verdict_boundaries_and_static_precedence(beta, delta, static_failed, expected):
+    assert bridge_verdict(beta, delta, static_tension_failed=static_failed) == expected
+
+
 def test_same_input_and_seed_give_same_output():
     data = toy("ac")
     assert leave_one_work_out(data) == leave_one_work_out(data)
@@ -267,6 +327,7 @@ def test_templates_require_no_copyrighted_content():
     root = Path(__file__).resolve().parents[1]
     for name in (
         "tension_bridge_windows_template.csv",
+        "tension_bridge_channels_template.csv",
         "tension_bridge_ratings_template.csv",
         "tension_bridge_work_manifest_template.csv",
     ):

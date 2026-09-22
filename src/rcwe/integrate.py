@@ -42,7 +42,7 @@ def integrate_states(
         raise ValueError("count cannot be negative")
     if count == 0:
         return np.empty((0, 2), dtype=float)
-    state0 = np.asarray(initial_state or (params.s0, params.v0), dtype=float)
+    state0 = np.asarray((params.s0, params.v0) if initial_state is None else initial_state, dtype=float)
     if include_initial:
         if count == 1:
             return state0.reshape(1, 2)

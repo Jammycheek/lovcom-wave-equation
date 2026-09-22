@@ -17,6 +17,10 @@ RELIABILITY_GATE = 0.70
 QUESTION_CODES = ("L", "T", "D")
 
 
+class ModelIdentificationError(ValueError):
+    """The frozen linear model cannot be identified for a specified fold."""
+
+
 @dataclass(frozen=True)
 class ChannelIE:
     work_id: str
@@ -29,6 +33,8 @@ class ChannelIE:
         values = np.asarray(self.vector, dtype=float)
         if values.shape != (4,) or np.any(values < 0) or not np.isclose(values.sum(), 1.0, atol=1e-12):
             raise ValueError("channel vector must be a nonnegative D/S/C/P simplex")
+        if not np.allclose(values * 4.0, np.round(values * 4.0), atol=1e-12):
+            raise ValueError("channel values must use the frozen 0.25 grid")
 
 
 @dataclass(frozen=True)
@@ -134,6 +140,21 @@ def channel_metrics(vectors: Iterable[Iterable[float]]) -> tuple[float, float]:
     return p_ac, p_switch
 
 
+def channel_reliability(coder_a, coder_b) -> dict[str, object]:
+    a = np.asarray(coder_a, dtype=float)
+    b = np.asarray(coder_b, dtype=float)
+    if a.shape != b.shape or a.ndim != 2 or a.shape[1] != 4 or len(a) == 0:
+        raise ValueError("coder channel arrays must be nonempty N x 4 arrays of equal shape")
+    for values in (a, b):
+        if np.any(values < 0) or not np.allclose(values.sum(axis=1), 1.0, atol=1e-12):
+            raise ValueError("raw coder vectors must lie on the D/S/C/P simplex")
+        if not np.allclose(values * 4.0, np.round(values * 4.0), atol=1e-12):
+            raise ValueError("raw coder values must use the frozen 0.25 grid")
+    distances = 0.5 * np.sum(np.abs(a - b), axis=1)
+    median = float(np.median(distances))
+    return {"median_d_tv": median, "row_count": len(a), "passed": median <= 0.25}
+
+
 def build_windows(ies: Iterable[ChannelIE]) -> list[WindowMetric]:
     groups: dict[tuple[str, str], list[ChannelIE]] = {}
     for ie in ies:
@@ -188,14 +209,24 @@ def validate_role_separation(
     coder_ids_by_work: Mapping[str, set[str]],
     adjudicator_ids_by_work: Mapping[str, set[str]],
     ratings: Iterable[Rating],
-) -> None:
+) -> bool:
     raters_by_work: dict[str, set[str]] = {}
     for rating in ratings:
         raters_by_work.setdefault(rating.work_id, set()).add(rating.rater_id)
-    for work_id, raters in raters_by_work.items():
-        overlap = raters & (set(coder_ids_by_work.get(work_id, set())) | set(adjudicator_ids_by_work.get(work_id, set())))
+    all_works = set(coder_ids_by_work) | set(adjudicator_ids_by_work) | set(raters_by_work)
+    for work_id in sorted(all_works):
+        raters = raters_by_work.get(work_id, set())
+        coders = set(coder_ids_by_work.get(work_id, set()))
+        adjudicators = set(adjudicator_ids_by_work.get(work_id, set()))
+        coder_adjudicator_overlap = coders & adjudicators
+        if coder_adjudicator_overlap:
+            raise ValueError(
+                f"coder and adjudicator roles overlap for {work_id}: {sorted(coder_adjudicator_overlap)}"
+            )
+        overlap = raters & (coders | adjudicators)
         if overlap:
             raise ValueError(f"coder/adjudicator and rater roles overlap for {work_id}: {sorted(overlap)}")
+    return True
 
 
 def aggregate_ratings(
@@ -271,18 +302,28 @@ def split_half_reliability(
     corrected: list[float] = []
     if len(grouped) >= 2:
         for repeat in range(repeats):
-            half_a, half_b = [], []
+            half_a, half_b, work_ids = [], [], []
             for window_id, values in sorted(grouped.items()):
                 rng = np.random.default_rng(_stable_seed(master_seed, construct, repeat, window_id))
                 order = rng.permutation(len(values))
                 split = len(values) // 2
                 a = [getattr(values[index], field) for index in order[:split]]
-                b = [getattr(values[index], field) for index in order[split:]]
+                b = [getattr(values[index], field) for index in order[split : split * 2]]
                 half_a.append(float(np.mean(a)))
                 half_b.append(float(np.mean(b)))
-            if np.std(half_a) == 0 or np.std(half_b) == 0:
+                work_ids.append(values[0].work_id)
+            centered_a, centered_b = [], []
+            for work_id in sorted(set(work_ids)):
+                indices = [index for index, value in enumerate(work_ids) if value == work_id]
+                if len(indices) < 2:
+                    continue
+                mean_a = float(np.mean([half_a[index] for index in indices]))
+                mean_b = float(np.mean([half_b[index] for index in indices]))
+                centered_a.extend(half_a[index] - mean_a for index in indices)
+                centered_b.extend(half_b[index] - mean_b for index in indices)
+            if len(centered_a) < 2 or np.std(centered_a) == 0 or np.std(centered_b) == 0:
                 continue
-            correlation = float(np.corrcoef(half_a, half_b)[0, 1])
+            correlation = float(np.corrcoef(centered_a, centered_b)[0, 1])
             if not np.isfinite(correlation) or np.isclose(1.0 + correlation, 0.0):
                 continue
             corrected.append(2.0 * correlation / (1.0 + correlation))
@@ -341,7 +382,7 @@ def standardize_train_holdout(train: np.ndarray, holdout: np.ndarray) -> tuple[n
     means = train.mean(axis=0)
     scales = train.std(axis=0, ddof=0)
     if np.any(scales == 0):
-        raise ValueError("TRAIN predictor SD is zero")
+        raise ModelIdentificationError("TRAIN predictor SD is zero")
     return (train - means) / scales, (holdout - means) / scales, means, scales
 
 
@@ -351,13 +392,13 @@ def ols_predictive_distribution(train_x, train_y, holdout_x) -> tuple[np.ndarray
     x_holdout = np.asarray(holdout_x, dtype=float)
     n, p = x.shape
     if n - p <= 0 or np.linalg.matrix_rank(x) < p:
-        raise ValueError("singular design or non-positive residual degrees of freedom")
+        raise ModelIdentificationError("singular design or non-positive residual degrees of freedom")
     inverse = np.linalg.inv(x.T @ x)
     beta = inverse @ x.T @ y
     residual = y - x @ beta
     variance = float(residual @ residual / (n - p))
     if variance <= 0 or not np.isfinite(variance):
-        raise ValueError("non-positive residual variance")
+        raise ModelIdentificationError("non-positive residual variance")
     locations = x_holdout @ beta
     leverage = np.einsum("ij,jk,ik->i", x_holdout, inverse, x_holdout)
     scales = np.sqrt(variance * (1.0 + leverage))
@@ -376,7 +417,7 @@ def leave_one_work_out(windows: Iterable[AggregatedWindow]) -> dict[str, object]
     data = sorted(windows, key=lambda item: (item.work_id, item.window_id))
     works = sorted({item.work_id for item in data})
     if len(works) < 2:
-        raise ValueError("leave-one-work-out requires at least two works")
+        raise ModelIdentificationError("leave-one-work-out requires at least two works")
     rows = []
     totals = {model: [] for model in MODEL_COLUMNS}
     for holdout_work in works:
@@ -416,7 +457,7 @@ def leave_one_work_out(windows: Iterable[AggregatedWindow]) -> dict[str, object]
     full_means = full_predictors.mean(axis=0)
     full_scales = full_predictors.std(axis=0, ddof=0)
     if np.any(full_scales == 0):
-        raise ValueError("full-dataset predictor SD is zero")
+        raise ModelIdentificationError("full-dataset predictor SD is zero")
     full_z = (full_predictors - full_means) / full_scales
     full_design = np.column_stack([np.ones(len(data)), full_z])
     full_y = np.array([item.t_obs for item in data])
@@ -424,12 +465,7 @@ def leave_one_work_out(windows: Iterable[AggregatedWindow]) -> dict[str, object]
     beta_pac = float(full_beta[3])
     delta_primary = scores["M1"] - scores["M0"]
     delta_love = scores["MLAC"] - scores["ML"]
-    if beta_pac > 0 and delta_primary >= 2:
-        status = "SUPPORT"
-    elif beta_pac > 0 and 0 < delta_primary < 2:
-        status = "INDETERMINATE"
-    else:
-        status = "FAIL"
+    status = bridge_verdict(beta_pac, delta_primary)
     return {
         "predictions": rows,
         "scores": scores,
@@ -438,6 +474,16 @@ def leave_one_work_out(windows: Iterable[AggregatedWindow]) -> dict[str, object]
         "beta_pac_full": beta_pac,
         "primary_status": status,
     }
+
+
+def bridge_verdict(beta_pac: float, delta_ls_primary: float, *, static_tension_failed: bool = False) -> str:
+    if static_tension_failed:
+        return "FAIL_STATIC_TENSION_CHALLENGE"
+    if beta_pac > 0 and delta_ls_primary >= 2:
+        return "SUPPORT"
+    if beta_pac > 0 and 0 < delta_ls_primary < 2:
+        return "INDETERMINATE"
+    return "FAIL"
 
 
 def static_tension_challenge(windows: Iterable[AggregatedWindow]) -> dict[str, object]:

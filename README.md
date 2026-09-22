@@ -17,8 +17,8 @@ The working slogan is **Love is DC; Rom-Com is AC**. It does not claim that affe
 
 - RCWE v2.0 mathematical core: frozen
 - Annotation Codebook v0.2.1: frozen candidate; reliability pilot still required
-- Predictive Scoring Specification v0.1: reference implementation and synthetic recovery completed
-- Tension Bridge: confirmatory experiment design frozen; human rating data pending
+- Predictive Scoring Specification v0.1: reference implementation remediated; synthetic recovery rerun pending
+- Tension Bridge: implementation wired; inactive pending a separately frozen `T_obs`/`D_obs` discriminant-validity pilot
 - Subject 5: retrospective blind-validation protocol
 - Subject 6: prospective protocol; probabilistic model-comparison addendum frozen
 - Control: information-exposure boundary frozen; inactive pending exact source-unit identifiers and coder access controls

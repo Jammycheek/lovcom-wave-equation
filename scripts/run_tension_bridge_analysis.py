@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+from datetime import datetime
 import hashlib
 import json
 from pathlib import Path
@@ -19,13 +20,18 @@ import numpy as np
 import scipy
 
 from rcwe.tension_bridge import (
+    ChannelIE,
     MIN_RATERS,
+    ModelIdentificationError,
     RELIABILITY_GATE,
     RELIABILITY_REPEATS,
     Rating,
     WindowMetric,
     activation_gate,
     aggregate_ratings,
+    build_windows,
+    bridge_verdict,
+    channel_reliability,
     leave_one_work_out,
     split_half_reliability,
     static_tension_challenge,
@@ -36,6 +42,7 @@ from rcwe.tension_bridge import (
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--channels", type=Path, default=ROOT / "data" / "tension_bridge_channels_template.csv")
     parser.add_argument("--windows", type=Path, default=ROOT / "data" / "tension_bridge_windows_template.csv")
     parser.add_argument("--ratings", type=Path, default=ROOT / "data" / "tension_bridge_ratings_template.csv")
     parser.add_argument("--manifest", type=Path, default=ROOT / "data" / "tension_bridge_work_manifest_template.csv")
@@ -84,29 +91,108 @@ def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, object]]) 
         writer.writerows(rows)
 
 
-def parse_windows(rows: list[dict[str, str]]) -> tuple[list[WindowMetric], bool, bool]:
-    windows = []
-    channel_passes = []
-    frozen_flags = []
+def parse_channels(rows: list[dict[str, str]]):
+    ies: list[ChannelIE] = []
+    coder_a: list[tuple[float, float, float, float]] = []
+    coder_b: list[tuple[float, float, float, float]] = []
+    metadata: dict[str, dict[str, str]] = {}
+    coders: dict[str, set[str]] = {}
+    adjudicators: dict[str, set[str]] = {}
     for row in rows:
-        ie_ids = tuple(row[f"ie_{index}"].strip() for index in range(1, 6))
-        if len(set(ie_ids)) != 5 or not all(ie_ids):
-            raise ValueError("every frozen window requires five distinct IE identifiers")
-        p_ac = float(row["p_ac"])
-        p_switch = float(row["p_switch"])
-        if p_ac < 0 or p_switch < 0:
-            raise ValueError("P_AC and P_switch cannot be negative")
-        windows.append(WindowMetric(row["window_id"].strip(), row["work_id"].strip(), row["pair"].strip(), ie_ids, p_ac, p_switch))
-        channel_passes.append(parse_bool(row["channel_reliability_passed"], "channel_reliability_passed"))
-        frozen_flags.append(parse_bool(row["frozen_before_ratings"], "frozen_before_ratings"))
-    if len({window.window_id for window in windows}) != len(windows):
+        work = row["work_id"].strip()
+        pair = row["pair"].strip()
+        ie_id = row["ie_id"].strip()
+        version_id = row["version_id"].strip()
+        edition = row["edition"].strip()
+        locator = row["source_locator"].strip()
+        coder_ids = split_ids(row["channel_coder_ids"])
+        adjudicator_id = row["adjudicator_id"].strip()
+        if not all((work, pair, ie_id, version_id, edition, locator, adjudicator_id)) or len(coder_ids) != 2:
+            raise ValueError("each channel row requires provenance, exactly two coder IDs, and one adjudicator")
+        if ie_id in metadata:
+            raise ValueError(f"duplicate ie_id: {ie_id}")
+        raw_a = tuple(float(row[f"{name}_a"]) for name in "dscp")
+        raw_b = tuple(float(row[f"{name}_b"]) for name in "dscp")
+        adjudicated = tuple(float(row[name]) for name in "dscp")
+        # ChannelIE validates the frozen simplex and 0.25 grid for every vector.
+        ChannelIE(work, pair, int(row["global_order"]), f"{ie_id}::coder-a", raw_a)
+        ChannelIE(work, pair, int(row["global_order"]), f"{ie_id}::coder-b", raw_b)
+        ies.append(ChannelIE(work, pair, int(row["global_order"]), ie_id, adjudicated))
+        coder_a.append(raw_a)
+        coder_b.append(raw_b)
+        metadata[ie_id] = {
+            "work_id": work,
+            "pair": pair,
+            "version_id": version_id,
+            "edition": edition,
+            "source_locator": locator,
+        }
+        coders.setdefault(work, set()).update(coder_ids)
+        adjudicators.setdefault(work, set()).add(adjudicator_id)
+    reliability = channel_reliability(coder_a, coder_b) if rows else {"median_d_tv": None, "row_count": 0, "passed": False}
+    return ies, metadata, coders, adjudicators, reliability
+
+
+def parse_windows(
+    rows: list[dict[str, str]],
+    derived_windows: list[WindowMetric],
+    channel_metadata: dict[str, dict[str, str]],
+) -> tuple[list[WindowMetric], list[datetime]]:
+    submitted = {row["window_id"].strip(): row for row in rows}
+    derived = {window.window_id: window for window in derived_windows}
+    if len(submitted) != len(rows):
         raise ValueError("duplicate window_id")
-    return windows, bool(windows) and all(channel_passes), bool(windows) and all(frozen_flags)
+    if set(submitted) != set(derived):
+        raise ValueError("submitted window manifest must exactly match mechanically derived complete windows")
+    frozen_times = []
+    for window_id, window in derived.items():
+        row = submitted[window_id]
+        ie_ids = tuple(row[f"ie_{index}"].strip() for index in range(1, 6))
+        if ie_ids != window.ie_ids:
+            raise ValueError(f"window IE membership/order mismatch: {window_id}")
+        if row["work_id"].strip() != window.work_id or row["pair"].strip() != window.pair:
+            raise ValueError(f"window work/pair mismatch: {window_id}")
+        first = channel_metadata[ie_ids[0]]
+        last = channel_metadata[ie_ids[-1]]
+        if any(channel_metadata[ie_id]["version_id"] != first["version_id"] or channel_metadata[ie_id]["edition"] != first["edition"] for ie_id in ie_ids):
+            raise ValueError(f"window crosses version or edition boundaries: {window_id}")
+        if row["version_id"].strip() != first["version_id"] or row["edition"].strip() != first["edition"]:
+            raise ValueError(f"window provenance mismatch: {window_id}")
+        if row["window_end_locator"].strip() != last["source_locator"]:
+            raise ValueError(f"window endpoint locator mismatch: {window_id}")
+        if not np.isclose(float(row["p_ac"]), window.p_ac, atol=1e-12, rtol=0.0):
+            raise ValueError(f"submitted p_ac is not the mechanically derived value: {window_id}")
+        if not np.isclose(float(row["p_switch"]), window.p_switch, atol=1e-12, rtol=0.0):
+            raise ValueError(f"submitted p_switch is not the mechanically derived value: {window_id}")
+        if not row["window_freeze_commit"].strip():
+            raise ValueError(f"window freeze commit is required: {window_id}")
+        frozen_times.append(parse_timestamp(row["window_frozen_at"], "window_frozen_at"))
+    return derived_windows, frozen_times
+
+
+def parse_timestamp(value: str, field: str) -> datetime:
+    normalized = value.strip().replace("Z", "+00:00")
+    if not normalized:
+        raise ValueError(f"{field} is required for future-blind audit")
+    try:
+        result = datetime.fromisoformat(normalized)
+    except ValueError as exc:
+        raise ValueError(f"{field} must be ISO 8601") from exc
+    if result.tzinfo is None or result.utcoffset() is None:
+        raise ValueError(f"{field} must include a UTC offset")
+    return result
 
 
 def parse_ratings(rows: list[dict[str, str]]) -> list[Rating]:
-    return [
-        Rating(
+    ratings = []
+    for row in rows:
+        eligibility = parse_timestamp(row["eligibility_decided_at"], "eligibility_decided_at")
+        endpoint = parse_timestamp(row["window_endpoint_reached_at"], "window_endpoint_reached_at")
+        rated = parse_timestamp(row["rating_timestamp"], "rating_timestamp")
+        next_opened_raw = row["next_source_opened_at"].strip()
+        next_opened = parse_timestamp(next_opened_raw, "next_source_opened_at") if next_opened_raw else None
+        audit_passed = eligibility <= endpoint <= rated and (next_opened is None or rated < next_opened)
+        ratings.append(Rating(
             rater_id=row["rater_id"].strip(),
             work_id=row["work_id"].strip(),
             window_id=row["window_id"].strip(),
@@ -117,11 +203,10 @@ def parse_ratings(rows: list[dict[str, str]]) -> list[Rating]:
             l_obs=int(row["l_obs"]),
             t_obs=int(row["t_obs"]),
             d_obs=int(row["d_obs"]),
-            future_blind=parse_bool(row["future_blind"], "future_blind"),
+            future_blind=audit_passed,
             valid_primary=parse_bool(row["valid_primary"], "valid_primary"),
-        )
-        for row in rows
-    ]
+        ))
+    return ratings
 
 
 def split_ids(value: str) -> set[str]:
@@ -131,39 +216,62 @@ def split_ids(value: str) -> set[str]:
 def parse_manifest(rows: list[dict[str, str]]):
     coders: dict[str, set[str]] = {}
     adjudicators: dict[str, set[str]] = {}
-    frozen = []
+    frozen_times = []
     ethics_ready = []
     for row in rows:
         work = row["work_id"].strip()
         coders.setdefault(work, set()).update(split_ids(row["channel_coder_ids"]))
         adjudicators.setdefault(work, set()).update(split_ids(row["adjudicator_ids"]))
-        frozen.append(parse_bool(row["manifest_frozen"], "manifest_frozen"))
+        if not row["manifest_freeze_commit"].strip():
+            raise ValueError("manifest_freeze_commit is required")
+        frozen_times.append(parse_timestamp(row["manifest_frozen_at"], "manifest_frozen_at"))
         if parse_bool(row["copyright_content_stored"], "copyright_content_stored"):
             raise ValueError("repository manifest indicates copyrighted source content was stored")
-        ethics_ready.append(row["ethics_status"].strip().lower() not in ("", "pending", "unassessed", "unknown"))
-    return coders, adjudicators, bool(rows) and all(frozen) and all(ethics_ready)
+        ethics_hash = row["ethics_record_sha256"].strip().lower()
+        pilot_hash = row["discriminant_pilot_spec_sha256"].strip().lower()
+        ethics_ready.append(
+            row["ethics_status"].strip().lower() not in ("", "pending", "unassessed", "unknown")
+            and len(ethics_hash) == 64 and all(character in "0123456789abcdef" for character in ethics_hash)
+            and parse_bool(row["discriminant_pilot_passed"], "discriminant_pilot_passed")
+            and len(pilot_hash) == 64 and all(character in "0123456789abcdef" for character in pilot_hash)
+        )
+    return coders, adjudicators, frozen_times, bool(rows) and all(ethics_ready)
 
 
 def main() -> int:
     args = parse_args()
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
+    channel_raw, channel_rows = read_csv(args.channels.resolve())
     window_raw, window_rows = read_csv(args.windows.resolve())
     rating_raw, rating_rows = read_csv(args.ratings.resolve())
     manifest_raw, manifest_rows = read_csv(args.manifest.resolve())
     input_hashes = {
+        "channels_sha256": file_hash(channel_raw),
         "windows_sha256": file_hash(window_raw),
         "ratings_sha256": file_hash(rating_raw),
         "manifest_sha256": file_hash(manifest_raw),
     }
-    windows, channel_passed, windows_frozen = parse_windows(window_rows)
+    channel_ies, channel_metadata, raw_coders, raw_adjudicators, channel_reliability_result = parse_channels(channel_rows)
+    windows, window_freeze_times = parse_windows(window_rows, build_windows(channel_ies), channel_metadata)
     ratings = parse_ratings(rating_rows)
-    coders, adjudicators, manifest_ready = parse_manifest(manifest_rows)
+    coders, adjudicators, manifest_freeze_times, ethics_ready = parse_manifest(manifest_rows)
+    if raw_coders != coders or raw_adjudicators != adjudicators:
+        raise ValueError("work manifest role assignments must exactly match raw channel rows")
+    first_rating_time = min((parse_timestamp(row["rating_timestamp"], "rating_timestamp") for row in rating_rows), default=None)
+    freeze_ready = bool(first_rating_time) and all(
+        frozen_at < first_rating_time for frozen_at in [*window_freeze_times, *manifest_freeze_times]
+    )
     command = " ".join([Path(sys.executable).name, *sys.argv])
     config = {
         "command": command,
         "master_seed": args.master_seed,
-        "input_files": {"windows": str(args.windows.resolve()), "ratings": str(args.ratings.resolve()), "manifest": str(args.manifest.resolve())},
+        "input_files": {
+            "channels": str(args.channels.resolve()),
+            "windows": str(args.windows.resolve()),
+            "ratings": str(args.ratings.resolve()),
+            "manifest": str(args.manifest.resolve()),
+        },
         "input_hashes": input_hashes,
         "window_size": 5,
         "minimum_raters": MIN_RATERS,
@@ -183,13 +291,21 @@ def main() -> int:
     model_summary: dict[str, object]
     window_output_rows: list[dict[str, object]] = []
 
-    if not windows and not ratings and not manifest_rows:
+    if not channel_ies and not windows and not ratings and not manifest_rows:
         status = "NO_DATA"
-        model_summary = {"status": status, "scores": None, "delta_ls_primary": None, "delta_ls_love": None, "beta_pac_full": None, "static_tension_challenge": None}
+        model_summary = {
+            "status": status,
+            "channel_reliability": channel_reliability_result,
+            "scores": None,
+            "delta_ls_primary": None,
+            "delta_ls_love": None,
+            "beta_pac_full": None,
+            "static_tension_challenge": None,
+        }
         warnings.append("Header-only templates contain no human or work data; no scientific result was produced.")
     else:
         validate_question_orders(ratings, args.master_seed)
-        validate_role_separation(coders, adjudicators, ratings)
+        role_separation_passed = validate_role_separation(coders, adjudicators, ratings)
         aggregates, window_statuses, eligible_ratings = aggregate_ratings(windows, ratings)
         exclusions = {"non_primary_ratings": len(ratings) - len(eligible_ratings), "window_status": window_statuses}
         reliability = {
@@ -199,9 +315,9 @@ def main() -> int:
         gate = activation_gate(
             aggregates,
             reliability,
-            channel_reliability_passed=channel_passed,
-            manifest_frozen=windows_frozen and manifest_ready,
-            role_separation_passed=True,
+            channel_reliability_passed=bool(channel_reliability_result["passed"]),
+            manifest_frozen=freeze_ready and ethics_ready,
+            role_separation_passed=role_separation_passed,
         )
         static = static_tension_challenge(aggregates)
         aggregate_map = {item.window_id: item for item in aggregates}
@@ -219,15 +335,27 @@ def main() -> int:
             try:
                 analysis = leave_one_work_out(aggregates)
                 fold_rows = analysis.pop("predictions")
-                status = str(analysis["primary_status"])
-                model_summary = {"status": status, "activation_gate": gate.as_dict(), **analysis, "static_tension_challenge": static}
-            except ValueError as exc:
+                primary_model_status = str(analysis.pop("primary_status"))
+                status = bridge_verdict(
+                    float(analysis["beta_pac_full"]),
+                    float(analysis["delta_ls_primary"]),
+                    static_tension_failed=static["status"] == "FAIL",
+                )
+                model_summary = {
+                    "status": status,
+                    "primary_model_status": primary_model_status,
+                    "channel_reliability": channel_reliability_result,
+                    "activation_gate": gate.as_dict(),
+                    **analysis,
+                    "static_tension_challenge": static,
+                }
+            except ModelIdentificationError as exc:
                 status = "MODEL_IDENTIFICATION_FAILURE"
-                model_summary = {"status": status, "activation_gate": gate.as_dict(), "scores": None, "delta_ls_primary": None, "delta_ls_love": None, "beta_pac_full": None, "static_tension_challenge": static, "identification_error": str(exc)}
+                model_summary = {"status": status, "channel_reliability": channel_reliability_result, "activation_gate": gate.as_dict(), "scores": None, "delta_ls_primary": None, "delta_ls_love": None, "beta_pac_full": None, "static_tension_challenge": static, "identification_error": str(exc)}
                 warnings.append(f"Frozen linear model could not be identified: {exc}")
         else:
             status = gate.status
-            model_summary = {"status": status, "activation_gate": gate.as_dict(), "scores": None, "delta_ls_primary": None, "delta_ls_love": None, "beta_pac_full": None, "static_tension_challenge": static}
+            model_summary = {"status": status, "channel_reliability": channel_reliability_result, "activation_gate": gate.as_dict(), "scores": None, "delta_ls_primary": None, "delta_ls_love": None, "beta_pac_full": None, "static_tension_challenge": static}
             warnings.append(f"Confirmatory analysis was not activated: {status}.")
 
     reliability_json = {key: value.as_dict() for key, value in reliability.items()}
@@ -250,6 +378,7 @@ def main() -> int:
         "## Corpus and reliability", "",
         f"- Works / dyads / eligible windows: `{gate_report if gate_report is not None else 'no data'}`",
         f"- Ratings per window and exclusions: `{exclusions}`",
+        f"- Channel reliability: `{channel_reliability_result}`",
         f"- Rater reliability: `{reliability_json}`", "",
         "## Models and challenges", "",
         f"- Model summary: `{model_summary}`",

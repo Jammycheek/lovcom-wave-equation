@@ -15,6 +15,7 @@ DIRECTION_KAPPA_GATE = 0.70
 @dataclass(frozen=True)
 class Subject6Row:
     global_order: int
+    pair_ie_order: int
     ie_id: str
     pair: str
     r_dir: str
@@ -26,6 +27,8 @@ class Subject6Row:
     def __post_init__(self) -> None:
         if self.global_order < 0:
             raise ValueError("global_order must be nonnegative")
+        if not 1 <= self.pair_ie_order <= 10:
+            raise ValueError("pair_ie_order must be in the frozen range 1..10")
         if not self.ie_id:
             raise ValueError("ie_id is required")
         if not self.source_locator:
@@ -45,6 +48,7 @@ class Subject6Row:
 @dataclass(frozen=True)
 class PredictionRow:
     global_order: int
+    pair_ie_order: int
     ie_id: str
     pair: str
     r_dir: str
@@ -132,6 +136,11 @@ def ordered_rows(rows: Iterable[Subject6Row]) -> list[Subject6Row]:
     orders = [row.global_order for row in result]
     if len(orders) != len(set(orders)):
         raise ValueError("duplicate global_order is not allowed")
+    if len(result) > 30:
+        raise ValueError("Subject 6 confirmatory corpus is capped at 10 qualified IEs per pair")
+    pair_orders = [(row.pair, row.pair_ie_order) for row in result]
+    if len(pair_orders) != len(set(pair_orders)):
+        raise ValueError("duplicate pair_ie_order is not allowed")
     return result
 
 
@@ -185,6 +194,7 @@ def compare(rows: Iterable[Subject6Row]) -> ComparisonResult:
         predictions.append(
             PredictionRow(
                 global_order=row.global_order,
+                pair_ie_order=row.pair_ie_order,
                 ie_id=row.ie_id,
                 pair=row.pair,
                 r_dir=row.r_dir,
@@ -227,6 +237,7 @@ def parse_boolean(value: str, field: str) -> bool:
 def row_from_mapping(mapping: dict[str, str]) -> Subject6Row:
     required = (
         "global_order",
+        "pair_ie_order",
         "ie_id",
         "pair",
         "r_dir",
@@ -240,6 +251,7 @@ def row_from_mapping(mapping: dict[str, str]) -> Subject6Row:
         raise ValueError(f"missing required columns: {', '.join(missing)}")
     return Subject6Row(
         global_order=int(mapping["global_order"]),
+        pair_ie_order=int(mapping["pair_ie_order"]),
         ie_id=mapping["ie_id"].strip(),
         pair=mapping["pair"].strip(),
         r_dir=mapping["r_dir"].strip(),

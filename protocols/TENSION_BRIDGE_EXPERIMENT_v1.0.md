@@ -29,7 +29,9 @@ P_{AC}(W)=\frac15\sum_{n\in W}\|\mathbf p_n-\bar{\mathbf p}_W\|_2^2,
 P_{switch}(W)=\frac14\sum_{n=2}^{5}\|\mathbf p_n-\mathbf p_{n-1}\|_2^2.
 \]
 
-`P_AC` is primary; `P_switch` is a secondary diagnostic and may not be added post hoc to a primary model. Use blind-coded, adjudicated D/S/C/P vectors. A corpus failing the Codebook channel-reliability gate is unavailable for confirmatory analysis.
+`P_AC` is primary; `P_switch` is a secondary diagnostic and may not be added post hoc to a primary model. Raw coder-A, coder-B, and adjudicated D/S/C/P vectors must all use the Codebook's 0.25 grid and simplex. The runner derives complete windows and both metrics from adjudicated IE rows; submitted window values are verification fields and any mismatch stops analysis. Channel reliability is computed from the two raw coder vectors as median per-IE total-variation distance and passes only at `median dTV <= .25`. A corpus failing this gate is unavailable for confirmatory analysis.
+
+The raw channel schema is `work_id, version_id, edition, pair, global_order, ie_id, d_a, s_a, c_a, p_a, d_b, s_b, c_b, p_b, d, s, c, p, channel_coder_ids, adjudicator_id, source_locator`. The frozen window manifest must exactly match every mechanically derived complete five-IE window, including ordered IE IDs, version, edition, endpoint locator, `P_AC`, and `P_switch`.
 
 ## Role separation and sequential presentation
 
@@ -47,7 +49,7 @@ knows_future_pair_outcome = no
 uncertain_about_prior_exposure = no
 ```
 
-Make eligibility decisions before inspecting ratings. Future-aware, previously familiar, or uncertain participants are excluded from the primary dataset and may be retained only for separately labelled sensitivity analysis.
+Make eligibility decisions before inspecting ratings. Future-aware, previously familiar, or uncertain participants are excluded from the primary dataset and may be retained only for separately labelled sensitivity analysis. Each row records offset-aware ISO-8601 timestamps for `eligibility_decided_at`, `window_endpoint_reached_at`, `rating_timestamp`, and (when applicable) `next_source_opened_at`. Primary future-blind status is computed, not self-declared: eligibility must precede or equal the endpoint, the endpoint must precede or equal the rating, and the rating must precede the next source opening.
 
 Target 16 eligible raters per work. A window requires at least 12 raters with valid `L/T/D` values. Otherwise it is excluded with `INSUFFICIENT_RATERS`; the minimum may not be changed after ratings are seen.
 
@@ -61,7 +63,7 @@ For each window/rater, deterministically randomize the order of `L/T/D` from a p
 
 Primary window aggregates are arithmetic means of eligible complete ratings. Medians are secondary diagnostics. Do not winsorize, trim, reweight, or exclude raters post hoc to improve results.
 
-For each of `L`, `T`, and `D`, run 1,000 deterministic repeated split halves. Within each window, split eligible raters as evenly as possible, calculate the two half means, correlate half-A and half-B means across eligible windows with Pearson `r`, and apply:
+For each of `L`, `T`, and `D`, run 1,000 deterministic repeated split halves. Within each window, use two equal halves; if the count is odd, discard one rater according to the deterministic permutation for that repeat. Calculate the two half means, center each half's window means within work, pool the centered values, correlate half A with half B using Pearson `r`, and apply:
 
 \[
 r_{SB}=\frac{2r}{1+r}.
@@ -125,7 +127,7 @@ If `MLAC > ML` but `M1 <= M0`, report that the AC signal loses independent contr
 
 ## Static-tension challenge
 
-With five IEs and 0.25 channel resolution, the smallest non-zero `P_AC` from one minimal channel transfer is `.02`. A window is a candidate when `T_obs >= 75` and `P_AC <= .02`. If at least three candidates occur across at least two independent works, record `STATIC_TENSION_CHALLENGE = FAIL` separately. A primary `SUPPORT` result cannot erase it.
+With five IEs and 0.25 channel resolution, the smallest non-zero `P_AC` from one minimal channel transfer is `.02`. A window is a candidate when `T_obs >= 75` and `P_AC <= .02`. If at least three candidates occur across at least two independent works, record `STATIC_TENSION_CHALLENGE = FAIL`. The regression-only verdict remains reported, but the final Bridge status becomes `FAIL_STATIC_TENSION_CHALLENGE`; a regression `SUPPORT` result cannot erase it.
 
 ## Data separation, source policy, and ethics
 
@@ -133,6 +135,12 @@ Keep channel annotations and audience ratings in separate files and ID namespace
 
 Before activation, the responsible study operator must document applicable consent, privacy, and ethics requirements. This protocol does not presume that review or approval is unnecessary.
 
+## Common-method limitation
+
+The same rater supplies `L_obs`, `T_obs`, and `D_obs` at one endpoint. Question-order randomization reduces order effects but does not eliminate shared-rater/common-method covariance. The primary analysis must report this limitation and must not interpret a positive `P_AC` coefficient as proof that the constructs are psychometrically independent. Split-rater or multi-method replication is a v2.1 candidate, not an unregistered rescue analysis.
+
+`T_obs` / `D_obs` discriminant validity is not yet frozen. Before the first confirmatory rating, a separately versioned pilot specification must define its sample, analysis, and acceptance threshold without access to confirmatory data. Until that document and pilot decision are committed, this experiment remains inactive; the implementation must not invent a threshold or use the confirmatory correlation to choose one.
+
 ## Reproducibility and freeze discipline
 
-The templates under `data/` contain headers only. Generated analysis outputs record input hashes, Git commit, master seed, exclusions, reliability, activation, folds, scores, effect direction, static challenge, and warnings. Empty templates yield `NO_DATA`, never a scientific result. Actual works may not be selected after viewing results, and failed results may not be repaired by changing windows, raters, controls, or models.
+The templates under `data/` contain headers only. Window and work manifests record offset-aware freeze timestamps and nonempty freeze commits; the runner verifies that every freeze predates the first rating. Ethics readiness requires a status plus a SHA-256 reference to the responsible operator's external ethics/consent record; the record itself need not expose private participant information in this repository. Generated outputs record input hashes, Git commit, master seed, exclusions, reliability, activation, folds, scores, effect direction, static challenge, and warnings. Empty templates yield `NO_DATA`, never a scientific result. The corpus, work list, dyads, all mechanically derived windows, target rater count, and recruitment closure rule must be committed before the first rating is opened. Works, windows, or raters may not be added after confirmatory status is opened; later data constitute a separately versioned study. Failed results may not be repaired by changing windows, raters, controls, or models.

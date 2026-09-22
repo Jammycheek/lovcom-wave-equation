@@ -33,7 +33,7 @@ The declaration above fixes the conceptual boundary but does not identify the ex
 
 ### C1 — Direction reversals
 
-Remove `0` directions and treat `mixed` as ineligible for this test unless its internal order was fixed during blind coding. In the first 12 qualified IEs, predict at most one sign reversal. Two or more reversals fail C1.
+Remove `0` directions; `mixed` is always ineligible for C1 and is never decomposed into a hidden internal order. In the first 12 qualified IEs, at least six valid signed (`+1` or `-1`) Direction observations are required. With six or more, predict at most one sign reversal; two or more reversals fail C1. With fewer than six, report `INSUFFICIENT_DIRECTIONAL_EVENTS`, not support.
 
 ### C2 — Perturbation response
 
@@ -41,12 +41,12 @@ After a preregistered misunderstanding, third-party intervention, constraint cha
 
 ### C3 — AC comparison
 
-As a secondary, cross-work hypothesis, predict lower channel AC power than Subject 6 in equal 12-IE windows. This comparison is descriptive until a cross-work normalization and uncertainty procedure are frozen. Failure of C3 does not overwrite C1 or C2.
+As a secondary, cross-work hypothesis, compare the first 10 qualified Samuwan dyadic IEs with the arithmetic mean of three separately computed Subject 6 values: the first 10 qualified `KM`, `KT`, and `KB` dyadic IEs. Each value uses the same frozen channel AC definition. C3 predicts that the Samuwan value is lower than that three-pair mean. All four sequences must contain 10 qualified IEs; otherwise report C3 as `NOT_TESTED_INCOMPLETE_WINDOWS`. No substitution, shortening, highlight selection, or pooled 30-IE recomputation is allowed. Failure of C3 does not overwrite C1 or C2.
 
 If strong oscillation is reproducibly observed, record control failure rather than redefining the work as a non-control. Report C1, C2, and C3 separately.
 
 ## Boundary status and remaining activation metadata
 
-The user-declared unread boundary and freeze date are now fixed. Before this protocol is activated, commit the exact edition/work version, the first eligible source-unit identifier after volume 3, the resulting eligible-unit list, an exposure/contamination log, and coder access controls. No result may be called prospective until those remaining fields are committed.
+The user-declared unread boundary and freeze date are now fixed. Before this protocol is activated, commit the exact edition/work version, the first eligible source-unit identifier after volume 3, the resulting eligible-unit list, an exposure/contamination log, and coder access controls. Also record a SHA-256 hash and externally timestamped or independently witnessed reference for the boundary declaration artifact. The public repository need not contain private reading history, but it must contain enough provenance to audit that the declaration existed before eligible material was opened. No result may be called prospective until those remaining fields are committed.
 
 The C1/C2/C3 predictions remain preserved while the protocol is inactive. Missing source-unit metadata must not be inferred from publication dates, conversation timestamps, another edition, or assumptions about chapter numbering.

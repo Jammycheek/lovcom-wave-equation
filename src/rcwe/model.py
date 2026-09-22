@@ -100,5 +100,8 @@ def classify_local_regime(params: RCWEParameters) -> dict[str, object]:
                 "classification": label,
             }
         )
-    primary = min(details, key=lambda item: abs(float(item["s"])))
-    return {"classification": primary["classification"], "equilibria": details}
+    if len(details) == 1:
+        classification = details[0]["classification"]
+    else:
+        classification = "multistable"
+    return {"classification": classification, "equilibria": details}

@@ -19,6 +19,7 @@ class BaselineFit:
     fit_log_likelihood: float
     converged: bool
     fit_count: int
+    guard_hits: tuple[str, ...]
 
     def as_dict(self) -> dict[str, object]:
         return asdict(self)
@@ -30,22 +31,24 @@ def _likelihood(y: np.ndarray, means: np.ndarray, sigma: float) -> float:
     )
 
 
-def _fit_scale(y: np.ndarray, means: np.ndarray, lower: float) -> tuple[float, float, bool]:
+def _fit_scale(y: np.ndarray, means: np.ndarray, lower: float) -> tuple[float, float, bool, tuple[str, ...]]:
+    bounds = (np.log(1e-8), np.log(5.0))
     result = minimize_scalar(
         lambda log_excess: -_likelihood(y, means, lower + np.exp(log_excess)),
-        bounds=(np.log(1e-8), np.log(5.0)),
+        bounds=bounds,
         method="bounded",
         options={"xatol": 1e-11},
     )
     sigma = float(lower + np.exp(result.x))
-    return sigma, -float(result.fun), bool(result.success)
+    hits = ("log_sigma_excess",) if min(abs(result.x - bounds[0]), abs(result.x - bounds[1])) < 1e-5 else ()
+    return sigma, -float(result.fun), bool(result.success), hits
 
 
 def fit_persistence(observed_fit, *, sigma_lower_bound: float = 1e-6) -> BaselineFit:
     y = np.asarray(observed_fit, dtype=float)
     if len(y) < 2:
         raise ValueError("persistence needs at least two FIT observations")
-    sigma, likelihood, converged = _fit_scale(y[1:], y[:-1], sigma_lower_bound)
+    sigma, likelihood, converged, guard_hits = _fit_scale(y[1:], y[:-1], sigma_lower_bound)
     return BaselineFit(
         name="persistence",
         coefficients={"last_fit": float(y[-1])},
@@ -54,6 +57,7 @@ def fit_persistence(observed_fit, *, sigma_lower_bound: float = 1e-6) -> Baselin
         fit_log_likelihood=likelihood,
         converged=converged,
         fit_count=len(y),
+        guard_hits=guard_hits,
     )
 
 
@@ -61,7 +65,7 @@ def forecast_persistence(fit: BaselineFit, count: int) -> np.ndarray:
     return np.full(count, fit.coefficients["last_fit"], dtype=float)
 
 
-def _fit_regression_likelihood(y, design, names, lower, starts) -> BaselineFit:
+def _fit_regression_likelihood(y, design, names, lower, starts, *, model_name: str, fit_count: int) -> BaselineFit:
     y = np.asarray(y, dtype=float)
     design = np.asarray(design, dtype=float)
 
@@ -83,14 +87,20 @@ def _fit_regression_likelihood(y, design, names, lower, starts) -> BaselineFit:
     successful = [result for result in results if result.success]
     best = min(successful or results, key=lambda result: result.fun)
     coefficients = {name: float(value) for name, value in zip(names, best.x[:-1])}
+    guard_hits = []
+    for name, value in zip((*names, "log_sigma_excess"), best.x):
+        lower_bound, upper_bound = (-5.0, 5.0) if name != "log_sigma_excess" else (np.log(1e-8), np.log(5.0))
+        if min(abs(value - lower_bound), abs(value - upper_bound)) < 1e-5:
+            guard_hits.append(name)
     return BaselineFit(
-        name="ar1" if names == ("alpha", "phi") else "quadratic_narrative_position",
+        name=model_name,
         coefficients=coefficients,
         sigma_pred=float(lower + np.exp(best.x[-1])),
         sigma_lower_bound=lower,
         fit_log_likelihood=-float(best.fun),
         converged=bool(successful),
-        fit_count=len(y) + (1 if names == ("alpha", "phi") else 0),
+        fit_count=fit_count,
+        guard_hits=tuple(guard_hits),
     )
 
 
@@ -104,7 +114,10 @@ def fit_ar1(observed_fit, *, sigma_lower_bound: float = 1e-6) -> BaselineFit:
         [0.0, 1.0, np.log(0.1)],
         [0.5, 0.5, np.log(0.25)],
     ]
-    return _fit_regression_likelihood(y[1:], design, ("alpha", "phi"), sigma_lower_bound, starts)
+    return _fit_regression_likelihood(
+        y[1:], design, ("alpha", "phi"), sigma_lower_bound, starts,
+        model_name="ar1", fit_count=len(y),
+    )
 
 
 def forecast_ar1(fit: BaselineFit, count: int, *, last_fit: float) -> np.ndarray:
@@ -134,7 +147,10 @@ def fit_narrative_position(observed_fit, *, sigma_lower_bound: float = 1e-6) -> 
         [0.5, 0.1, 0.0, np.log(0.25)],
         [0.5, 0.0, 0.1, np.log(0.25)],
     ]
-    result = _fit_regression_likelihood(y, design, ("a", "b", "c"), sigma_lower_bound, starts)
+    result = _fit_regression_likelihood(
+        y, design, ("a", "b", "c"), sigma_lower_bound, starts,
+        model_name="quadratic_narrative_position", fit_count=len(y),
+    )
     coefficients = dict(result.coefficients)
     coefficients.update({"fit_index_mean": mean, "fit_index_sd": scale})
     return BaselineFit(
@@ -145,6 +161,7 @@ def fit_narrative_position(observed_fit, *, sigma_lower_bound: float = 1e-6) -> 
         fit_log_likelihood=result.fit_log_likelihood,
         converged=result.converged,
         fit_count=len(y),
+        guard_hits=result.guard_hits,
     )
 
 
