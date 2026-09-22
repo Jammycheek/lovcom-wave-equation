@@ -21,6 +21,8 @@ This package implements the primary open-loop path in `PREDICTIVE_SCORING_SPEC_v
 
 The predictive scale is parameterized as `sigma_pred = sigma_coder + exp(eta)`, so the coder lower bound is always respected. When coder disagreement is exactly zero, the specified `1e-6` numerical floor is used and reported.
 
+For Quadratic Narrative Position, the FIT-index standard deviation uses the population convention (`ddof=0`). `PREDICTIVE_SCORING_SPEC_v0.1.md` does not select a sample-versus-population convention; this reference choice is therefore an implementation decision to preserve exactly in independent reproductions.
+
 ## Open-loop freeze
 
 The FIT terminal state is the state at the last FIT interaction index. The first HOLDOUT forecast is one complete interaction step after that state. Parameters, terminal state, scale, solver settings, and baseline fits remain frozen. Holdout observations are passed only to scoring; they cannot reset a state or forecast.

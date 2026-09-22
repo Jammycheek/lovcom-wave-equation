@@ -228,6 +228,20 @@ def main() -> int:
         "Broad optimizer guards prevent numerical overflow and are not scientific parameter bounds.",
         "Poor parameter or regime recovery is reported without changing the frozen model.",
     ]
+    convergence_failures = [row for row in rows if not row["converged"]]
+    regime_failures = [row for row in rows if row.get("converged") and not row.get("regime_recovered")]
+    warnings.append(
+        f"Convergence failures: {len(convergence_failures)} of {len(rows)} replicates."
+    )
+    if regime_failures:
+        failures = "; ".join(
+            f"{row['scenario']} seed={row['seed']} truth={row['truth_regime']} "
+            f"fitted={row['fitted_local_regime']} fitted_G={float(row['fitted_G']):.12g}"
+            for row in regime_failures
+        )
+        warnings.append(f"Regime-recovery failures: {failures}.")
+    else:
+        warnings.append("Regime-recovery failures: none.")
     report = [
         "# RCWE Synthetic Recovery Report",
         "",
