@@ -2,30 +2,50 @@
   "replicate_count": 40,
   "scenarios": {
     "strong_oscillatory": {
-      "converged": 0,
-      "convergence_rate": 0.0,
-      "mean_delta_LS_ar1": null,
-      "mean_delta_LS_narrative": null,
-      "mean_delta_LS_persistence": null,
-      "mean_holdout_LS_RCWE": null,
-      "median_absolute_error_Delta": null,
-      "median_absolute_error_G": null,
-      "median_absolute_error_R": null,
-      "regime_recovery_rate_among_converged": null,
-      "replicates": 20
+      "converged": 12,
+      "convergence_rate": 0.6,
+      "mean_delta_LS_ar1": 10.419384138996245,
+      "mean_delta_LS_narrative": 11.350325770321886,
+      "mean_delta_LS_persistence": 19.57728545883189,
+      "mean_holdout_LS_RCWE": -12.975434986342123,
+      "median_absolute_error_Delta": 0.011323755221472498,
+      "median_absolute_error_G": 0.02299732738823257,
+      "median_absolute_error_R": 0.001310105150233963,
+      "optimizer_reported_successful_starts_distribution": {
+        "2": 4,
+        "3": 15,
+        "4": 1
+      },
+      "regime_recovery_rate_among_converged": 1.0,
+      "replicates": 20,
+      "stationary_starts_distribution": {
+        "1": 4,
+        "2": 9,
+        "3": 7
+      }
     },
     "strong_stable": {
-      "converged": 0,
-      "convergence_rate": 0.0,
-      "mean_delta_LS_ar1": null,
-      "mean_delta_LS_narrative": null,
-      "mean_delta_LS_persistence": null,
-      "mean_holdout_LS_RCWE": null,
-      "median_absolute_error_Delta": null,
-      "median_absolute_error_G": null,
-      "median_absolute_error_R": null,
-      "regime_recovery_rate_among_converged": null,
-      "replicates": 20
+      "converged": 19,
+      "convergence_rate": 0.95,
+      "mean_delta_LS_ar1": 0.07360115787669252,
+      "mean_delta_LS_narrative": 4.131868348132321,
+      "mean_delta_LS_persistence": 3.118100849990251,
+      "mean_holdout_LS_RCWE": -8.803445292266659,
+      "median_absolute_error_Delta": 0.0064756408355709505,
+      "median_absolute_error_G": 0.1244596792373468,
+      "median_absolute_error_R": 0.009141739674885255,
+      "optimizer_reported_successful_starts_distribution": {
+        "3": 17,
+        "4": 3
+      },
+      "regime_recovery_rate_among_converged": 1.0,
+      "replicates": 20,
+      "stationary_starts_distribution": {
+        "1": 1,
+        "2": 5,
+        "3": 12,
+        "4": 2
+      }
     }
   }
 }

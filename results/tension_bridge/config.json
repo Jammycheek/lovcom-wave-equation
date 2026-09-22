@@ -4,12 +4,14 @@
   "input_files": {
     "channels": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_channels_template.csv",
     "manifest": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_work_manifest_template.csv",
+    "pilot_result": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\results\\tension_bridge_discriminant_pilot\\summary.json",
     "ratings": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_ratings_template.csv",
     "windows": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_windows_template.csv"
   },
   "input_hashes": {
     "channels_sha256": "6d6df1b211791c92c2f90408a10752f29ad4a4c074c498e4d85d556105cc34b3",
-    "manifest_sha256": "b07e2cca25ccbefec74df28f1b6ace7f4ad08b637efc275b03d47e65a2f3ffa1",
+    "manifest_sha256": "fd067cb4d05433c002b265a123a3ea2a36cc3f9097d2cf6a653a45aee7786b6d",
+    "pilot_result_sha256": "51746fa614f1cb2c51c7081f43696cd29ba6439f4db5d090a548f2ff8a2bb575",
     "ratings_sha256": "863309703d5cd25f0a31767b749524c8cbcff32247488d90ff1ec9c1dc07445b",
     "windows_sha256": "30f8aa131a828de7537219332f0b324c9ee375fa249cc13fa2d868dfe6af8c7a"
   },

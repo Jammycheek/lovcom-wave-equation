@@ -31,3 +31,4 @@ This import intentionally excludes exploratory parameter estimates, superseded f
 - Reran the frozen 40-replicate synthetic benchmark: strict cross-start agreement failed in all 40 fits, recorded as `F-07`; no thresholds or model terms were changed to rescue the result.
 - Diagnosed `F-07` as a false-termination defect caused by a flat `1e300` invalid-point penalty; replaced it with a finite quadratic penalty, added an explicit projected-gradient stationarity gate, and preserved the invalidated run in the audit log.
 - Added the independent Tension Bridge T/D discriminant-validity pilot, frozen `.85` work-cluster-bootstrap gate, raw runner, data templates, result hashing, and confirmatory non-reuse checks.
+- Completed the corrected 40-replicate benchmark: `31/40` met strict convergence and all 31 recovered the generating regime; the remaining nine are retained as `F-08` rather than repaired post hoc.

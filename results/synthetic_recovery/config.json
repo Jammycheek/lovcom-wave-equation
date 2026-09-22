@@ -1,11 +1,12 @@
 {
-  "command": "python.exe scripts\\run_synthetic_recovery.py --replicates 20 --seed-base 260901",
+  "command": "python.exe scripts\\run_synthetic_recovery.py --replicates 20 --seed-base 260901 --workers 8",
   "optimizer": {
     "ftol": 1e-12,
     "gtol": 1e-07,
     "maxiter": 80,
     "method": "L-BFGS-B",
-    "start_agreement_log_likelihood_tolerance": 1e-06
+    "start_agreement_log_likelihood_tolerance": 1e-06,
+    "stationarity_tolerance": 0.0001
   },
   "optimizer_guards_are_numerical_not_scientific": {
     "Delta": [
@@ -117,5 +118,5 @@
     "method": "DOP853",
     "rtol": 1e-09
   },
-  "workers": 4
+  "workers": 8
 }

@@ -7,6 +7,13 @@
   },
   "delta_ls_love": null,
   "delta_ls_primary": null,
+  "discriminant_pilot": {
+    "independence_passed": true,
+    "protocol_sha256": "7885ffbd22637c183d558b7d38786c2f116f088065aaaa194e1610cac14c86f2",
+    "ready": false,
+    "result_sha256": "51746fa614f1cb2c51c7081f43696cd29ba6439f4db5d090a548f2ff8a2bb575",
+    "status": "NO_DATA"
+  },
   "scores": null,
   "static_tension_challenge": null,
   "status": "NO_DATA"
