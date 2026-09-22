@@ -1,0 +1,30 @@
+{
+  "M_C_implemented": false,
+  "activation_gate": {
+    "pairs_with_both_exposures_min": 2,
+    "total_rows_min": 12,
+    "x_shared_0_min": 4,
+    "x_shared_1_min": 4
+  },
+  "alpha": 1.0,
+  "category_order": [
+    "-1",
+    "0",
+    "+1",
+    "mixed"
+  ],
+  "command": "python.exe scripts\\run_subject6_comparison.py",
+  "direction_kappa": null,
+  "direction_kappa_gate": 0.7,
+  "input_path": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\subject6_comparison_template.csv",
+  "input_sha256": "e76e59f24a0171f30f961e80b2da2f92c7946e46a71a1813e5c3b036e9b8fc72",
+  "models": [
+    "M_A",
+    "M_B"
+  ],
+  "pairs": [
+    "KM",
+    "KT",
+    "KB"
+  ]
+}
