@@ -1,5 +1,10 @@
 {
   "beta_pac_full": null,
+  "channel_reliability": {
+    "median_d_tv": null,
+    "passed": false,
+    "row_count": 0
+  },
   "delta_ls_love": null,
   "delta_ls_primary": null,
   "scores": null,

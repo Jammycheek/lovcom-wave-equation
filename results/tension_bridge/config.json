@@ -2,14 +2,16 @@
   "command": "python.exe scripts\\run_tension_bridge_analysis.py",
   "cross_validation": "Leave-One-Work-Out",
   "input_files": {
+    "channels": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_channels_template.csv",
     "manifest": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_work_manifest_template.csv",
     "ratings": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_ratings_template.csv",
     "windows": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_windows_template.csv"
   },
   "input_hashes": {
-    "manifest_sha256": "26b20df60f8f344d2a587b16e2958fa176098d3d751e6b4f1e7fa2689de658b8",
-    "ratings_sha256": "137192dc954844f36e930d62d386cce49a35106496619890557858d4608afa2f",
-    "windows_sha256": "af0eabdbe4368e7ce9e4f4a3863b4c341422fae9fb046f66014aa01e016543bd"
+    "channels_sha256": "6d6df1b211791c92c2f90408a10752f29ad4a4c074c498e4d85d556105cc34b3",
+    "manifest_sha256": "b07e2cca25ccbefec74df28f1b6ace7f4ad08b637efc275b03d47e65a2f3ffa1",
+    "ratings_sha256": "863309703d5cd25f0a31767b749524c8cbcff32247488d90ff1ec9c1dc07445b",
+    "windows_sha256": "30f8aa131a828de7537219332f0b324c9ee375fa249cc13fa2d868dfe6af8c7a"
   },
   "master_seed": "RCWE-TB-v1.0",
   "minimum_raters": 12,

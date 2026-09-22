@@ -28,3 +28,4 @@ This import intentionally excludes exploratory parameter estimates, superseded f
 - Replaced truth-matching synthetic starts with four data-independent starts, froze optimizer settings, added cross-start agreement, direct fit/gradient tests, and baseline guard warnings.
 - Split Subject 6 exposure and outcome inputs across distinct commits, capped the confirmatory corpus at the first 10 qualified IEs per pair, and compute Direction kappa from raw double coding.
 - Closed Samuwan C1/C3 underspecification and added external provenance for the unread-boundary declaration.
+- Reran the frozen 40-replicate synthetic benchmark: strict cross-start agreement failed in all 40 fits, recorded as `F-07`; no thresholds or model terms were changed to rescue the result.
