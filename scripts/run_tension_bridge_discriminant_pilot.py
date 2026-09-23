@@ -32,14 +32,16 @@ from rcwe.tension_bridge import (
     validate_question_orders,
 )
 
-PROTOCOL = ROOT / "protocols" / "TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.3.md"
+PROTOCOL = ROOT / "protocols" / "TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.4.md"
 INSTRUMENT = ROOT / "protocols" / "TENSION_BRIDGE_RATING_FORM_v1.1.md"
-MASTER_SEED = "RCWE-TB-DISCRIMINANT-v0.3"
+MASTER_SEED = "RCWE-TB-DISCRIMINANT-v0.4"
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--ratings", type=Path, default=ROOT / "data" / "tension_bridge_discriminant_pilot_ratings_template.csv")
+    parser.add_argument("--cutoff-export", type=Path, default=ROOT / "data" / "tension_bridge_pilot_cutoff_export_template.csv")
+    parser.add_argument("--cutoff-receipt", type=Path, default=ROOT / "data" / "tension_bridge_pilot_cutoff_receipt_template.json")
     parser.add_argument("--manifest", type=Path, default=ROOT / "data" / "tension_bridge_discriminant_pilot_manifest_template.csv")
     parser.add_argument("--master-seed", default=MASTER_SEED)
     parser.add_argument("--cancel-reason", help="close this frozen pilot plan without a scientific verdict")
@@ -57,6 +59,8 @@ def parse_bool(value: str, field: str) -> bool:
 
 
 def parse_timestamp(value: str, field: str) -> datetime:
+    if not isinstance(value, str):
+        raise ValueError(f"{field} must be ISO 8601")
     normalized = value.strip().replace("Z", "+00:00")
     if not normalized:
         raise ValueError(f"{field} is required")
@@ -92,12 +96,14 @@ def git_sha() -> str:
 def parse_ratings(rows: list[dict[str, str]]) -> tuple[list[Rating], list[datetime]]:
     ratings, times = [], []
     for row in rows:
+        if "valid_pilot" in row or "valid_primary" in row:
+            raise ValueError("manual row-level validity overrides are prohibited")
         response_status = row["response_status"].strip()
         if response_status == "NONRESPONSE":
             if any(row[field].strip() for field in (
                 "prior_exposure", "knows_future", "exposure_uncertain", "question_order",
                 "l_obs", "t_obs", "d_obs", "eligibility_decided_at",
-                "window_endpoint_reached_at", "rating_timestamp", "next_source_opened_at", "valid_pilot",
+                "window_endpoint_reached_at", "rating_timestamp", "next_source_opened_at",
             )):
                 raise ValueError("NONRESPONSE cells must not contain invented ratings or timestamps")
             continue
@@ -113,7 +119,7 @@ def parse_ratings(rows: list[dict[str, str]]) -> tuple[list[Rating], list[dateti
             row["rater_id"].strip(), row["work_id"].strip(), row["window_id"].strip(),
             row["prior_exposure"].strip(), row["knows_future"].strip(), row["exposure_uncertain"].strip(),
             row["question_order"].strip(), int(row["l_obs"]), int(row["t_obs"]), int(row["d_obs"]),
-            future_blind, parse_bool(row["valid_pilot"], "valid_pilot"),
+            future_blind, True,
         ))
         times.append(rated)
     return ratings, times
@@ -175,6 +181,84 @@ def validate_manifest(
     return True, closes_at, planned_cell_count
 
 
+def nonresponse_order_violations(
+    manifest_rows: list[dict[str, str]], response_rows: list[dict[str, str]],
+) -> list[dict[str, str]]:
+    """A rater may stop, but cannot resume after a planned nonresponse."""
+    by_cell = {(row["work_id"].strip(), row["rater_id"].strip(), row["window_id"].strip()): row
+               for row in response_rows}
+    violations = []
+    for plan in manifest_rows:
+        work = plan["work_id"].strip()
+        for rater in plan["planned_rater_ids"].split(";"):
+            stopped = False
+            for window in plan["planned_window_ids"].split(";"):
+                row = by_cell.get((work, rater, window))
+                if row is None:
+                    continue  # A cancelled plan may have an incomplete roster.
+                if row["response_status"].strip() == "NONRESPONSE":
+                    stopped = True
+                elif stopped:
+                    violations.append({"work_id": work, "rater_id": rater, "resumed_at_window_id": window})
+    return violations
+
+
+def audit_cutoff_export(
+    export_raw: bytes, export_rows: list[dict[str, str]], response_rows: list[dict[str, str]],
+    manifest_raw: bytes, receipt: dict[str, str], closes_at: datetime,
+    *, as_of: datetime | None = None,
+) -> list[str]:
+    """Check a committed cutoff snapshot against every answer received by cutoff."""
+    violations: list[str] = []
+    now = as_of or datetime.now(timezone.utc)
+    claimed_export_hash = receipt.get("cutoff_export_sha256")
+    claimed_manifest_hash = receipt.get("manifest_sha256")
+    if not isinstance(claimed_export_hash, str) or claimed_export_hash.lower() != sha256(export_raw):
+        violations.append("CUTOFF_EXPORT_HASH_MISMATCH")
+    if not isinstance(claimed_manifest_hash, str) or claimed_manifest_hash.lower() != sha256(manifest_raw):
+        violations.append("CUTOFF_RECEIPT_PLAN_MISMATCH")
+    if not isinstance(receipt.get("registration_locator"), str) or not receipt["registration_locator"].strip():
+        violations.append("CUTOFF_EXTERNAL_REGISTRATION_MISSING")
+    if not isinstance(receipt.get("export_operator_id"), str) or not receipt["export_operator_id"].strip():
+        violations.append("CUTOFF_EXPORT_OPERATOR_MISSING")
+    try:
+        registered_at = parse_timestamp(receipt.get("registered_at", ""), "registered_at")
+        if not closes_at <= registered_at <= now:
+            violations.append("CUTOFF_REGISTRATION_TIME_INVALID")
+    except ValueError:
+        violations.append("CUTOFF_REGISTRATION_TIME_INVALID")
+
+    export_by_cell: dict[tuple[str, str, str], dict[str, str]] = {}
+    for row in export_rows:
+        if any(not isinstance(row.get(field), str) for field in ("work_id", "rater_id", "window_id", "response_status")):
+            violations.append("CUTOFF_EXPORT_MALFORMED_ROW")
+            continue
+        cell = (row["work_id"].strip(), row["rater_id"].strip(), row["window_id"].strip())
+        if cell in export_by_cell:
+            violations.append("DUPLICATE_CUTOFF_ANSWER")
+        export_by_cell[cell] = row
+        if row["response_status"].strip() != "ANSWERED":
+            violations.append("CUTOFF_EXPORT_HAS_NONANSWER")
+        try:
+            if parse_timestamp(row.get("rating_timestamp", ""), "rating_timestamp") > closes_at:
+                violations.append("CUTOFF_EXPORT_HAS_LATE_ANSWER")
+        except ValueError:
+            violations.append("CUTOFF_EXPORT_HAS_INVALID_TIMESTAMP")
+
+    roster_at_cutoff: dict[tuple[str, str, str], dict[str, str]] = {}
+    for row in response_rows:
+        if row["response_status"].strip() != "ANSWERED":
+            continue
+        if parse_timestamp(row["rating_timestamp"], "rating_timestamp") <= closes_at:
+            cell = (row["work_id"].strip(), row["rater_id"].strip(), row["window_id"].strip())
+            roster_at_cutoff[cell] = row
+    if set(export_by_cell) != set(roster_at_cutoff):
+        violations.append("CUTOFF_ANSWER_MEMBERSHIP_MISMATCH")
+    elif any(export_by_cell[cell] != roster_at_cutoff[cell] for cell in export_by_cell):
+        violations.append("CUTOFF_ANSWER_CONTENT_MISMATCH")
+    return sorted(set(violations))
+
+
 def main() -> int:
     args = parse_args()
     if args.master_seed != MASTER_SEED:
@@ -187,12 +271,39 @@ def main() -> int:
     if prior.exists() and json.loads(prior.read_bytes()).get("status") != "NO_DATA":
         raise ValueError("completed pilot results cannot be overwritten; retain and register every run")
     rating_raw, rating_rows = read_csv(args.ratings.resolve())
+    try:
+        export_raw, export_rows = read_csv(args.cutoff_export.resolve())
+        export_missing = False
+    except FileNotFoundError:
+        export_raw, export_rows, export_missing = b"", [], True
+    try:
+        receipt_raw = args.cutoff_receipt.resolve().read_bytes()
+        receipt_missing = False
+    except FileNotFoundError:
+        receipt_raw, receipt_missing = b"", True
+    try:
+        receipt = json.loads(receipt_raw)
+    except json.JSONDecodeError:
+        receipt = {}
+    receipt_malformed = not isinstance(receipt, dict)
+    if receipt_malformed:
+        receipt = {}
     manifest_raw, manifest_rows = read_csv(args.manifest.resolve())
     if cancelled and not manifest_rows:
         raise ValueError("a cancelled pilot must name a frozen plan")
     ratings, rating_times = parse_ratings(rating_rows)
     manifest_ready, closes_at, planned_cell_count = validate_manifest(
         manifest_rows, rating_rows, rating_times, cancelled=cancelled)
+    order_violations = nonresponse_order_violations(manifest_rows, rating_rows)
+    provenance_violations = (
+        audit_cutoff_export(export_raw, export_rows, rating_rows, manifest_raw, receipt, closes_at)
+        if manifest_ready and not cancelled and closes_at is not None else []
+    )
+    if manifest_ready and not cancelled:
+        if export_missing:
+            provenance_violations.append("CUTOFF_EXPORT_MISSING")
+        if receipt_missing or receipt_malformed:
+            provenance_violations.append("CUTOFF_RECEIPT_MISSING_OR_MALFORMED")
     output.mkdir(parents=True, exist_ok=True)
     late_count = sum(rated > closes_at for rated in rating_times) if closes_at is not None else 0
     if closes_at is not None:
@@ -201,7 +312,9 @@ def main() -> int:
     nonresponse_count = sum(row["response_status"].strip() == "NONRESPONSE" for row in rating_rows)
     protocol_hash = sha256(PROTOCOL.read_bytes())
     instrument_hash = sha256(INSTRUMENT.read_bytes())
-    hashes = {"ratings_sha256": sha256(rating_raw), "manifest_sha256": sha256(manifest_raw), "protocol_sha256": protocol_hash, "instrument_sha256": instrument_hash}
+    hashes = {"ratings_sha256": sha256(rating_raw), "manifest_sha256": sha256(manifest_raw),
+              "cutoff_export_sha256": sha256(export_raw), "cutoff_receipt_sha256": sha256(receipt_raw),
+              "protocol_sha256": protocol_hash, "instrument_sha256": instrument_hash}
     command = " ".join([Path(sys.executable).name, *sys.argv])
     config = {
         "command": command, "master_seed": args.master_seed, "input_hashes": hashes,
@@ -209,6 +322,7 @@ def main() -> int:
         "bootstrap_repeats": BOOTSTRAP_REPEATS, "discriminant_limit": DISCRIMINANT_LIMIT,
         "recruitment_closes_at": closes_at.isoformat() if closes_at else None,
         "planned_cell_count": planned_cell_count,
+        "cutoff_registration_locator": receipt.get("registration_locator") if manifest_ready else None,
     }
     (output / "config.json").write_text(json.dumps(config, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
     environment = {"git_commit": git_sha(), "python": platform.python_version(), "numpy": np.__version__, "scipy": scipy.__version__}
@@ -236,6 +350,14 @@ def main() -> int:
         summary = {"status": "CANCELLED_PILOT", "cancel_reason": args.cancel_reason.strip(),
                    "manifest_ready": manifest_ready, "protocol_sha256": protocol_hash,
                    "input_hashes": hashes, **membership, "abs_r_td": None, "upper_95_abs_r_td": None}
+    elif order_violations or provenance_violations:
+        reliability = {}
+        aggregates = []
+        summary = {"status": "PILOT_PROTOCOL_DEVIATION" if order_violations else "PILOT_PROVENANCE_FAILURE",
+                   "manifest_ready": manifest_ready, "protocol_sha256": protocol_hash,
+                   "input_hashes": hashes, **membership, "abs_r_td": None, "upper_95_abs_r_td": None,
+                   "nonresponse_order_violations": order_violations,
+                   "cutoff_export_violations": provenance_violations}
     else:
         validate_question_orders(ratings, args.master_seed)
         mapping: dict[str, str] = {}
@@ -258,6 +380,9 @@ def main() -> int:
     summary.update(instrument_version=INSTRUMENT_VERSION, instrument_sha256=instrument_hash,
                    completed_at=datetime.now(timezone.utc).isoformat(),
                    recruitment_closes_at=closes_at.isoformat() if closes_at else None,
+                   cutoff_registration_locator=receipt.get("registration_locator") if manifest_ready else None,
+                   cutoff_registered_at=receipt.get("registered_at") if manifest_ready else None,
+                   cutoff_export_operator_id=receipt.get("export_operator_id") if manifest_ready else None,
                    exclusions=exclusions)
     reliability_json = {key: value.as_dict() for key, value in reliability.items()}
     (output / "reliability.json").write_text(json.dumps(reliability_json, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — fourth-review R-4 safeguard
+
+- Pilot v0.4 enforces suffix-only nonresponse per planned rater/window order. A resumed answer yields terminal `PILOT_PROTOCOL_DEVIATION`; source/roster or cutoff-registration inconsistencies yield terminal `PILOT_PROVENANCE_FAILURE`.
+- Require a cutoff snapshot of actual answer rows, externally registered SHA-256 and receipt metadata, exact match to all pre-cutoff roster answers, and independent receipt-verification metadata before confirmatory activation. The runner cannot itself prove the external registration's authenticity.
+- Remove analyst-controlled `valid_pilot` and `valid_primary` input columns. The confirmatory exclusion change is a separately versioned addendum; until its source-export commitment is specified, the runner fails closed with `CONFIRMATORY_SOURCE_PROVENANCE_PENDING` rather than a support verdict.
+- Independently reran the comparison utility on the supplied Linux artifacts in separate commit `67c4fc0`; pinned-vs-older Linux numerical outputs agree exactly, and both differ from the committed Windows classification on 10/40 exposed cases. No thresholds were changed.
+
 ## Unreleased — third-review follow-up (R-1 through R-3)
 
 - R-1: retain the fixed-parameter solver-only `1e-8` agreement check, but label the historical independently refitted `1e-8` comparison as a failed diagnostic rather than an acceptance gate. A distinct refitted-forecast tolerance requires an unexposed development block. Record the reviewer's 12/40 discrepancy as reported evidence, pending the raw reproduction bundle.

@@ -1,6 +1,6 @@
 # Romantic Tension Bridge v0.1
 
-**Status: hypothesis frozen; confirmatory implementation inactive; human rating data not yet collected.** See `protocols/TENSION_BRIDGE_EXPERIMENT_v1.0.md`, `protocols/TENSION_BRIDGE_RATING_FORM_v1.1.md`, and the fixed-plan discriminant pilot v0.3. No real pilot plan or passing evidence has been supplied.
+**Status: hypothesis frozen; confirmatory implementation inactive; human rating data not yet collected.** See `protocols/TENSION_BRIDGE_EXPERIMENT_v1.0.md` with `protocols/TENSION_BRIDGE_RATING_EXCLUSION_ADDENDUM_v0.1.md`, `protocols/TENSION_BRIDGE_RATING_FORM_v1.1.md`, and the fixed-plan discriminant pilot v0.4. No real pilot plan, externally verified cutoff export, or passing evidence has been supplied.
 
 ## External ratings
 

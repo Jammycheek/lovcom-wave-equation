@@ -1,1 +1,1 @@
-rater_id,work_id,window_id,prior_exposure,knows_future,exposure_uncertain,question_order,l_obs,t_obs,d_obs,eligibility_decided_at,window_endpoint_reached_at,rating_timestamp,next_source_opened_at,valid_primary
+rater_id,work_id,window_id,prior_exposure,knows_future,exposure_uncertain,question_order,l_obs,t_obs,d_obs,eligibility_decided_at,window_endpoint_reached_at,rating_timestamp,next_source_opened_at

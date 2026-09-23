@@ -15,8 +15,10 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-DISCRIMINANT_PROTOCOL = ROOT / "protocols" / "TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.3.md"
+DISCRIMINANT_PROTOCOL = ROOT / "protocols" / "TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.4.md"
+RATING_EXCLUSION_ADDENDUM = ROOT / "protocols" / "TENSION_BRIDGE_RATING_EXCLUSION_ADDENDUM_v0.1.md"
 INSTRUMENT = ROOT / "protocols" / "TENSION_BRIDGE_RATING_FORM_v1.1.md"
+CONFIRMATORY_SOURCE_PROVENANCE_SPECIFIED = False
 
 import numpy as np
 import scipy
@@ -191,6 +193,8 @@ def parse_timestamp(value: str, field: str) -> datetime:
 def parse_ratings(rows: list[dict[str, str]]) -> list[Rating]:
     ratings = []
     for row in rows:
+        if "valid_primary" in row or "valid_pilot" in row:
+            raise ValueError("manual row-level validity overrides are prohibited")
         eligibility = parse_timestamp(row["eligibility_decided_at"], "eligibility_decided_at")
         endpoint = parse_timestamp(row["window_endpoint_reached_at"], "window_endpoint_reached_at")
         rated = parse_timestamp(row["rating_timestamp"], "rating_timestamp")
@@ -209,7 +213,7 @@ def parse_ratings(rows: list[dict[str, str]]) -> list[Rating]:
             t_obs=int(row["t_obs"]),
             d_obs=int(row["d_obs"]),
             future_blind=audit_passed,
-            valid_primary=parse_bool(row["valid_primary"], "valid_primary"),
+            valid_primary=True,
         ))
     return ratings
 
@@ -294,6 +298,7 @@ def main() -> int:
         "pilot_result_sha256": pilot_result_hash,
         "instrument_sha256": instrument_hash,
         "discriminant_protocol_sha256": discriminant_protocol_hash,
+        "rating_exclusion_addendum_sha256": file_hash(RATING_EXCLUSION_ADDENDUM.read_bytes()),
     }
     channel_ies, channel_metadata, raw_coders, raw_adjudicators, channel_reliability_result = parse_channels(channel_rows)
     windows, window_freeze_times = parse_windows(window_rows, build_windows(channel_ies), channel_metadata)
@@ -343,6 +348,7 @@ def main() -> int:
         "reliability_repeats": RELIABILITY_REPEATS,
         "reliability_gate": RELIABILITY_GATE,
         "cross_validation": "Leave-One-Work-Out",
+        "confirmatory_source_provenance_status": "NOT_SPECIFIED",
         "models": ["ML", "MLAC", "M0", "M1"],
     }
     environment = {"git_commit": git_sha(), "python": platform.python_version(), "numpy": np.__version__, "scipy": scipy.__version__}
@@ -416,6 +422,14 @@ def main() -> int:
                              "delta_ls_primary": None, "delta_ls_love": None,
                              "beta_pac_full": None, "static_tension_challenge": None}
             warnings.append("Pilot evidence did not pass; confirmatory models were not fitted.")
+        elif not CONFIRMATORY_SOURCE_PROVENANCE_SPECIFIED:
+            status = "CONFIRMATORY_SOURCE_PROVENANCE_PENDING"
+            model_summary = {"status": status, "activation_gate": gate.as_dict(),
+                             "discriminant_pilot": pilot_audit, "scores": None,
+                             "channel_reliability": channel_reliability_result,
+                             "delta_ls_primary": None, "delta_ls_love": None,
+                             "beta_pac_full": None, "static_tension_challenge": None}
+            warnings.append("Confirmatory source-export completeness protocol is not frozen; models were not fitted.")
         elif gate.passed:
             try:
                 analysis = leave_one_work_out(aggregates)

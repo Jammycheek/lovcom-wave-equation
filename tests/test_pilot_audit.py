@@ -20,8 +20,10 @@ def evidence(tmp_path):
     pilot = {
         "status": "PILOT_PASS", "instrument_version": "1.1",
         "instrument_sha256": "a" * 64, "protocol_sha256": "b" * 64,
-        "input_hashes": {"manifest_sha256": "c" * 64}, "manifest_ready": True,
-        "completed_at": "2026-01-02T00:00:00Z", "pilot_work_ids": ["pilot-work"],
+        "input_hashes": {"manifest_sha256": "c" * 64, "cutoff_export_sha256": "d" * 64},
+        "cutoff_registration_locator": "urn:test:registered-cutoff", "manifest_ready": True,
+        "cutoff_export_operator_id": "study-operator", "cutoff_registered_at": "2026-01-02T00:30:00Z",
+        "completed_at": "2026-01-02T02:00:00Z", "pilot_work_ids": ["pilot-work"],
         "pilot_rater_id_hashes": [hashlib.sha256(b"pilot-rater").hexdigest()],
     }
     digest = save(tmp_path / "pass.json", pilot)
@@ -29,7 +31,13 @@ def evidence(tmp_path):
                "protocol_sha256": "b" * 64, "manifest_sha256": "c" * 64,
                "declared_complete": True, "freeze_commit": "frozen-test-commit",
                "sealed_at": "2026-01-03T00:00:00Z",
-               "runs": [{"path": "pass.json", "sha256": digest}]}
+               "runs": [{"path": "pass.json", "sha256": digest,
+                         "cutoff_receipt_verification": {
+                             "verifier_id": "independent-auditor",
+                             "verified_at": "2026-01-02T01:00:00Z",
+                             "registration_locator": "urn:test:registered-cutoff",
+                             "cutoff_export_sha256": "d" * 64,
+                         }}]}
     return tmp_path, pilot, history, digest
 
 
@@ -47,7 +55,27 @@ def test_complete_pass_history_activates(evidence):
     assert audit(evidence)["ready"] is True
 
 
-@pytest.mark.parametrize("status", ["PILOT_DISCRIMINANT_FAILURE", "PILOT_MEASUREMENT_FAILURE", "INSUFFICIENT_PILOT_DATA", "CANCELLED_PILOT"])
+def test_unverified_or_mismatched_cutoff_receipt_blocks_confirmation(evidence):
+    evidence[2]["runs"][0].pop("cutoff_receipt_verification")
+    assert audit(evidence)["reason"] == "UNVERIFIED_CUTOFF_EXPORT"
+    evidence[2]["runs"][0]["cutoff_receipt_verification"] = {
+        "verifier_id": "auditor", "verified_at": "2026-01-04T00:00:00Z",
+        "registration_locator": "urn:test:registered-cutoff", "cutoff_export_sha256": "d" * 64,
+    }
+    assert audit(evidence)["reason"] == "UNVERIFIED_CUTOFF_EXPORT"
+    evidence[2]["runs"][0]["cutoff_receipt_verification"]["verified_at"] = "2026-01-02T01:00:00Z"
+    evidence[2]["runs"][0]["cutoff_receipt_verification"]["verifier_id"] = "study-operator"
+    assert audit(evidence)["reason"] == "UNVERIFIED_CUTOFF_EXPORT"
+
+
+def test_passing_result_without_a_cutoff_export_hash_cannot_activate(evidence):
+    path, pilot, history, _ = evidence
+    digest = save(path / "pass.json", {**pilot, "input_hashes": {"manifest_sha256": "c" * 64}})
+    history["runs"][0]["sha256"] = digest
+    assert audit(evidence, selected_result_hash=digest)["reason"] == "UNVERIFIED_CUTOFF_EXPORT"
+
+
+@pytest.mark.parametrize("status", ["PILOT_DISCRIMINANT_FAILURE", "PILOT_MEASUREMENT_FAILURE", "INSUFFICIENT_PILOT_DATA", "CANCELLED_PILOT", "PILOT_PROTOCOL_DEVIATION", "PILOT_PROVENANCE_FAILURE"])
 def test_failed_run_cannot_be_hidden_behind_later_pass(evidence, status):
     path, pilot, history, _ = evidence
     digest = save(path / "failed.json", {**pilot, "status": status})
@@ -107,7 +135,7 @@ def test_committed_no_data_artifacts_bind_current_form_protocol_and_result_bytes
     pilot = json.loads(pilot_path.read_bytes())
     bridge = json.loads((root / "results/tension_bridge/model_summary.json").read_bytes())
     form_hash = hashlib.sha256((root / "protocols/TENSION_BRIDGE_RATING_FORM_v1.1.md").read_bytes()).hexdigest()
-    protocol_hash = hashlib.sha256((root / "protocols/TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.3.md").read_bytes()).hexdigest()
+    protocol_hash = hashlib.sha256((root / "protocols/TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.4.md").read_bytes()).hexdigest()
     assert pilot["instrument_sha256"] == bridge["discriminant_pilot"]["instrument_sha256"] == form_hash
     assert pilot["protocol_sha256"] == bridge["discriminant_pilot"]["protocol_sha256"] == protocol_hash
     assert bridge["discriminant_pilot"]["result_sha256"] == hashlib.sha256(pilot_path.read_bytes()).hexdigest()

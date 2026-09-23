@@ -71,6 +71,25 @@ def audit_pilot_history(
             return {**result, "reason": "MISSING_PILOT_MEMBERSHIP"}
         works.update(pilot["pilot_work_ids"])
         raters.update(pilot["pilot_rater_id_hashes"])
+        if pilot.get("status") == "PILOT_PASS":
+            verification = entry.get("cutoff_receipt_verification") or {}
+            export_hash = pilot.get("input_hashes", {}).get("cutoff_export_sha256")
+            if (not isinstance(export_hash, str)
+                    or len(export_hash) != 64
+                    or any(char not in "0123456789abcdef" for char in export_hash)
+                    or not pilot.get("cutoff_registration_locator")
+                    or not pilot.get("cutoff_export_operator_id")
+                    or not verification.get("verifier_id")
+                    or verification.get("verifier_id") == pilot.get("cutoff_export_operator_id")
+                    or verification.get("registration_locator") != pilot.get("cutoff_registration_locator")
+                    or verification.get("cutoff_export_sha256") != export_hash):
+                return {**result, "reason": "UNVERIFIED_CUTOFF_EXPORT"}
+            try:
+                if not (timestamp(pilot.get("cutoff_registered_at", ""))
+                        <= timestamp(verification.get("verified_at", "")) <= sealed):
+                    return {**result, "reason": "UNVERIFIED_CUTOFF_EXPORT"}
+            except (AttributeError, TypeError, ValueError):
+                return {**result, "reason": "UNVERIFIED_CUTOFF_EXPORT"}
         all_passed = all_passed and pilot.get("status") == "PILOT_PASS"
     independent = not (works & confirmatory_works) and not (
         raters & {hashlib.sha256(rater.encode()).hexdigest() for rater in confirmatory_raters})

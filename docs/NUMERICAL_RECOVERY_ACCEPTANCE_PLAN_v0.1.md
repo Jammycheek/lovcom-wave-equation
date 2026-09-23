@@ -6,7 +6,7 @@ Status: **DRAFT / NOT ASSESSED / FREEZE BLOCKED**. This is a preregistration che
 
 Keep `results/synthetic_recovery/` and its generating revision unchanged. Its `converged` boolean is the v0.1 runtime-conditional rule. The exposed block comprises both default scenarios and seeds 260901 through 260920 (40 scenario/seed pairs). Quarantine the entire block across environments. Neither the original nine rejected IDs nor a reproduction's rejected IDs define a fresh holdout.
 
-The reported Linux reproduction established excellent FIT-likelihood agreement, not stable membership. Total holdout Log Score agreement is not a substitute for the per-IE forecast-mean tolerance. The raw reproduction bundle is still required to independently verify the reviewer's claims here.
+The reviewer supplied two Linux reproduction runs separately at commit `67c4fc0` under `review/reproduction_2026-09-23/`. The comparison utility was rerun locally on those raw CSV files against the committed Windows artifacts: both Linux runs flip the same 10/40 historical convergence flags and reach maximum per-IE forecast-mean difference `9.084153679284057e-8`; pinned-vs-older Linux fits and predictions agree numerically exactly. This verifies the supplied artifacts and comparisons, not an independent rerun of either Linux optimization on this host. The original archive SHA-256 was not checked because only expanded files were pushed; per-file Git-blob hashes were checked. Total holdout Log Score agreement remains no substitute for per-IE comparison. All 40 cases remain exposed audit data, not calibration data.
 
 ## Runtime contract and replay
 

@@ -8,7 +8,10 @@ import sys
 import numpy as np
 import pytest
 
-from scripts.run_tension_bridge_analysis import parse_ratings, parse_windows, validate_discriminant_pilot
+from scripts.run_tension_bridge_analysis import (
+    CONFIRMATORY_SOURCE_PROVENANCE_SPECIFIED, parse_ratings, parse_windows,
+    validate_discriminant_pilot,
+)
 
 from rcwe.tension_bridge import (
     AggregatedWindow,
@@ -153,9 +156,15 @@ def test_future_blind_status_is_derived_from_timestamp_order():
         "exposure_uncertain": "no", "question_order": deterministic_question_order("seed", "W", "WIN", "R"),
         "l_obs": "1", "t_obs": "2", "d_obs": "3", "eligibility_decided_at": "2026-01-01T00:00:00+09:00",
         "window_endpoint_reached_at": "2026-01-01T01:00:00+09:00", "rating_timestamp": "2026-01-01T02:00:00+09:00",
-        "next_source_opened_at": "2026-01-01T01:30:00+09:00", "valid_primary": "true",
+        "next_source_opened_at": "2026-01-01T01:30:00+09:00",
     }
     assert not parse_ratings([row])[0].future_blind
+    with pytest.raises(ValueError, match="manual row-level"):
+        parse_ratings([{**row, "valid_primary": "false"}])
+
+
+def test_confirmatory_source_provenance_has_not_been_preregistered():
+    assert CONFIRMATORY_SOURCE_PROVENANCE_SPECIFIED is False
 
 
 def test_discriminant_pilot_requires_hash_match_and_independent_people_and_works():

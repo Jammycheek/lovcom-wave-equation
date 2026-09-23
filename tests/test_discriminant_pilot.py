@@ -9,7 +9,9 @@ import pytest
 
 from rcwe.discriminant_pilot import discriminant_verdict, evaluate_discriminant_pilot
 from rcwe.tension_bridge import AggregatedWindow, ReliabilityResult, Rating
-from scripts.run_tension_bridge_discriminant_pilot import INSTRUMENT, parse_ratings, sha256, validate_manifest
+from scripts.run_tension_bridge_discriminant_pilot import (
+    INSTRUMENT, nonresponse_order_violations, parse_ratings, sha256, validate_manifest,
+)
 from rcwe.tension_bridge import deterministic_question_order
 
 
@@ -61,10 +63,12 @@ def test_nonresponse_uses_blank_values_and_closes_at_fixed_cutoff():
     blank = dict(rater_id="r2", work_id="w", window_id="w1", response_status="NONRESPONSE",
                  prior_exposure="", knows_future="", exposure_uncertain="", question_order="",
                  l_obs="", t_obs="", d_obs="", eligibility_decided_at="",
-                 window_endpoint_reached_at="", rating_timestamp="", next_source_opened_at="", valid_pilot="")
+                 window_endpoint_reached_at="", rating_timestamp="", next_source_opened_at="")
     assert parse_ratings([blank]) == ([], [])
     with pytest.raises(ValueError, match="invented"):
         parse_ratings([{**blank, "t_obs": "0"}])
+    with pytest.raises(ValueError, match="manual row-level"):
+        parse_ratings([{**blank, "valid_pilot": "false"}])
     answer = {"rater_id": "r1", "work_id": "w", "window_id": "w1", "response_status": "ANSWERED"}
     roster = [answer, blank]
     before = datetime(2026, 1, 2, tzinfo=timezone.utc)
@@ -75,6 +79,19 @@ def test_nonresponse_uses_blank_values_and_closes_at_fixed_cutoff():
     with pytest.raises(ValueError, match="exactly cover"):
         validate_manifest([row], [answer], [before], as_of=after)
     assert validate_manifest([row], [], [], cancelled=True, as_of=before)[0]
+
+
+def test_nonresponse_is_a_terminal_suffix_in_planned_window_order():
+    plan = [{"work_id": "w", "planned_window_ids": "w1;w2;w3", "planned_rater_ids": "r1;r2"}]
+    rows = [
+        {"work_id": "w", "window_id": window, "rater_id": rater, "response_status": status}
+        for rater, statuses in (("r1", ("ANSWERED", "NONRESPONSE", "ANSWERED")),
+                                ("r2", ("ANSWERED", "NONRESPONSE", "NONRESPONSE")))
+        for window, status in zip(("w1", "w2", "w3"), statuses)
+    ]
+    assert nonresponse_order_violations(plan, rows) == [
+        {"work_id": "w", "rater_id": "r1", "resumed_at_window_id": "w3"}
+    ]
 
 
 def reliability(passed=True):
@@ -149,19 +166,36 @@ def test_real_runner_records_dropout_and_insufficient_result_without_fake_scores
     answered = dict.fromkeys(rating_fields, "")
     answered.update(rater_id="r1", work_id="work", window_id="window", response_status="ANSWERED",
                     prior_exposure="no", knows_future="no", exposure_uncertain="no",
-                    question_order=deterministic_question_order("RCWE-TB-DISCRIMINANT-v0.3", "work", "window", "r1"),
+                    question_order=deterministic_question_order("RCWE-TB-DISCRIMINANT-v0.4", "work", "window", "r1"),
                     l_obs="50", t_obs="60", d_obs="30", eligibility_decided_at="2026-01-01T01:00:00Z",
                     window_endpoint_reached_at="2026-01-02T00:00:00Z",
-                    rating_timestamp="2026-01-02T00:01:00Z", valid_pilot="true")
+                    rating_timestamp="2026-01-02T00:01:00Z")
     unanswered = {**dict.fromkeys(rating_fields, ""), "rater_id": "r2", "work_id": "work",
                   "window_id": "window", "response_status": "NONRESPONSE"}
     with ratings.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=rating_fields)
         writer.writeheader()
         writer.writerows([answered, unanswered])
+    export = tmp_path / "cutoff_export.csv"
+    receipt = tmp_path / "cutoff_receipt.json"
+    def freeze_export(rows):
+        with export.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=rating_fields)
+            writer.writeheader()
+            writer.writerows(rows)
+        receipt.write_text(json.dumps({
+            "cutoff_export_sha256": sha256(export.read_bytes()),
+            "manifest_sha256": sha256(manifest.read_bytes()),
+            "registered_at": "2026-01-03T00:01:00Z",
+            "registration_locator": "urn:test:registered-cutoff",
+            "export_operator_id": "operator-one",
+        }), encoding="utf-8")
+    freeze_export([answered])
     output = tmp_path / "result"
     command = [sys.executable, str(root / "scripts/run_tension_bridge_discriminant_pilot.py"),
-               "--manifest", str(manifest), "--ratings", str(ratings), "--output", str(output)]
+               "--manifest", str(manifest), "--ratings", str(ratings),
+               "--cutoff-export", str(export), "--cutoff-receipt", str(receipt),
+               "--output", str(output)]
     subprocess.run(command, cwd=root, check=True)
     result = json.loads((output / "summary.json").read_text())
     assert result["status"] == "INSUFFICIENT_PILOT_DATA"
@@ -171,12 +205,37 @@ def test_real_runner_records_dropout_and_insufficient_result_without_fake_scores
     assert result["abs_r_td"] is None
     with pytest.raises(subprocess.CalledProcessError):
         subprocess.run(command, cwd=root, check=True, capture_output=True)
+    bad_receipt = tmp_path / "bad_receipt.json"
+    bad_receipt.write_text(json.dumps({**json.loads(receipt.read_text()),
+                                       "cutoff_export_sha256": "0" * 64}), encoding="utf-8")
+    bad_receipt_output = tmp_path / "bad-receipt-result"
+    subprocess.run([*command[:-1], str(bad_receipt_output),
+                    "--cutoff-receipt", str(bad_receipt)], cwd=root, check=True)
+    assert json.loads((bad_receipt_output / "summary.json").read_text())["status"] == "PILOT_PROVENANCE_FAILURE"
+    missing_export_output = tmp_path / "missing-export-result"
+    subprocess.run([*command[:-1], str(missing_export_output),
+                    "--cutoff-export", str(tmp_path / "does-not-exist.csv")], cwd=root, check=True)
+    missing_export = json.loads((missing_export_output / "summary.json").read_text())
+    assert missing_export["status"] == "PILOT_PROVENANCE_FAILURE"
+    assert "CUTOFF_EXPORT_MISSING" in missing_export["cutoff_export_violations"]
+    hidden_output = tmp_path / "hidden-answer"
+    with ratings.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=rating_fields)
+        writer.writeheader()
+        writer.writerows([{"rater_id": "r1", "work_id": "work", "window_id": "window",
+                          "response_status": "NONRESPONSE"}, unanswered])
+    hidden = subprocess.run([*command[:-1], str(hidden_output)], cwd=root, check=True)
+    assert hidden.returncode == 0
+    hidden_summary = json.loads((hidden_output / "summary.json").read_text())
+    assert hidden_summary["status"] == "PILOT_PROVENANCE_FAILURE"
+    assert "CUTOFF_ANSWER_MEMBERSHIP_MISMATCH" in hidden_summary["cutoff_export_violations"]
     late_output = tmp_path / "late"
     late_answer = {**answered, "rating_timestamp": "2026-01-04T00:01:00Z"}
     with ratings.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=rating_fields)
         writer.writeheader()
         writer.writerows([late_answer, unanswered])
+    freeze_export([])
     subprocess.run([*command[:-1], str(late_output)], cwd=root, check=True)
     late = json.loads((late_output / "summary.json").read_text())
     assert late["status"] == "INSUFFICIENT_PILOT_DATA"
@@ -191,3 +250,55 @@ def test_real_runner_records_dropout_and_insufficient_result_without_fake_scores
     assert cancelled["status"] == "CANCELLED_PILOT"
     assert cancelled["cancel_reason"] == "study stopped"
     assert len(cancelled["pilot_rater_id_hashes"]) == 2
+
+
+def test_runner_records_resumed_after_nonresponse_as_terminal_protocol_deviation(tmp_path):
+    root = Path(__file__).resolve().parents[1]
+    manifest_fields = (root / "data/tension_bridge_discriminant_pilot_manifest_template.csv").read_text().strip().split(",")
+    rating_fields = (root / "data/tension_bridge_discriminant_pilot_ratings_template.csv").read_text().strip().split(",")
+    manifest = tmp_path / "manifest.csv"
+    roster = tmp_path / "roster.csv"
+    export = tmp_path / "cutoff_export.csv"
+    receipt = tmp_path / "receipt.json"
+    plan = dict(work_id="work", version_id="v", edition="e", planned_work_count="1",
+                planned_window_count="2", planned_window_ids="w1;w2", planned_rater_ids="r1",
+                instrument_sha256=sha256(INSTRUMENT.read_bytes()),
+                manifest_frozen_at="2026-01-01T00:00:00Z", manifest_freeze_commit="frozen",
+                recruitment_closes_at="2026-01-03T00:00:00Z",
+                confirmatory_reuse_prohibited="true", notes="")
+    with manifest.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=manifest_fields)
+        writer.writeheader()
+        writer.writerow(plan)
+    missing = {**dict.fromkeys(rating_fields, ""), "rater_id": "r1", "work_id": "work",
+               "window_id": "w1", "response_status": "NONRESPONSE"}
+    answered = {**dict.fromkeys(rating_fields, ""), "rater_id": "r1", "work_id": "work",
+                "window_id": "w2", "response_status": "ANSWERED", "prior_exposure": "no",
+                "knows_future": "no", "exposure_uncertain": "no", "l_obs": "50",
+                "t_obs": "60", "d_obs": "30",
+                "question_order": deterministic_question_order("RCWE-TB-DISCRIMINANT-v0.4", "work", "w2", "r1"),
+                "eligibility_decided_at": "2026-01-01T00:01:00Z",
+                "window_endpoint_reached_at": "2026-01-02T00:00:00Z",
+                "rating_timestamp": "2026-01-02T00:01:00Z"}
+    for path, rows in ((roster, [missing, answered]), (export, [answered])):
+        with path.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=rating_fields)
+            writer.writeheader()
+            writer.writerows(rows)
+    receipt.write_text(json.dumps({
+        "cutoff_export_sha256": sha256(export.read_bytes()),
+        "manifest_sha256": sha256(manifest.read_bytes()),
+        "registered_at": "2026-01-03T00:01:00Z",
+        "registration_locator": "urn:test:registered-cutoff",
+        "export_operator_id": "operator-one",
+    }), encoding="utf-8")
+    output = tmp_path / "result"
+    subprocess.run([sys.executable, str(root / "scripts/run_tension_bridge_discriminant_pilot.py"),
+                    "--manifest", str(manifest), "--ratings", str(roster),
+                    "--cutoff-export", str(export), "--cutoff-receipt", str(receipt),
+                    "--output", str(output)], cwd=root, check=True)
+    summary = json.loads((output / "summary.json").read_text())
+    assert summary["status"] == "PILOT_PROTOCOL_DEVIATION"
+    assert summary["nonresponse_order_violations"] == [
+        {"work_id": "work", "rater_id": "r1", "resumed_at_window_id": "w2"}]
+    assert summary["abs_r_td"] is None
