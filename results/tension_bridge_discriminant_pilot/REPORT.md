@@ -2,10 +2,10 @@
 
 Generated; do not edit by hand.
 
-- Git commit: `42ba76d720d9172dad4e7543fbb91c0229b4dc3e`
-- Input/protocol hashes: `{'ratings_sha256': '6695e0aa20389698423bb1a8316e571ba201f086a95381a953f441c524db3b2a', 'manifest_sha256': 'cdd686688bf27142788d58299296c0321d638fdeaed98cda8cad7a9d19d3f51f', 'protocol_sha256': 'd6a857f1adbc1d1f749ae126d70172ab7e66806cca396c3dab9856a19bc3d2c1', 'instrument_sha256': '17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1'}`
+- Git commit: `35598d16db06e907936ddce326491aa96a0c2979`
+- Input/protocol hashes: `{'ratings_sha256': '52ceccfc9460039eef7796f8ce26ed0e48c667bf6df2b4da0b839d019546d556', 'manifest_sha256': '92beb79eb67fcc64fee355ad99ad7c07979b68c05d4b91e12db238c0b8f8add7', 'protocol_sha256': 'd18bf3292137478df3cc59ebf82886003f580088eae1301b8e53a9750ecf2da0', 'instrument_sha256': '17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1'}`
 - Exact command: `python.exe scripts/run_tension_bridge_discriminant_pilot.py`
 
 - Status: `NO_DATA`
-- T/D result: `{'status': 'NO_DATA', 'protocol_sha256': 'd6a857f1adbc1d1f749ae126d70172ab7e66806cca396c3dab9856a19bc3d2c1', 'input_hashes': {'ratings_sha256': '6695e0aa20389698423bb1a8316e571ba201f086a95381a953f441c524db3b2a', 'manifest_sha256': 'cdd686688bf27142788d58299296c0321d638fdeaed98cda8cad7a9d19d3f51f', 'protocol_sha256': 'd6a857f1adbc1d1f749ae126d70172ab7e66806cca396c3dab9856a19bc3d2c1', 'instrument_sha256': '17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1'}, 'pilot_work_ids': [], 'pilot_rater_id_hashes': [], 'abs_r_td': None, 'upper_95_abs_r_td': None, 'instrument_version': '1.1', 'instrument_sha256': '17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1', 'completed_at': '2026-09-23T01:03:47.806819+00:00'}`
+- T/D result: `{'status': 'NO_DATA', 'protocol_sha256': 'd18bf3292137478df3cc59ebf82886003f580088eae1301b8e53a9750ecf2da0', 'input_hashes': {'ratings_sha256': '52ceccfc9460039eef7796f8ce26ed0e48c667bf6df2b4da0b839d019546d556', 'manifest_sha256': '92beb79eb67fcc64fee355ad99ad7c07979b68c05d4b91e12db238c0b8f8add7', 'protocol_sha256': 'd18bf3292137478df3cc59ebf82886003f580088eae1301b8e53a9750ecf2da0', 'instrument_sha256': '17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1'}, 'pilot_work_ids': [], 'pilot_rater_id_hashes': [], 'abs_r_td': None, 'upper_95_abs_r_td': None, 'instrument_version': '1.1', 'instrument_sha256': '17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1', 'completed_at': '2026-09-23T02:05:05.731505+00:00', 'recruitment_closes_at': None, 'exclusions': {'planned_cells': 0, 'answered_cells': 0, 'nonresponse_cells': 0, 'late_answered_cells': 0}}`
 - Reliability: `{}`

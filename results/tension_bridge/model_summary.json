@@ -18,9 +18,9 @@
     "independence_passed": null,
     "instrument_sha256": "17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1",
     "instrument_version": "1.1",
-    "protocol_sha256": "d6a857f1adbc1d1f749ae126d70172ab7e66806cca396c3dab9856a19bc3d2c1",
+    "protocol_sha256": "d18bf3292137478df3cc59ebf82886003f580088eae1301b8e53a9750ecf2da0",
     "ready": false,
-    "result_sha256": "c5f79c87b682af68f3d90eb1deef43870eb8dfd43c9989463e64aa7612a680e3",
+    "result_sha256": "4b1b55b51e7235b5a617b0343d2231ee30c3add84e137755edc0cbe8233947b3",
     "selected_result_independence_passed": null,
     "status": "NO_DATA"
   },

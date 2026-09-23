@@ -4,11 +4,13 @@
   "discriminant_limit": 0.85,
   "input_hashes": {
     "instrument_sha256": "17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1",
-    "manifest_sha256": "cdd686688bf27142788d58299296c0321d638fdeaed98cda8cad7a9d19d3f51f",
-    "protocol_sha256": "d6a857f1adbc1d1f749ae126d70172ab7e66806cca396c3dab9856a19bc3d2c1",
-    "ratings_sha256": "6695e0aa20389698423bb1a8316e571ba201f086a95381a953f441c524db3b2a"
+    "manifest_sha256": "92beb79eb67fcc64fee355ad99ad7c07979b68c05d4b91e12db238c0b8f8add7",
+    "protocol_sha256": "d18bf3292137478df3cc59ebf82886003f580088eae1301b8e53a9750ecf2da0",
+    "ratings_sha256": "52ceccfc9460039eef7796f8ce26ed0e48c667bf6df2b4da0b839d019546d556"
   },
-  "master_seed": "RCWE-TB-DISCRIMINANT-v0.2",
+  "master_seed": "RCWE-TB-DISCRIMINANT-v0.3",
   "minimum_raters": 12,
+  "planned_cell_count": 0,
+  "recruitment_closes_at": null,
   "reliability_repeats": 1000
 }
