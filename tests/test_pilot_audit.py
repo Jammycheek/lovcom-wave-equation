@@ -47,7 +47,7 @@ def test_complete_pass_history_activates(evidence):
     assert audit(evidence)["ready"] is True
 
 
-@pytest.mark.parametrize("status", ["PILOT_DISCRIMINANT_FAILURE", "PILOT_MEASUREMENT_FAILURE", "INSUFFICIENT_PILOT_DATA"])
+@pytest.mark.parametrize("status", ["PILOT_DISCRIMINANT_FAILURE", "PILOT_MEASUREMENT_FAILURE", "INSUFFICIENT_PILOT_DATA", "CANCELLED_PILOT"])
 def test_failed_run_cannot_be_hidden_behind_later_pass(evidence, status):
     path, pilot, history, _ = evidence
     digest = save(path / "failed.json", {**pilot, "status": status})
@@ -107,7 +107,7 @@ def test_committed_no_data_artifacts_bind_current_form_protocol_and_result_bytes
     pilot = json.loads(pilot_path.read_bytes())
     bridge = json.loads((root / "results/tension_bridge/model_summary.json").read_bytes())
     form_hash = hashlib.sha256((root / "protocols/TENSION_BRIDGE_RATING_FORM_v1.1.md").read_bytes()).hexdigest()
-    protocol_hash = hashlib.sha256((root / "protocols/TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.2.md").read_bytes()).hexdigest()
+    protocol_hash = hashlib.sha256((root / "protocols/TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.3.md").read_bytes()).hexdigest()
     assert pilot["instrument_sha256"] == bridge["discriminant_pilot"]["instrument_sha256"] == form_hash
     assert pilot["protocol_sha256"] == bridge["discriminant_pilot"]["protocol_sha256"] == protocol_hash
     assert bridge["discriminant_pilot"]["result_sha256"] == hashlib.sha256(pilot_path.read_bytes()).hexdigest()

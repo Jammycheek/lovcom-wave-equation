@@ -13,8 +13,8 @@ The reported Linux reproduction established excellent FIT-likelihood agreement, 
 - Canonical family: CPython 3.12.14, NumPy 2.5.3, SciPy 1.18.1, Windows AMD64. `pyproject.toml` pins the numerical dependencies and Python minor family. The benchmark also checks the exact runtime family before fitting.
 - Record OS, architecture, library build/BLAS configuration, thread environment, worker count, code commit, all initial/final values, raw optimizer flags, projected gradients and likelihoods. Same versions do not imply identical builds or bitwise replay.
 - Another family requires `--allow-nonreference-runtime`; no cross-family run is silently called canonical. Diagnostic replay must use a new output directory, never overwrite historical results.
-- Compare exact `(scenario, seed)` membership and per-IE predictions. FIT likelihood absolute tolerance remains `1e-6`, forecast-mean tolerance `1e-8`. Parameter differences, holdout scores and classification differences are separate diagnostics, not alternate acceptance criteria.
-- Use `python scripts/compare_synthetic_runs.py results/synthetic_recovery PATH_TO_REPRODUCED_RUN` for a read-only comparison. It checks duplicate/missing IDs, raw flags, FIT likelihoods and each RCWE holdout mean; matching totals cannot hide membership swaps. A self-comparison tests the tool only, not independent reproducibility. Missing/non-finite fit evidence raises an error rather than silently excluding cases.
+- Compare exact `(scenario, seed)` membership and per-IE predictions. Preserve the historical FIT-likelihood absolute tolerance `1e-6` as a diagnostic. The solver-only `1e-8` forecast-mean tolerance applies with fixed parameters and initial state. Independently refitted forecasts need a **separate, not yet selected** equivalence tolerance calibrated on the development block. Parameter differences, holdout scores and classification differences remain separately reported. The reviewer reported a `9.08e-8` maximum per-IE mean difference, with 12/40 exposed replicates beyond the historical `1e-8` fitted-run test; these numbers are audit observations, not calibration data.
+- Use `python scripts/compare_synthetic_runs.py results/synthetic_recovery PATH_TO_REPRODUCED_RUN` for a read-only comparison. It checks duplicate/missing IDs, raw flags, FIT likelihoods and each RCWE holdout mean; matching totals cannot hide membership swaps. Its `numerical_tolerances_met` field applies the **historical** fitted-run `1e-8` diagnostic and does not determine future acceptance. A self-comparison tests the tool only, not independent reproducibility. Missing/non-finite fit evidence raises an error rather than silently excluding cases.
 - New benchmark runs checkpoint each completed replicate and report progress. Default workers are capped at four and at the detected logical CPU count; operators may lower the explicit worker count for quota-limited hosts.
 
 ## Three-state annotation, not a rescued gate
@@ -40,6 +40,8 @@ These must be filled before validation, not inferred from the existing 31/40 res
 - minimum correct regime fraction per scenario over all attempted replicates, with failures/marginals counted as not recovered;
 - maximum parameter-recovery error for each named parameter, metric/quantile, and handling of non-identifiability;
 - maximum between-runtime membership disagreement and the declared runtime/build matrix;
+- refitted-forecast per-IE mean equivalence tolerance, independently of the fixed-parameter solver tolerance, and an explicit policy for failed equivalence;
+- reference runtime/build matrix for independent Linux or container reproduction, if cross-platform confirmation is required;
 - fixed development and validation sample sizes, seed lists and closure rules;
 - whether predictive performance is a separate characterization or an acceptance criterion; if the latter, exact baseline comparisons and thresholds.
 

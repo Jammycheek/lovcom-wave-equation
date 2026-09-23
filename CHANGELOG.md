@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — third-review follow-up (R-1 through R-3)
+
+- R-1: retain the fixed-parameter solver-only `1e-8` agreement check, but label the historical independently refitted `1e-8` comparison as a failed diagnostic rather than an acceptance gate. A distinct refitted-forecast tolerance requires an unexposed development block. Record the reviewer's 12/40 discrepancy as reported evidence, pending the raw reproduction bundle.
+- R-2: version the T/D pilot as v0.3. Freeze one recruitment cutoff and represent every planned cell as an actual `ANSWERED` row or a blank-valued `NONRESPONSE`; keep late answers in raw data but out of the primary analysis. Emit insufficient-data or cancelled-plan results without silently replacing the plan.
+- R-3: require an external timestamped registration of the plan hash before the first rating, one plan per instrument version. A real plan, receipt, participants and outcomes are still absent.
+- N-1, N-3 and N-4 passed the reviewer's mutation and runtime checks. N-2 and N-5 remain open; no freeze tag or scientific pass claim follows from this update.
+
 ## Unreleased — second-review safeguards (N-1 through N-5)
 
 - N-1: fix the pilot sampling plan before ratings; require exact work/window/rater cells and a sealed, complete result history. Failed or changed-plan evidence cannot activate confirmation. Real collection remains pending.

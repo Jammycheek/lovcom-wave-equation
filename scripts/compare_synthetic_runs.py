@@ -57,6 +57,8 @@ def compare(left: Path, right: Path):
     return {"replicates": len(a), "input_hashes": hashes, "maximum_absolute_differences": maxima,
             "convergence_flipped_ids": flipped, "convergence_membership_equal": not flipped,
             "numerical_tolerances_met": maxima["FIT_log_likelihood"] <= 1e-6 and maxima["holdout_predicted_mu"] <= 1e-8,
+            "refitted_forecast_tolerance_status": "NOT_PREREGISTERED",
+            "numerical_tolerances_scope": "historical v0.1 fitted-run diagnostic; not acceptance",
             "acceptance_status": "NOT_ASSESSED",
             "note": "Runtime/build eligibility and scientific acceptance require separate review; matching counts are insufficient."}
 

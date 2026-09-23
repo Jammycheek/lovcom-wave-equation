@@ -35,6 +35,7 @@ def test_equal_counts_do_not_hide_flipped_ids(runs):
     assert len(result["convergence_flipped_ids"]) == 2
     assert result["numerical_tolerances_met"] is True
     assert result["acceptance_status"] == "NOT_ASSESSED"
+    assert result["refitted_forecast_tolerance_status"] == "NOT_PREREGISTERED"
 
 
 def test_per_ie_mean_tolerance_is_not_replaced_by_total_score(runs):

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+from dataclasses import replace
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -31,15 +32,17 @@ from rcwe.tension_bridge import (
     validate_question_orders,
 )
 
-PROTOCOL = ROOT / "protocols" / "TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.2.md"
+PROTOCOL = ROOT / "protocols" / "TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.3.md"
 INSTRUMENT = ROOT / "protocols" / "TENSION_BRIDGE_RATING_FORM_v1.1.md"
+MASTER_SEED = "RCWE-TB-DISCRIMINANT-v0.3"
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--ratings", type=Path, default=ROOT / "data" / "tension_bridge_discriminant_pilot_ratings_template.csv")
     parser.add_argument("--manifest", type=Path, default=ROOT / "data" / "tension_bridge_discriminant_pilot_manifest_template.csv")
-    parser.add_argument("--master-seed", default="RCWE-TB-DISCRIMINANT-v0.2")
+    parser.add_argument("--master-seed", default=MASTER_SEED)
+    parser.add_argument("--cancel-reason", help="close this frozen pilot plan without a scientific verdict")
     parser.add_argument("--output", type=Path, default=ROOT / "results" / "tension_bridge_discriminant_pilot")
     return parser.parse_args()
 
@@ -89,6 +92,17 @@ def git_sha() -> str:
 def parse_ratings(rows: list[dict[str, str]]) -> tuple[list[Rating], list[datetime]]:
     ratings, times = [], []
     for row in rows:
+        response_status = row["response_status"].strip()
+        if response_status == "NONRESPONSE":
+            if any(row[field].strip() for field in (
+                "prior_exposure", "knows_future", "exposure_uncertain", "question_order",
+                "l_obs", "t_obs", "d_obs", "eligibility_decided_at",
+                "window_endpoint_reached_at", "rating_timestamp", "next_source_opened_at", "valid_pilot",
+            )):
+                raise ValueError("NONRESPONSE cells must not contain invented ratings or timestamps")
+            continue
+        if response_status != "ANSWERED":
+            raise ValueError("response_status must be ANSWERED or NONRESPONSE")
         eligibility = parse_timestamp(row["eligibility_decided_at"], "eligibility_decided_at")
         endpoint = parse_timestamp(row["window_endpoint_reached_at"], "window_endpoint_reached_at")
         rated = parse_timestamp(row["rating_timestamp"], "rating_timestamp")
@@ -105,17 +119,23 @@ def parse_ratings(rows: list[dict[str, str]]) -> tuple[list[Rating], list[dateti
     return ratings, times
 
 
-def validate_manifest(rows: list[dict[str, str]], ratings: list[Rating], rating_times: list[datetime]) -> bool:
-    if not rows and not ratings:
-        return False
-    if not rows or not ratings:
-        raise ValueError("pilot ratings and a frozen work manifest are both required")
-    works = {rating.work_id for rating in ratings}
+def validate_manifest(
+    rows: list[dict[str, str]], response_rows: list[dict[str, str]], rating_times: list[datetime],
+    *, cancelled: bool = False, as_of: datetime | None = None,
+) -> tuple[bool, datetime | None, int]:
+    if not rows and not response_rows:
+        return False, None, 0
+    if not rows:
+        raise ValueError("a frozen pilot work manifest is required")
+    works = {row["work_id"].strip() for row in response_rows}
     if len({row["work_id"].strip() for row in rows}) != len(rows):
         raise ValueError("duplicate work_id in pilot manifest")
-    if {row["work_id"].strip() for row in rows} != works:
+    if works - {row["work_id"].strip() for row in rows}:
         raise ValueError("pilot manifest works must exactly match rating works")
-    first_rating = min(rating_times)
+    first_rating = min(rating_times, default=None)
+    now = as_of or datetime.now(timezone.utc)
+    closures = set()
+    planned_cell_count = 0
     for row in rows:
         work = row["work_id"].strip()
         if int(row["planned_work_count"]) != len(rows):
@@ -126,7 +146,10 @@ def validate_manifest(rows: list[dict[str, str]], ratings: list[Rating], rating_
             raise ValueError("pilot manifest provenance is incomplete")
         if not parse_bool(row["confirmatory_reuse_prohibited"], "confirmatory_reuse_prohibited"):
             raise ValueError("pilot works and raters cannot be reused in the confirmatory Bridge study")
-        if parse_timestamp(row["manifest_frozen_at"], "manifest_frozen_at") >= first_rating:
+        frozen_at = parse_timestamp(row["manifest_frozen_at"], "manifest_frozen_at")
+        closes_at = parse_timestamp(row["recruitment_closes_at"], "recruitment_closes_at")
+        closures.add(closes_at)
+        if frozen_at >= closes_at or (first_rating is not None and frozen_at >= first_rating):
             raise ValueError("pilot manifest must be frozen before the first rating")
         window_list = row["planned_window_ids"].split(";")
         rater_list = row["planned_rater_ids"].split(";")
@@ -136,24 +159,46 @@ def validate_manifest(rows: list[dict[str, str]], ratings: list[Rating], rating_
             raise ValueError("duplicate ID in frozen pilot plan")
         if int(row["planned_window_count"]) != len(window_list):
             raise ValueError(f"planned window count mismatch for {work}")
-        actual_cells = [(rating.window_id, rating.rater_id) for rating in ratings if rating.work_id == work]
+        actual_cells = [(entry["window_id"].strip(), entry["rater_id"].strip())
+                        for entry in response_rows if entry["work_id"].strip() == work]
         expected_cells = {(window, rater) for window in window_list for rater in rater_list}
-        if len(actual_cells) != len(expected_cells) or set(actual_cells) != expected_cells:
+        planned_cell_count += len(expected_cells)
+        if len(actual_cells) != len(set(actual_cells)) or not set(actual_cells) <= expected_cells:
             raise ValueError("pilot ratings must exactly cover the frozen rater/window plan, including exclusions")
-    return True
+        if not cancelled and set(actual_cells) != expected_cells:
+            raise ValueError("pilot ratings must exactly cover the frozen rater/window plan, including exclusions")
+    if len(closures) != 1:
+        raise ValueError("all pilot works must share one frozen recruitment cutoff")
+    closes_at = closures.pop()
+    if not cancelled and now < closes_at:
+        raise ValueError("pilot collection has not reached the frozen recruitment cutoff")
+    return True, closes_at, planned_cell_count
 
 
 def main() -> int:
     args = parse_args()
+    if args.master_seed != MASTER_SEED:
+        raise ValueError("the pilot bootstrap/question-order seed is frozen for this protocol version")
+    if args.cancel_reason is not None and not args.cancel_reason.strip():
+        raise ValueError("cancellation requires a nonempty reason")
+    cancelled = args.cancel_reason is not None
     output = args.output.resolve()
     prior = output / "summary.json"
     if prior.exists() and json.loads(prior.read_bytes()).get("status") != "NO_DATA":
         raise ValueError("completed pilot results cannot be overwritten; retain and register every run")
-    output.mkdir(parents=True, exist_ok=True)
     rating_raw, rating_rows = read_csv(args.ratings.resolve())
     manifest_raw, manifest_rows = read_csv(args.manifest.resolve())
+    if cancelled and not manifest_rows:
+        raise ValueError("a cancelled pilot must name a frozen plan")
     ratings, rating_times = parse_ratings(rating_rows)
-    manifest_ready = validate_manifest(manifest_rows, ratings, rating_times)
+    manifest_ready, closes_at, planned_cell_count = validate_manifest(
+        manifest_rows, rating_rows, rating_times, cancelled=cancelled)
+    output.mkdir(parents=True, exist_ok=True)
+    late_count = sum(rated > closes_at for rated in rating_times) if closes_at is not None else 0
+    if closes_at is not None:
+        ratings = [replace(rating, valid_primary=False) if rated > closes_at else rating
+                   for rating, rated in zip(ratings, rating_times)]
+    nonresponse_count = sum(row["response_status"].strip() == "NONRESPONSE" for row in rating_rows)
     protocol_hash = sha256(PROTOCOL.read_bytes())
     instrument_hash = sha256(INSTRUMENT.read_bytes())
     hashes = {"ratings_sha256": sha256(rating_raw), "manifest_sha256": sha256(manifest_raw), "protocol_sha256": protocol_hash, "instrument_sha256": instrument_hash}
@@ -162,22 +207,43 @@ def main() -> int:
         "command": command, "master_seed": args.master_seed, "input_hashes": hashes,
         "minimum_raters": MIN_RATERS, "reliability_repeats": RELIABILITY_REPEATS,
         "bootstrap_repeats": BOOTSTRAP_REPEATS, "discriminant_limit": DISCRIMINANT_LIMIT,
+        "recruitment_closes_at": closes_at.isoformat() if closes_at else None,
+        "planned_cell_count": planned_cell_count,
     }
     (output / "config.json").write_text(json.dumps(config, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
     environment = {"git_commit": git_sha(), "python": platform.python_version(), "numpy": np.__version__, "scipy": scipy.__version__}
     (output / "environment.json").write_text(json.dumps(environment, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
 
-    if not ratings and not manifest_rows:
+    pilot_works = sorted(row["work_id"].strip() for row in manifest_rows)
+    pilot_raters = sorted({rater for row in manifest_rows for rater in row["planned_rater_ids"].split(";")}) if manifest_rows else []
+    membership = {
+        "pilot_work_ids": pilot_works,
+        "pilot_rater_id_hashes": sorted(hashlib.sha256(rater.encode()).hexdigest() for rater in pilot_raters),
+    }
+    exclusions = {
+        "planned_cells": planned_cell_count,
+        "answered_cells": len(ratings),
+        "nonresponse_cells": nonresponse_count,
+        "late_answered_cells": late_count,
+    }
+    if not manifest_rows and not rating_rows:
         reliability = {}
         summary = {"status": "NO_DATA", "protocol_sha256": protocol_hash, "input_hashes": hashes, "pilot_work_ids": [], "pilot_rater_id_hashes": [], "abs_r_td": None, "upper_95_abs_r_td": None}
         aggregates = []
+    elif cancelled:
+        reliability = {}
+        aggregates = []
+        summary = {"status": "CANCELLED_PILOT", "cancel_reason": args.cancel_reason.strip(),
+                   "manifest_ready": manifest_ready, "protocol_sha256": protocol_hash,
+                   "input_hashes": hashes, **membership, "abs_r_td": None, "upper_95_abs_r_td": None}
     else:
         validate_question_orders(ratings, args.master_seed)
         mapping: dict[str, str] = {}
-        for rating in ratings:
-            previous = mapping.setdefault(rating.window_id, rating.work_id)
-            if previous != rating.work_id:
-                raise ValueError("window_id must be globally unique across pilot works")
+        for row in manifest_rows:
+            for window_id in row["planned_window_ids"].split(";"):
+                previous = mapping.setdefault(window_id, row["work_id"].strip())
+                if previous != row["work_id"].strip():
+                    raise ValueError("window_id must be globally unique across pilot works")
         windows = [
             WindowMetric(window_id, work, work, tuple(f"{window_id}::{index}" for index in range(5)), 0.0, 0.0)
             for window_id, work in mapping.items()
@@ -187,11 +253,12 @@ def main() -> int:
         summary = {
             **evaluate_discriminant_pilot(aggregates, reliability, master_seed=args.master_seed),
             "manifest_ready": manifest_ready, "protocol_sha256": protocol_hash, "input_hashes": hashes,
-            "pilot_work_ids": sorted({rating.work_id for rating in ratings}),
-            "pilot_rater_id_hashes": sorted({hashlib.sha256(rating.rater_id.encode()).hexdigest() for rating in ratings}),
+            **membership,
         }
     summary.update(instrument_version=INSTRUMENT_VERSION, instrument_sha256=instrument_hash,
-                   completed_at=datetime.now(timezone.utc).isoformat())
+                   completed_at=datetime.now(timezone.utc).isoformat(),
+                   recruitment_closes_at=closes_at.isoformat() if closes_at else None,
+                   exclusions=exclusions)
     reliability_json = {key: value.as_dict() for key, value in reliability.items()}
     (output / "reliability.json").write_text(json.dumps(reliability_json, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
     (output / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8", newline="\n")

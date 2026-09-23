@@ -18,7 +18,7 @@ The working slogan is **Love is DC; Rom-Com is AC**. It does not claim that affe
 - RCWE v2.0 mathematical core: frozen
 - Annotation Codebook v0.2.1: frozen candidate; reliability pilot still required
 - Predictive Scoring Specification v0.1: **NOT READY**; historical `31/40` convergence membership is runtime-dependent (F-08/F-09). Numerical dependencies are pinned, but independent calibration and preregistered acceptance remain unresolved (N-2/N-5).
-- Tension Bridge: implementation wired; fixed-plan discriminant pilot v0.2 and hash-bound form v1.1, with complete-history checks. No real pilot plan or human data yet; experiment inactive.
+- Tension Bridge: implementation wired; fixed-plan discriminant pilot v0.3 supports honest nonresponse, a frozen collection cutoff, final insufficient results, cancellation, and complete-history checks. Form v1.1 remains hash-bound. No real pilot plan or human data yet; experiment inactive.
 - Subject 5: retrospective blind-validation protocol
 - Subject 6: prospective protocol; probabilistic model-comparison addendum frozen
 - Control: information-exposure boundary frozen; inactive pending exact source-unit identifiers and coder access controls
