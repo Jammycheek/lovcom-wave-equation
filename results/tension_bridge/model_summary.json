@@ -1,0 +1,30 @@
+{
+  "beta_pac_full": null,
+  "channel_reliability": {
+    "median_d_tv": null,
+    "passed": false,
+    "row_count": 0
+  },
+  "delta_ls_love": null,
+  "delta_ls_primary": null,
+  "discriminant_pilot": {
+    "history": {
+      "history_sha256": "0b191fb92a0db1639fc1693abea3dd597009c4f79bde68fa6c590ec25263437c",
+      "independence_passed": null,
+      "ready": false,
+      "reason": "NO_DECLARED_HISTORY",
+      "result_hashes": []
+    },
+    "independence_passed": null,
+    "instrument_sha256": "17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1",
+    "instrument_version": "1.1",
+    "protocol_sha256": "1c9f454f3e9c6c12ccbacf71bfcc2c3e1c8580f3e27b691238c98e330a325c86",
+    "ready": false,
+    "result_sha256": "1b7458c6259b81a9997e8801e3088ede70d7c346f3f2c39687c98bd786afbbb2",
+    "selected_result_independence_passed": null,
+    "status": "NO_DATA"
+  },
+  "scores": null,
+  "static_tension_challenge": null,
+  "status": "NO_DATA"
+}

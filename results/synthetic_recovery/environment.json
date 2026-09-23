@@ -1,0 +1,8 @@
+{
+  "git_commit": "cb3df887d4e423c3d6b8bb961c5bd8bb5659474d",
+  "numpy": "2.5.3",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.14",
+  "python_implementation": "CPython",
+  "scipy": "1.18.1"
+}

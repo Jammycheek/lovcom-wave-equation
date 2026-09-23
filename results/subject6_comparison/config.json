@@ -1,0 +1,38 @@
+{
+  "M_C_implemented": false,
+  "activation_gate": {
+    "pairs_with_both_exposures_min": 2,
+    "total_rows_min": 12,
+    "x_shared_0_min": 4,
+    "x_shared_1_min": 4
+  },
+  "alpha": 1.0,
+  "category_order": [
+    "-1",
+    "0",
+    "+1",
+    "mixed"
+  ],
+  "command": "python.exe scripts\\run_subject6_comparison.py",
+  "direction_kappa_gate": 0.7,
+  "input_files": {
+    "exposures": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\subject6_exposures_template.csv",
+    "manifest": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\subject6_comparison_manifest_template.csv",
+    "outcomes": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\subject6_outcomes_template.csv"
+  },
+  "input_hashes": {
+    "exposures_sha256": "945bf572d245585c6c6d7a09de0b3855d6530efc10c6cc88402a23c46224b743",
+    "manifest_sha256": "7d2c0a5fac54670ad25a76ef34ae8d223993c64c6d46fe8de08a72773d18ff64",
+    "outcomes_sha256": "d465cb55adb7c33005a3199cefd2adfd59b41fd901d35165e42cd3ad0de6cacf"
+  },
+  "models": [
+    "M_A",
+    "M_B"
+  ],
+  "pair_ie_cap": 10,
+  "pairs": [
+    "KM",
+    "KT",
+    "KB"
+  ]
+}

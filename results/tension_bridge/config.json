@@ -1,0 +1,35 @@
+{
+  "command": "python.exe scripts/run_tension_bridge_analysis.py",
+  "confirmatory_source_provenance_status": "NOT_SPECIFIED",
+  "cross_validation": "Leave-One-Work-Out",
+  "input_files": {
+    "channels": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_channels_template.csv",
+    "manifest": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_work_manifest_template.csv",
+    "pilot_history": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_pilot_history_template.json",
+    "pilot_result": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\results\\tension_bridge_discriminant_pilot\\summary.json",
+    "ratings": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_ratings_template.csv",
+    "windows": "C:\\Users\\silve\\.codex\\.chatgpt-projects\\g-p-6865aa7e88748191b0ac032c4cfa79ad\\lovcom-wave-equation-review\\data\\tension_bridge_windows_template.csv"
+  },
+  "input_hashes": {
+    "channels_sha256": "6d6df1b211791c92c2f90408a10752f29ad4a4c074c498e4d85d556105cc34b3",
+    "discriminant_protocol_sha256": "1c9f454f3e9c6c12ccbacf71bfcc2c3e1c8580f3e27b691238c98e330a325c86",
+    "instrument_sha256": "17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1",
+    "manifest_sha256": "f471ad6ba646d77e905a181130251fed56b5a5006fed9c65c354dec8f44ca090",
+    "pilot_history_sha256": "0b191fb92a0db1639fc1693abea3dd597009c4f79bde68fa6c590ec25263437c",
+    "pilot_result_sha256": "1b7458c6259b81a9997e8801e3088ede70d7c346f3f2c39687c98bd786afbbb2",
+    "rating_exclusion_addendum_sha256": "01a816995f717af1c582072a56360c5ab9377e45aff64c2bead78ddc431c173c",
+    "ratings_sha256": "86cab5daf668e04149a791b6d92e76fbc48bae707d44ced4751112c6a7a5d64b",
+    "windows_sha256": "30f8aa131a828de7537219332f0b324c9ee375fa249cc13fa2d868dfe6af8c7a"
+  },
+  "master_seed": "RCWE-TB-v1.0",
+  "minimum_raters": 12,
+  "models": [
+    "ML",
+    "MLAC",
+    "M0",
+    "M1"
+  ],
+  "reliability_gate": 0.7,
+  "reliability_repeats": 1000,
+  "window_size": 5
+}
