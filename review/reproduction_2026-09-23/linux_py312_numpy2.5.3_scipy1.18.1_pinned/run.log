@@ -1,0 +1,44 @@
+/tmp/claude-0/-home-user-lovcom-wave-equation/a5c71670-4d42-5cb2-85aa-63d4817f5f2c/scratchpad/pin312/lib/python3.12/site-packages/numpy/__config__.py:155: UserWarning: Install `pyyaml` for better output
+  warnings.warn("Install `pyyaml` for better output", stacklevel=1)
+/tmp/claude-0/-home-user-lovcom-wave-equation/a5c71670-4d42-5cb2-85aa-63d4817f5f2c/scratchpad/pin312/lib/python3.12/site-packages/scipy/__config__.py:167: UserWarning: Install `pyyaml` for better output
+  warnings.warn("Install `pyyaml` for better output", stacklevel=1)
+[1/40] strong_stable seed=260902 diagnostic=MARGINAL
+[2/40] strong_stable seed=260903 diagnostic=CONVERGED
+[3/40] strong_stable seed=260901 diagnostic=MARGINAL
+[4/40] strong_stable seed=260904 diagnostic=CONVERGED
+[5/40] strong_stable seed=260905 diagnostic=MARGINAL
+[6/40] strong_stable seed=260906 diagnostic=CONVERGED
+[7/40] strong_stable seed=260907 diagnostic=CONVERGED
+[8/40] strong_stable seed=260908 diagnostic=MARGINAL
+[9/40] strong_stable seed=260909 diagnostic=CONVERGED
+[10/40] strong_stable seed=260910 diagnostic=MARGINAL
+[11/40] strong_stable seed=260912 diagnostic=MARGINAL
+[12/40] strong_stable seed=260911 diagnostic=MARGINAL
+[13/40] strong_stable seed=260913 diagnostic=CONVERGED
+[14/40] strong_stable seed=260914 diagnostic=MARGINAL
+[15/40] strong_stable seed=260915 diagnostic=CONVERGED
+[16/40] strong_stable seed=260916 diagnostic=MARGINAL
+[17/40] strong_stable seed=260917 diagnostic=CONVERGED
+[18/40] strong_stable seed=260918 diagnostic=MARGINAL
+[19/40] strong_stable seed=260919 diagnostic=CONVERGED
+[20/40] strong_stable seed=260920 diagnostic=CONVERGED
+[21/40] strong_oscillatory seed=260902 diagnostic=MARGINAL
+[22/40] strong_oscillatory seed=260901 diagnostic=FAILED
+[23/40] strong_oscillatory seed=260903 diagnostic=MARGINAL
+[24/40] strong_oscillatory seed=260904 diagnostic=MARGINAL
+[25/40] strong_oscillatory seed=260905 diagnostic=MARGINAL
+[26/40] strong_oscillatory seed=260906 diagnostic=MARGINAL
+[27/40] strong_oscillatory seed=260907 diagnostic=MARGINAL
+[28/40] strong_oscillatory seed=260908 diagnostic=MARGINAL
+[29/40] strong_oscillatory seed=260910 diagnostic=MARGINAL
+[30/40] strong_oscillatory seed=260909 diagnostic=MARGINAL
+[31/40] strong_oscillatory seed=260911 diagnostic=MARGINAL
+[32/40] strong_oscillatory seed=260912 diagnostic=MARGINAL
+[33/40] strong_oscillatory seed=260913 diagnostic=FAILED
+[34/40] strong_oscillatory seed=260915 diagnostic=MARGINAL
+[35/40] strong_oscillatory seed=260914 diagnostic=CONVERGED
+[36/40] strong_oscillatory seed=260916 diagnostic=FAILED
+[37/40] strong_oscillatory seed=260917 diagnostic=MARGINAL
+[38/40] strong_oscillatory seed=260918 diagnostic=MARGINAL
+[39/40] strong_oscillatory seed=260919 diagnostic=MARGINAL
+[40/40] strong_oscillatory seed=260920 diagnostic=MARGINAL

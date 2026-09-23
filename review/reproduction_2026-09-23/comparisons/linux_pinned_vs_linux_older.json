@@ -1,0 +1,28 @@
+{
+  "acceptance_status": "NOT_ASSESSED",
+  "convergence_flipped_ids": [],
+  "convergence_membership_equal": true,
+  "input_hashes": {
+    "left": {
+      "predictions.csv": "700c32c9adc67eabb30089812657134839e03b96e915b2e3c430327a1dbc37d2",
+      "replicates.csv": "b9b3bb7bf4b4bf40f1b60400be379c8eb8a7eb5e98d96608565402a5e8a211fc"
+    },
+    "right": {
+      "predictions.csv": "700c32c9adc67eabb30089812657134839e03b96e915b2e3c430327a1dbc37d2",
+      "replicates.csv": "fdbc2fcff0fde7638a0a6ead0caa0f26de46e1b04efe4ce48eede11b72d0d264"
+    }
+  },
+  "maximum_absolute_differences": {
+    "FIT_log_likelihood": 0.0,
+    "fitted_Delta": 0.0,
+    "fitted_Omega": 0.0,
+    "fitted_R": 0.0,
+    "holdout_LS_RCWE": 0.0,
+    "holdout_predicted_mu": 0.0
+  },
+  "note": "Runtime/build eligibility and scientific acceptance require separate review; matching counts are insufficient.",
+  "numerical_tolerances_met": true,
+  "numerical_tolerances_scope": "historical v0.1 fitted-run diagnostic; not acceptance",
+  "refitted_forecast_tolerance_status": "NOT_PREREGISTERED",
+  "replicates": 40
+}

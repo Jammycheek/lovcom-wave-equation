@@ -1,0 +1,124 @@
+{
+  "acceptance_status": "NOT_ASSESSED",
+  "allow_nonreference_runtime": true,
+  "command": "python scripts/run_synthetic_recovery.py --replicates 20 --seed-base 260901 --workers 4 --allow-nonreference-runtime --output /tmp/pinned_out",
+  "optimizer": {
+    "ftol": 1e-12,
+    "gtol": 1e-07,
+    "maxiter": 80,
+    "method": "L-BFGS-B",
+    "start_agreement_log_likelihood_tolerance": 1e-06,
+    "stationarity_tolerance": 0.0001
+  },
+  "optimizer_guards_are_numerical_not_scientific": {
+    "Delta": [
+      -5.0,
+      5.0
+    ],
+    "log_Omega": [
+      -9.210340371976182,
+      4.605170185988092
+    ],
+    "log_R": [
+      -9.210340371976182,
+      4.605170185988092
+    ],
+    "log_sigma_excess": [
+      -18.420680743952367,
+      1.6094379124341003
+    ],
+    "s0": [
+      -12.0,
+      12.0
+    ],
+    "v0": [
+      -10.0,
+      10.0
+    ]
+  },
+  "replicates_per_scenario": 20,
+  "scenarios": [
+    {
+      "fit_count": 60,
+      "holdout_count": 20,
+      "local_regime": {
+        "classification": "stable_focus",
+        "equilibria": [
+          {
+            "classification": "stable_focus",
+            "determinant": 1.2,
+            "s": 0.0,
+            "trace": -0.19999999999999996,
+            "v": 0.5
+          }
+        ]
+      },
+      "name": "strong_stable",
+      "parameters": {
+        "Delta": 0.5,
+        "G": 0.8,
+        "Omega": 8.0,
+        "R": 0.1,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "sigma_true": 0.08
+    },
+    {
+      "fit_count": 60,
+      "holdout_count": 20,
+      "local_regime": {
+        "classification": "unstable_focus",
+        "equilibria": [
+          {
+            "classification": "unstable_focus",
+            "determinant": 1.7999999999999998,
+            "s": 0.0,
+            "trace": 0.20000000000000018,
+            "v": 0.5
+          }
+        ]
+      },
+      "name": "strong_oscillatory",
+      "parameters": {
+        "Delta": 0.5,
+        "G": 1.2000000000000002,
+        "Omega": 12.0,
+        "R": 0.1,
+        "s0": -1.0,
+        "v0": 0.2
+      },
+      "sigma_true": 0.08
+    }
+  ],
+  "seed_base": 260901,
+  "seeds": [
+    260901,
+    260902,
+    260903,
+    260904,
+    260905,
+    260906,
+    260907,
+    260908,
+    260909,
+    260910,
+    260911,
+    260912,
+    260913,
+    260914,
+    260915,
+    260916,
+    260917,
+    260918,
+    260919,
+    260920
+  ],
+  "solver": {
+    "atol": 1e-11,
+    "max_step": 0.05,
+    "method": "DOP853",
+    "rtol": 1e-09
+  },
+  "workers": 4
+}

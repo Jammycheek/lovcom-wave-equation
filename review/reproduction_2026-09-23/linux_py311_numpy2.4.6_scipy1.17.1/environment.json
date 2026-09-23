@@ -1,0 +1,8 @@
+{
+  "git_commit": "a0e2fa9ad8b6f2cf275f5ea234a3372e73818c7c",
+  "numpy": "2.4.6",
+  "platform": "Linux-6.18.44-fc-v37-x86_64-with-glibc2.39",
+  "python": "3.11.15",
+  "python_implementation": "CPython",
+  "scipy": "1.17.1"
+}

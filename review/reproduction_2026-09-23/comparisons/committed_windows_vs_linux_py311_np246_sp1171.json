@@ -1,0 +1,69 @@
+{
+  "acceptance_status": "NOT_ASSESSED",
+  "convergence_flipped_ids": [
+    [
+      "strong_oscillatory",
+      "260901"
+    ],
+    [
+      "strong_oscillatory",
+      "260904"
+    ],
+    [
+      "strong_oscillatory",
+      "260905"
+    ],
+    [
+      "strong_oscillatory",
+      "260908"
+    ],
+    [
+      "strong_oscillatory",
+      "260910"
+    ],
+    [
+      "strong_oscillatory",
+      "260917"
+    ],
+    [
+      "strong_oscillatory",
+      "260918"
+    ],
+    [
+      "strong_oscillatory",
+      "260920"
+    ],
+    [
+      "strong_stable",
+      "260904"
+    ],
+    [
+      "strong_stable",
+      "260916"
+    ]
+  ],
+  "convergence_membership_equal": false,
+  "input_hashes": {
+    "left": {
+      "predictions.csv": "231dcb932910ca5a1976ac4686ccf84b004c921f6a5a0ef33dbcbbe35e43debe",
+      "replicates.csv": "e0787ff3724ea080a25b363ceb71512216a801f7937c4179210cf3960f79a799"
+    },
+    "right": {
+      "predictions.csv": "700c32c9adc67eabb30089812657134839e03b96e915b2e3c430327a1dbc37d2",
+      "replicates.csv": "fdbc2fcff0fde7638a0a6ead0caa0f26de46e1b04efe4ce48eede11b72d0d264"
+    }
+  },
+  "maximum_absolute_differences": {
+    "FIT_log_likelihood": 1.106315039578476e-11,
+    "fitted_Delta": 1.0283308204961372e-08,
+    "fitted_Omega": 3.19930185455064e-07,
+    "fitted_R": 7.478511282466016e-09,
+    "holdout_LS_RCWE": 3.0912945838679207e-06,
+    "holdout_predicted_mu": 9.084153679284057e-08
+  },
+  "note": "Runtime/build eligibility and scientific acceptance require separate review; matching counts are insufficient.",
+  "numerical_tolerances_met": false,
+  "numerical_tolerances_scope": "historical v0.1 fitted-run diagnostic; not acceptance",
+  "refitted_forecast_tolerance_status": "NOT_PREREGISTERED",
+  "replicates": 40
+}
