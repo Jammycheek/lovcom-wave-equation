@@ -41,3 +41,7 @@ Do not change v2.0 to rescue a failed validation. Record failures in `registry/F
 Recovery acceptance is currently `NOT_ASSESSED`, not a pass. See [the open numerical acceptance plan](docs/NUMERICAL_RECOVERY_ACCEPTANCE_PLAN_v0.1.md). All 40 exposed benchmark cases are audit-only, never threshold-development data. Original benchmark artifacts are retained unchanged. Replays must use a new output directory; exact package pins alone do not establish cross-platform classification reproducibility.
 
 The Linux reproduction artifacts supplied separately on commit `67c4fc0` were compared with the committed Windows run. Pinned and older Linux libraries yielded identical numerical fits on that host; both flipped 10/40 historical convergence flags versus Windows. These are retrospective audit findings, not acceptance evidence or a new calibration block.
+
+## Language versions
+
+English Markdown files are the canonical research record. A Japanese companion uses the same path and filename with `.ja.md` in place of `.md` (start with [README.ja.md](README.ja.md)). The Japanese files are translations for reading, not new protocol versions, rating instruments, data schemas, or hash-bound inputs. Preserve equations, numeric thresholds, identifiers, field names, and status codes from the English originals. If the versions disagree, the English original controls and the translation should be corrected. Code and generated result artifacts are not translated.
