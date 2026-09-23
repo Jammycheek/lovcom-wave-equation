@@ -8,10 +8,20 @@
   "delta_ls_love": null,
   "delta_ls_primary": null,
   "discriminant_pilot": {
-    "independence_passed": true,
-    "protocol_sha256": "7885ffbd22637c183d558b7d38786c2f116f088065aaaa194e1610cac14c86f2",
+    "history": {
+      "history_sha256": "0b191fb92a0db1639fc1693abea3dd597009c4f79bde68fa6c590ec25263437c",
+      "independence_passed": null,
+      "ready": false,
+      "reason": "NO_DECLARED_HISTORY",
+      "result_hashes": []
+    },
+    "independence_passed": null,
+    "instrument_sha256": "17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1",
+    "instrument_version": "1.1",
+    "protocol_sha256": "d6a857f1adbc1d1f749ae126d70172ab7e66806cca396c3dab9856a19bc3d2c1",
     "ready": false,
-    "result_sha256": "51746fa614f1cb2c51c7081f43696cd29ba6439f4db5d090a548f2ff8a2bb575",
+    "result_sha256": "c5f79c87b682af68f3d90eb1deef43870eb8dfd43c9989463e64aa7612a680e3",
+    "selected_result_independence_passed": null,
     "status": "NO_DATA"
   },
   "scores": null,

@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 import hashlib
 import json
+from pathlib import Path
 
 import pytest
 
@@ -98,3 +99,17 @@ def test_no_data_independence_is_unassessed(tmp_path):
         {"status": "NO_DATA"}, result_hash=None, protocol_hash="b", instrument_hash="a",
         manifest_hashes=set(), confirmatory_work_ids=set(), confirmatory_rater_ids=set())
     assert ready is False and independent is None
+
+
+def test_committed_no_data_artifacts_bind_current_form_protocol_and_result_bytes():
+    root = Path(__file__).resolve().parents[1]
+    pilot_path = root / "results/tension_bridge_discriminant_pilot/summary.json"
+    pilot = json.loads(pilot_path.read_bytes())
+    bridge = json.loads((root / "results/tension_bridge/model_summary.json").read_bytes())
+    form_hash = hashlib.sha256((root / "protocols/TENSION_BRIDGE_RATING_FORM_v1.1.md").read_bytes()).hexdigest()
+    protocol_hash = hashlib.sha256((root / "protocols/TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.2.md").read_bytes()).hexdigest()
+    assert pilot["instrument_sha256"] == bridge["discriminant_pilot"]["instrument_sha256"] == form_hash
+    assert pilot["protocol_sha256"] == bridge["discriminant_pilot"]["protocol_sha256"] == protocol_hash
+    assert bridge["discriminant_pilot"]["result_sha256"] == hashlib.sha256(pilot_path.read_bytes()).hexdigest()
+    assert pilot["status"] == bridge["status"] == "NO_DATA"
+    assert bridge["discriminant_pilot"]["independence_passed"] is None

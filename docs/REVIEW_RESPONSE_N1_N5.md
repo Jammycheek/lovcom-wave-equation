@@ -14,7 +14,7 @@ Additional corrections: explicit `PILOT_NOT_PASSED`, unassessed no-data independ
 
 ## Reproduction handoff
 
-Local verification: **202 tests passed**, including a full run invoked from outside the repository cwd. Two optional-PyYAML display warnings occur while capturing NumPy/SciPy build configuration; the capture and tests succeed. `pip check` reports no broken installed requirements and `git diff --check` reports no whitespace errors. The committed benchmark was self-compared to exercise the comparison tool only; this is not an independent reproduction. The original benchmark files were not modified.
+Local verification: **203 tests passed**; the preceding 202-test suite also passed when invoked from outside the repository cwd. The added 203rd test verifies committed no-data artifacts against current form/protocol/result bytes. Both header-only runners report `NO_DATA` and unassessed independence. Two optional-PyYAML display warnings occur while capturing NumPy/SciPy build configuration; the capture and tests succeed. `pip check` reports no broken installed requirements and `git diff --check` reports no whitespace errors. The committed benchmark was self-compared to exercise the comparison tool only; this is not an independent reproduction. The original benchmark files were not modified.
 
 Run the suite from the repository using its Python 3.12 environment:
 
