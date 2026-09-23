@@ -13,6 +13,7 @@ from scipy.optimize import minimize
 from .integrate import REFERENCE_SOLVER, forecast_means
 from .model import RCWEParameters, sigmoid
 from .observation import observation_log_probability
+from .numerical_audit import convergence_diagnostic
 
 
 # These broad bounds prevent overflow and pathological solver calls. They are
@@ -67,6 +68,12 @@ class RCWEFit:
     starts: tuple[StartResult, ...]
     seed: int | None
 
+    @property
+    def convergence_diagnostic(self) -> str:
+        return convergence_diagnostic(
+            self.starts, tolerance=float(FROZEN_OPTIMIZER["stationarity_tolerance"]),
+            agreement_tolerance=float(FROZEN_OPTIMIZER["start_agreement_log_likelihood_tolerance"]))
+
     def as_dict(self) -> dict[str, object]:
         return {
             "parameters": self.parameters.as_dict(),
@@ -75,6 +82,8 @@ class RCWEFit:
             "terminal_state": list(self.terminal_state),
             "fit_log_likelihood": self.fit_log_likelihood,
             "converged": self.converged,
+            "convergence_diagnostic": self.convergence_diagnostic,
+            "diagnostic_is_acceptance_gate": False,
             "optimizer_agreement": self.optimizer_agreement,
             "successful_starts": self.successful_starts,
             "top_two_log_likelihood_gap": self.top_two_log_likelihood_gap,

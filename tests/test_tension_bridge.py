@@ -161,18 +161,20 @@ def test_future_blind_status_is_derived_from_timestamp_order():
 def test_discriminant_pilot_requires_hash_match_and_independent_people_and_works():
     result_hash = "a" * 64
     protocol_hash = "b" * 64
+    instrument_hash = "c" * 64
     pilot = {
         "status": "PILOT_PASS", "protocol_sha256": protocol_hash,
+        "instrument_sha256": instrument_hash, "instrument_version": "1.1",
         "pilot_work_ids": ["PILOT-WORK"],
         "pilot_rater_id_hashes": [hashlib.sha256(b"PILOT-RATER").hexdigest()],
     }
     ready, independent = validate_discriminant_pilot(
-        pilot, result_hash=result_hash, protocol_hash=protocol_hash, manifest_hashes={result_hash},
+        pilot, result_hash=result_hash, protocol_hash=protocol_hash, instrument_hash=instrument_hash, manifest_hashes={result_hash},
         confirmatory_work_ids={"CONFIRMATORY-WORK"}, confirmatory_rater_ids={"CONFIRMATORY-RATER"},
     )
     assert ready and independent
     reused, independent = validate_discriminant_pilot(
-        pilot, result_hash=result_hash, protocol_hash=protocol_hash, manifest_hashes={result_hash},
+        pilot, result_hash=result_hash, protocol_hash=protocol_hash, instrument_hash=instrument_hash, manifest_hashes={result_hash},
         confirmatory_work_ids={"PILOT-WORK"}, confirmatory_rater_ids={"CONFIRMATORY-RATER"},
     )
     assert not reused and not independent
@@ -369,7 +371,45 @@ def test_empty_template_runner_returns_no_data(tmp_path):
     summary = json.loads((output / "model_summary.json").read_text(encoding="utf-8"))
     assert summary["status"] == "NO_DATA"
     assert summary["scores"] is None
+    assert summary["discriminant_pilot"]["independence_passed"] is None
     assert {path.name for path in output.iterdir()} == {
         "config.json", "environment.json", "window_metrics.csv", "rater_reliability.json",
         "fold_predictions.csv", "model_summary.json", "REPORT.md",
     }
+
+
+def test_role_failure_is_not_a_measurement_failure():
+    gate = activation_gate(toy("ac"), passing_reliability(), channel_reliability_passed=True,
+                           manifest_frozen=True, role_separation_passed=False)
+    assert not gate.passed and gate.status == "ROLE_SEPARATION_FAILURE"
+
+
+def test_runner_missing_pilot_has_explicit_status_and_never_fits_models(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    import scripts.run_tension_bridge_analysis as runner
+
+    output = tmp_path / "output"
+    # Isolate the orchestration gate; parsers and numeric gates are tested separately.
+    args = SimpleNamespace(output=output, channels=tmp_path / "channels", windows=tmp_path / "windows",
+                           ratings=tmp_path / "ratings", manifest=tmp_path / "manifest",
+                           pilot_result=tmp_path / "missing-result", pilot_history=tmp_path / "missing-history",
+                           master_seed="test")
+    monkeypatch.setattr(runner, "parse_args", lambda: args)
+    monkeypatch.setattr(runner, "read_csv", lambda path: (b"test", [{"rating_timestamp": "2026-01-02T00:00:00Z"}]
+                                                          if path == args.ratings else []))
+    monkeypatch.setattr(runner, "parse_channels", lambda _: ([object()], {}, {}, {}, {"passed": True}))
+    monkeypatch.setattr(runner, "build_windows", lambda _: [])
+    monkeypatch.setattr(runner, "parse_windows", lambda *_: ([], []))
+    monkeypatch.setattr(runner, "parse_ratings", lambda _: [])
+    monkeypatch.setattr(runner, "parse_manifest", lambda _: ({}, {}, [], set(), True))
+    monkeypatch.setattr(runner, "validate_question_orders", lambda *_: None)
+    monkeypatch.setattr(runner, "validate_role_separation", lambda *_: True)
+    monkeypatch.setattr(runner, "aggregate_ratings", lambda *_: (toy("ac"), {}, []))
+    monkeypatch.setattr(runner, "split_half_reliability", lambda _, key, **kwargs: passing_reliability()[key])
+    def forbidden_fit(*_args):
+        pytest.fail("confirmatory models must not fit without pilot evidence")
+    monkeypatch.setattr(runner, "leave_one_work_out", forbidden_fit)
+    assert runner.main() == 0
+    summary = json.loads((output / "model_summary.json").read_text())
+    assert summary["status"] == "PILOT_NOT_PASSED"
+    assert summary["scores"] is None

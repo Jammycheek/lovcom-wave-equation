@@ -1,10 +1,12 @@
 from types import SimpleNamespace
 
 import numpy as np
+import pytest
 
 import rcwe.fit as fit_module
 from rcwe.fit import _decode, _log_likelihood_and_gradient, fit_rcwe, predefined_starts
 from rcwe.integrate import forecast_means
+from rcwe.synthetic import DEFAULT_SCENARIOS
 
 
 OBSERVED = np.array([0.0, 0.25, 0.5, 0.75, 1.0, 0.75, 0.5, 0.25])
@@ -29,16 +31,37 @@ def test_likelihood_gradient_matches_centered_finite_difference():
     assert np.allclose(gradient, numerical, rtol=3e-3, atol=3e-3)
 
 
+def assert_no_synthetic_truth_start(starts):
+    # Noise scale must not hide a leaked dynamical truth. Check every scenario
+    # and every start, including appended starts and near-truth perturbations.
+    for scenario in DEFAULT_SCENARIOS:
+        truth = scenario.parameters
+        expected = (truth.Delta, truth.R, truth.Omega, truth.s0, truth.v0)
+        for vector in starts:
+            params, _sigma = _decode(vector, LOWER)
+            actual = (params.Delta, params.R, params.Omega, params.s0, params.v0)
+            assert not np.allclose(actual, expected, rtol=0.05, atol=1e-8), scenario.name
+
+
 def test_predefined_starts_are_data_independent_and_not_synthetic_truth():
     first = predefined_starts(np.zeros(8), LOWER)
     second = predefined_starts(np.ones(8), LOWER)
+    assert len(first) == len(second)
     assert all(np.array_equal(a, b) for a, b in zip(first, second))
-    decoded = []
-    for item in first:
-        params, sigma = _decode(item, LOWER)
-        decoded.append((params.Delta, params.R, params.Omega, params.s0, params.v0, sigma))
-    truth = (0.5, 0.1, 8.0, -1.0, 0.2, 0.1)
-    assert not any(np.allclose(item, truth) for item in decoded)
+    assert_no_synthetic_truth_start(first)
+
+
+@pytest.mark.parametrize("scenario", DEFAULT_SCENARIOS, ids=lambda item: item.name)
+@pytest.mark.parametrize("factor", [1.0, 1.02])
+def test_truth_start_guard_detects_appended_truth_even_with_different_noise(scenario, factor, monkeypatch):
+    truth = scenario.parameters
+    leaked = np.array([truth.Delta * factor, np.log(truth.R * factor),
+                       np.log(truth.Omega * factor), truth.s0 * factor,
+                       truth.v0 * factor, np.log(0.3 - LOWER)])
+    mutated = [*predefined_starts(OBSERVED, LOWER), leaked]
+    monkeypatch.setitem(globals(), "predefined_starts", lambda *_args: mutated)
+    with pytest.raises(AssertionError, match=scenario.name):
+        test_predefined_starts_are_data_independent_and_not_synthetic_truth()
 
 
 def test_fit_optimizer_moves_and_does_not_reduce_best_initial_likelihood():
@@ -71,7 +94,10 @@ def test_converged_requires_cross_start_likelihood_agreement(monkeypatch):
         "_log_likelihood_and_gradient",
         lambda _observed, vector, _lower: (float(vector[0]), np.zeros(6)),
     )
-    fitted = fit_rcwe(OBSERVED, starts=predefined_starts(OBSERVED, LOWER)[:2])
+    # The agreement unit test must not depend on the scientific start registry.
+    starts = [np.array([delta, np.log(.1), np.log(8), -1, .2, np.log(.2 - LOWER)])
+              for delta in (.25, .75)]
+    fitted = fit_rcwe(OBSERVED, starts=starts)
     assert fitted.successful_starts == 2
     assert fitted.top_two_log_likelihood_gap == 0.5
     assert not fitted.optimizer_agreement

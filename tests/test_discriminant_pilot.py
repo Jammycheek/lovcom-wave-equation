@@ -2,9 +2,50 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+from datetime import datetime, timezone
 
-from rcwe.discriminant_pilot import evaluate_discriminant_pilot
-from rcwe.tension_bridge import AggregatedWindow, ReliabilityResult
+import pytest
+
+from rcwe.discriminant_pilot import discriminant_verdict, evaluate_discriminant_pilot
+from rcwe.tension_bridge import AggregatedWindow, ReliabilityResult, Rating
+from scripts.run_tension_bridge_discriminant_pilot import INSTRUMENT, sha256, validate_manifest
+
+
+@pytest.mark.parametrize("point,upper,expected", [
+    (.84, .849999, "PILOT_PASS"), (.85, .84, "PILOT_DISCRIMINANT_FAILURE"),
+    (.84, .85, "PILOT_DISCRIMINANT_FAILURE"), (.85, .85, "PILOT_DISCRIMINANT_FAILURE"),
+    (.86, .86, "PILOT_DISCRIMINANT_FAILURE"), (float("nan"), .8, "PILOT_MEASUREMENT_FAILURE"),
+])
+def test_exact_point_and_confidence_bound_cutoffs(point, upper, expected):
+    assert discriminant_verdict(point, upper) == expected
+
+
+def test_frozen_plan_prevents_added_works_windows_and_raters():
+    rows, ratings = [], []
+    for index in range(4):
+        work = f"work-{index}"
+        windows = [f"{work}-window-{n}" for n in range(8)]
+        raters = [f"rater-{n}" for n in range(12)]
+        rows.append(dict(work_id=work, version_id="v", edition="e", planned_work_count="4",
+                         planned_window_count="8", planned_window_ids=";".join(windows),
+                         planned_rater_ids=";".join(raters), instrument_sha256=sha256(INSTRUMENT.read_bytes()),
+                         manifest_freeze_commit="frozen", manifest_frozen_at="2026-01-01T00:00:00Z",
+                         confirmatory_reuse_prohibited="true"))
+        ratings.extend(Rating(rater, work, window, "no", "no", "no", "L-T-D", 50, 50, 50, True, True)
+                       for window in windows for rater in raters)
+    times = [datetime(2026, 1, 2, tzinfo=timezone.utc)] * len(ratings)
+    assert validate_manifest(rows, ratings, times)
+    extra_work = {**rows[0], "work_id": "extra"}
+    extra_rating = Rating("rater-0", "extra", "new", "no", "no", "no", "L-T-D", 50, 50, 50, True, True)
+    with pytest.raises(ValueError, match="planned work count"):
+        validate_manifest([*rows, extra_work], [*ratings, extra_rating], times)
+    for rater, window in [("new-rater", "work-0-window-0"), ("rater-0", "new-window")]:
+        extra = Rating(rater, "work-0", window, "no", "no", "no", "L-T-D", 50, 50, 50, True, True)
+        with pytest.raises(ValueError, match="exactly cover"):
+            validate_manifest(rows, [*ratings, extra], times)
+    rows[0]["instrument_sha256"] = "0" * 64
+    with pytest.raises(ValueError, match="instrument hash"):
+        validate_manifest(rows, ratings, times)
 
 
 def reliability(passed=True):

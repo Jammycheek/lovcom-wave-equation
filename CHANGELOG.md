@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — second-review safeguards (N-1 through N-5)
+
+- N-1: fix the pilot sampling plan before ratings; require exact work/window/rater cells and a sealed, complete result history. Failed or changed-plan evidence cannot activate confirmation. Real collection remains pending.
+- N-3: derive the truth-start guard from every default scenario, ignoring noise scale; mutation regressions now call the intended guard test and catch appended exact/near truths.
+- N-4: version the romantic-uncertainty form as v1.1 and bind its complete bytes in pilot and confirmatory artifacts. Add explicit `PILOT_NOT_PASSED` and unassessed no-data independence.
+- N-5 partial: pin NumPy/SciPy and the canonical Python/runtime family, capture numerical build provenance, add a non-acceptance three-state diagnostic, and quarantine all 40 exposed cases. Preserve the original benchmark and stationarity gate unchanged.
+- N-2 remains open: record the required scientific acceptance decisions and prohibit executable benchmark PASS claims until independently preregistered criteria exist. No new thresholds, validation seed blocks, tags or scientific results were invented.
+- Add per-replicate progress/checkpoints and a conservative worker default; reject overwriting existing benchmark or completed pilot results.
+
 ## Unreleased — initial research import
 
 - Consolidated the RCWE v2.0 frozen core.

@@ -356,7 +356,7 @@ def activation_gate(
     counts = {work: sum(window.work_id == work for window in data) for work in sorted(works)}
     all_min_raters = all(window.rating_count >= MIN_RATERS for window in data)
     audience_passed = set(reliability) == {"L", "T", "D"} and all(reliability[key].passed for key in ("L", "T", "D"))
-    measurement_failure = bool(data) and not (channel_reliability_passed and audience_passed and role_separation_passed)
+    measurement_failure = bool(data) and not (channel_reliability_passed and audience_passed)
     passed = (
         len(data) >= 30
         and len(works) >= 4
@@ -369,7 +369,8 @@ def activation_gate(
         and manifest_frozen
         and role_separation_passed
     )
-    status = "READY" if passed else "MEASUREMENT_FAILURE" if measurement_failure else "INSUFFICIENT_BRIDGE_DATA"
+    status = ("READY" if passed else "ROLE_SEPARATION_FAILURE" if not role_separation_passed
+              else "MEASUREMENT_FAILURE" if measurement_failure else "INSUFFICIENT_BRIDGE_DATA")
     return ActivationResult(
         passed, status, len(data), len(works), len(dyads), counts, all_min_raters,
         channel_reliability_passed, audience_passed, manifest_frozen, role_separation_passed,

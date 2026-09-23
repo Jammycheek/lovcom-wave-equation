@@ -16,6 +16,12 @@ BOOTSTRAP_REPEATS = 5000
 DISCRIMINANT_LIMIT = 0.85
 
 
+def discriminant_verdict(point: float, upper: float, limit: float = DISCRIMINANT_LIMIT) -> str:
+    if not np.isfinite([point, upper]).all():
+        return "PILOT_MEASUREMENT_FAILURE"
+    return "PILOT_PASS" if point < limit and upper < limit else "PILOT_DISCRIMINANT_FAILURE"
+
+
 def _seed(master_seed: str | int, repeat: int) -> int:
     material = f"{master_seed}|T-D|{repeat}".encode()
     return int.from_bytes(hashlib.sha256(material).digest()[:8], "big")
@@ -79,5 +85,5 @@ def evaluate_discriminant_pilot(
     if not bootstrap:
         return {**base, "status": "PILOT_MEASUREMENT_FAILURE", "abs_r_td": point, "upper_95_abs_r_td": None, "repeats_valid": 0}
     upper = float(np.percentile(np.asarray(bootstrap), 95.0))
-    status = "PILOT_PASS" if point < limit and upper < limit else "PILOT_DISCRIMINANT_FAILURE"
+    status = discriminant_verdict(point, upper, limit)
     return {**base, "status": status, "abs_r_td": point, "upper_95_abs_r_td": upper, "repeats_valid": len(bootstrap)}

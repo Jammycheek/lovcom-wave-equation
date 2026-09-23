@@ -17,8 +17,8 @@ The working slogan is **Love is DC; Rom-Com is AC**. It does not claim that affe
 
 - RCWE v2.0 mathematical core: frozen
 - Annotation Codebook v0.2.1: frozen candidate; reliability pilot still required
-- Predictive Scoring Specification v0.1: false optimizer termination corrected; frozen rerun reached `31/40` strict convergence, with nine unresolved optimizer-identification failures
-- Tension Bridge: implementation wired; independent `T_obs`/`D_obs` discriminant-validity pilot frozen but not yet run
+- Predictive Scoring Specification v0.1: **NOT READY**; historical `31/40` convergence membership is runtime-dependent (F-08/F-09). Numerical dependencies are pinned, but independent calibration and preregistered acceptance remain unresolved (N-2/N-5).
+- Tension Bridge: implementation wired; fixed-plan discriminant pilot v0.2 and hash-bound form v1.1, with complete-history checks. No real pilot plan or human data yet; experiment inactive.
 - Subject 5: retrospective blind-validation protocol
 - Subject 6: prospective protocol; probabilistic model-comparison addendum frozen
 - Control: information-exposure boundary frozen; inactive pending exact source-unit identifiers and coder access controls
@@ -37,3 +37,5 @@ No quoted scripts, transcripts, manga pages, novel text, or other copyrighted so
 ## Freeze discipline
 
 Do not change v2.0 to rescue a failed validation. Record failures in `registry/FAIL_LOG.md`; place possible revisions in `registry/V2.1_CANDIDATES.md`. Do not create `v2.0-freeze`. A future `v2.0-spec-freeze` tag may be created only after review, a scoring reference implementation, and synthetic recovery verification; it denotes a specification freeze, not completed validation.
+
+Recovery acceptance is currently `NOT_ASSESSED`, not a pass. See [the open numerical acceptance plan](docs/NUMERICAL_RECOVERY_ACCEPTANCE_PLAN_v0.1.md). All 40 exposed benchmark cases are audit-only, never threshold-development data. Original benchmark artifacts are retained unchanged. Replays must use a new output directory; exact package pins alone do not establish cross-platform classification reproducibility.

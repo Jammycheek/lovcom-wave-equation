@@ -21,3 +21,11 @@ data/
 ```
 
 Derived files must record the source commit and generation method. Personally identifying coder information should not be committed.
+
+## Tension Bridge pilot audit
+
+Before collection, fill the pilot manifest's exact `planned_work_count`, `planned_window_count`, semicolon-separated `planned_window_ids` and `planned_rater_ids` for each work, and the entire v1.1 form's SHA-256. Use pseudonyms only. Every planned rater/window cell must remain in the raw ratings, including excluded rows; no replacements or additions after results. Counts remain subject to the protocol minima.
+
+The JSON history template is deliberately unapproved/empty. Before confirmatory ratings, an accountable operator must enumerate every completed pilot result (including failures) in `runs` as `{"path": "relative/path/to/summary.json", "sha256": "exact file hash"}`, set the one frozen manifest/form/protocol hashes, declare completeness, and record offset-aware `sealed_at` and `freeze_commit`. Paths are resolved relative to the history file. Every confirmatory work-manifest row records the selected result hash and `discriminant_pilot_history_sha256`. Commit the history and retain all listed files; the runner checks every one, not just the selected passing file. A declaration cannot establish completeness without external audit provenance.
+
+Hash exact UTF-8 file bytes using LF newlines. `.gitattributes` preserves this convention across checkouts; new JSON artifacts are written with LF explicitly. Historical results remain tied to their original revision and must not be rewritten to retroactively match a new hash convention. No pilot result or plan is fabricated by these templates.

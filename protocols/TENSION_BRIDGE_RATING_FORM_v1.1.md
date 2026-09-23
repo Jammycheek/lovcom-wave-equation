@@ -1,4 +1,6 @@
-# Romantic Tension Bridge Rating Form v1.0
+# Romantic Tension Bridge Rating Form v1.1
+
+Version correction: the romantic-uncertainty wording previously edited under v1.0 is now explicitly v1.1. Both pilot and confirmatory artifacts bind the SHA-256 of this entire file, including administration and anchors. A wording, anchor, or administration change requires a new instrument version and independent pilot; old v1.0 results cannot activate v1.1.
 
 ## Administration
 

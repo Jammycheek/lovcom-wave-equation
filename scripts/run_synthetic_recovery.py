@@ -4,9 +4,10 @@
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 import csv
 import json
+import os
 from pathlib import Path
 import platform
 import subprocess
@@ -31,13 +32,16 @@ from rcwe.integrate import REFERENCE_SOLVER
 from rcwe.model import classify_local_regime
 from rcwe.scoring import score_predictions
 from rcwe.synthetic import DEFAULT_SCENARIOS, generate_synthetic
+from rcwe.numerical_audit import EXPOSED_SEEDS, runtime_provenance
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--replicates", type=int, default=20, help="replicates per scenario")
     parser.add_argument("--seed-base", type=int, default=260901)
-    parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument("--workers", type=int, default=min(4, os.cpu_count() or 1))
+    parser.add_argument("--allow-nonreference-runtime", action="store_true",
+                        help="diagnostic reproduction only; does not establish acceptance")
     parser.add_argument("--output", type=Path, default=ROOT / "results" / "synthetic_recovery")
     return parser.parse_args()
 
@@ -52,7 +56,7 @@ def git_sha() -> str:
 
 
 def json_dump(path: Path, value) -> None:
-    path.write_text(json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8", newline="\n")
 
 
 def regime_group(classification: str) -> str:
@@ -64,7 +68,12 @@ def regime_group(classification: str) -> str:
 
 
 def summarize(rows: list[dict[str, object]], scenarios) -> dict[str, object]:
-    summary: dict[str, object] = {"replicate_count": len(rows), "scenarios": {}}
+    summary: dict[str, object] = {
+        "replicate_count": len(rows), "scenarios": {}, "acceptance_status": "NOT_ASSESSED",
+        "acceptance_reason": "Numerical acceptance criteria and a fresh validation block are not frozen.",
+        "membership_warning": "v0.1 converged subsets are runtime-dependent; compare replicate IDs, not counts.",
+        "exposed_seed_present": any(int(row["seed"]) in EXPOSED_SEEDS for row in rows),
+    }
     for scenario in scenarios:
         subset = [row for row in rows if row["scenario"] == scenario.name]
         converged = [row for row in subset if row["converged"]]
@@ -74,6 +83,9 @@ def summarize(rows: list[dict[str, object]], scenarios) -> dict[str, object]:
             "replicates": len(subset),
             "converged": len(converged),
             "convergence_rate": len(converged) / len(subset) if subset else None,
+            "convergence_diagnostics": {state: sum(row.get("convergence_diagnostic") == state for row in subset)
+                                        for state in ("CONVERGED", "MARGINAL", "FAILED")},
+            "converged_seeds": [row["seed"] for row in converged],
             "optimizer_reported_successful_starts_distribution": {
                 str(count): sum(int(row.get("optimizer_reported_successful_starts", 0)) == count for row in subset)
                 for count in sorted({int(row.get("optimizer_reported_successful_starts", 0)) for row in subset})
@@ -125,6 +137,7 @@ def run_one(task):
             "scenario": scenario.name,
             "seed": seed,
             "converged": fitted.converged,
+            "convergence_diagnostic": fitted.convergence_diagnostic,
             "successful_starts": fitted.successful_starts,
             "optimizer_reported_successful_starts": sum(start.optimizer_reported_success for start in fitted.starts),
             "stationary_starts": sum(start.stationary for start in fitted.starts),
@@ -173,6 +186,7 @@ def run_one(task):
             "scenario": scenario.name,
             "seed": seed,
             "converged": False,
+            "convergence_diagnostic": "FAILED",
             "truth_Delta": scenario.parameters.Delta,
             "truth_R": scenario.parameters.R,
             "truth_Omega": scenario.parameters.Omega,
@@ -187,7 +201,14 @@ def main() -> int:
     args = parse_args()
     if args.replicates < 1:
         raise SystemExit("--replicates must be at least 1")
+    if args.workers < 1:
+        raise SystemExit("--workers must be at least 1")
+    runtime = runtime_provenance()
+    if not runtime["reference_family_matches"] and not args.allow_nonreference_runtime:
+        raise SystemExit("Nonreference runtime: use the pinned family or explicitly request diagnostic reproduction.")
     output = args.output.resolve()
+    if (output / "replicates.csv").exists():
+        raise SystemExit("Existing benchmark preserved: specify a new --output directory.")
     output.mkdir(parents=True, exist_ok=True)
     seeds = [args.seed_base + index for index in range(args.replicates)]
     exact_command = " ".join([Path(sys.executable).name, *sys.argv])
@@ -202,8 +223,11 @@ def main() -> int:
         "scenarios": [scenario.as_dict() for scenario in scenarios],
         "solver": REFERENCE_SOLVER.as_dict(),
         "optimizer_guards_are_numerical_not_scientific": OPTIMIZER_GUARDS,
+        "acceptance_status": "NOT_ASSESSED",
+        "allow_nonreference_runtime": args.allow_nonreference_runtime,
     }
     environment = {
+        **runtime,
         "git_commit": git_sha(),
         "python": platform.python_version(),
         "python_implementation": platform.python_implementation(),
@@ -215,8 +239,17 @@ def main() -> int:
     json_dump(output / "environment.json", environment)
 
     tasks = [(scenario, seed) for scenario in scenarios for seed in seeds]
+    completed = [None] * len(tasks)
     with ProcessPoolExecutor(max_workers=args.workers) as executor:
-        completed = list(executor.map(run_one, tasks))
+        futures = {executor.submit(run_one, task): index for index, task in enumerate(tasks)}
+        for count, future in enumerate(as_completed(futures), start=1):
+            index = futures[future]
+            completed[index] = future.result()
+            row = completed[index][0]
+            # Checkpoint each completed replicate, retaining deterministic final order.
+            json_dump(output / f"replicate_{index:04d}.json", completed[index])
+            print(f"[{count}/{len(tasks)}] {row['scenario']} seed={row['seed']} "
+                  f"diagnostic={row['convergence_diagnostic']}", flush=True)
     rows = [result[0] for result in completed]
     fit_details = [result[1] for result in completed if result[1] is not None]
     prediction_rows = [item for result in completed for item in result[2]]

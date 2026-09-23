@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
-from datetime import datetime
+from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -20,6 +20,7 @@ import numpy as np
 import scipy
 
 from rcwe.discriminant_pilot import BOOTSTRAP_REPEATS, DISCRIMINANT_LIMIT, evaluate_discriminant_pilot
+from rcwe.pilot_audit import INSTRUMENT_VERSION
 from rcwe.tension_bridge import (
     MIN_RATERS,
     RELIABILITY_REPEATS,
@@ -30,14 +31,15 @@ from rcwe.tension_bridge import (
     validate_question_orders,
 )
 
-PROTOCOL = ROOT / "protocols" / "TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.1.md"
+PROTOCOL = ROOT / "protocols" / "TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.2.md"
+INSTRUMENT = ROOT / "protocols" / "TENSION_BRIDGE_RATING_FORM_v1.1.md"
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--ratings", type=Path, default=ROOT / "data" / "tension_bridge_discriminant_pilot_ratings_template.csv")
     parser.add_argument("--manifest", type=Path, default=ROOT / "data" / "tension_bridge_discriminant_pilot_manifest_template.csv")
-    parser.add_argument("--master-seed", default="RCWE-TB-DISCRIMINANT-v0.1")
+    parser.add_argument("--master-seed", default="RCWE-TB-DISCRIMINANT-v0.2")
     parser.add_argument("--output", type=Path, default=ROOT / "results" / "tension_bridge_discriminant_pilot")
     return parser.parse_args()
 
@@ -116,37 +118,54 @@ def validate_manifest(rows: list[dict[str, str]], ratings: list[Rating], rating_
     first_rating = min(rating_times)
     for row in rows:
         work = row["work_id"].strip()
+        if int(row["planned_work_count"]) != len(rows):
+            raise ValueError("actual work count must equal the frozen planned work count")
+        if row["instrument_sha256"] != sha256(INSTRUMENT.read_bytes()):
+            raise ValueError("pilot manifest instrument hash mismatch")
         if not all(row[field].strip() for field in ("version_id", "edition", "manifest_freeze_commit")):
             raise ValueError("pilot manifest provenance is incomplete")
         if not parse_bool(row["confirmatory_reuse_prohibited"], "confirmatory_reuse_prohibited"):
             raise ValueError("pilot works and raters cannot be reused in the confirmatory Bridge study")
         if parse_timestamp(row["manifest_frozen_at"], "manifest_frozen_at") >= first_rating:
             raise ValueError("pilot manifest must be frozen before the first rating")
-        actual = len({rating.window_id for rating in ratings if rating.work_id == work})
-        if int(row["planned_window_count"]) != actual:
+        window_list = row["planned_window_ids"].split(";")
+        rater_list = row["planned_rater_ids"].split(";")
+        if any(not value or value != value.strip() for value in window_list + rater_list):
+            raise ValueError("planned window/rater IDs must be nonempty semicolon-separated IDs")
+        if len(set(window_list)) != len(window_list) or len(set(rater_list)) != len(rater_list):
+            raise ValueError("duplicate ID in frozen pilot plan")
+        if int(row["planned_window_count"]) != len(window_list):
             raise ValueError(f"planned window count mismatch for {work}")
+        actual_cells = [(rating.window_id, rating.rater_id) for rating in ratings if rating.work_id == work]
+        expected_cells = {(window, rater) for window in window_list for rater in rater_list}
+        if len(actual_cells) != len(expected_cells) or set(actual_cells) != expected_cells:
+            raise ValueError("pilot ratings must exactly cover the frozen rater/window plan, including exclusions")
     return True
 
 
 def main() -> int:
     args = parse_args()
     output = args.output.resolve()
+    prior = output / "summary.json"
+    if prior.exists() and json.loads(prior.read_bytes()).get("status") != "NO_DATA":
+        raise ValueError("completed pilot results cannot be overwritten; retain and register every run")
     output.mkdir(parents=True, exist_ok=True)
     rating_raw, rating_rows = read_csv(args.ratings.resolve())
     manifest_raw, manifest_rows = read_csv(args.manifest.resolve())
     ratings, rating_times = parse_ratings(rating_rows)
     manifest_ready = validate_manifest(manifest_rows, ratings, rating_times)
     protocol_hash = sha256(PROTOCOL.read_bytes())
-    hashes = {"ratings_sha256": sha256(rating_raw), "manifest_sha256": sha256(manifest_raw), "protocol_sha256": protocol_hash}
+    instrument_hash = sha256(INSTRUMENT.read_bytes())
+    hashes = {"ratings_sha256": sha256(rating_raw), "manifest_sha256": sha256(manifest_raw), "protocol_sha256": protocol_hash, "instrument_sha256": instrument_hash}
     command = " ".join([Path(sys.executable).name, *sys.argv])
     config = {
         "command": command, "master_seed": args.master_seed, "input_hashes": hashes,
         "minimum_raters": MIN_RATERS, "reliability_repeats": RELIABILITY_REPEATS,
         "bootstrap_repeats": BOOTSTRAP_REPEATS, "discriminant_limit": DISCRIMINANT_LIMIT,
     }
-    (output / "config.json").write_text(json.dumps(config, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (output / "config.json").write_text(json.dumps(config, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
     environment = {"git_commit": git_sha(), "python": platform.python_version(), "numpy": np.__version__, "scipy": scipy.__version__}
-    (output / "environment.json").write_text(json.dumps(environment, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (output / "environment.json").write_text(json.dumps(environment, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
 
     if not ratings and not manifest_rows:
         reliability = {}
@@ -171,9 +190,11 @@ def main() -> int:
             "pilot_work_ids": sorted({rating.work_id for rating in ratings}),
             "pilot_rater_id_hashes": sorted({hashlib.sha256(rating.rater_id.encode()).hexdigest() for rating in ratings}),
         }
+    summary.update(instrument_version=INSTRUMENT_VERSION, instrument_sha256=instrument_hash,
+                   completed_at=datetime.now(timezone.utc).isoformat())
     reliability_json = {key: value.as_dict() for key, value in reliability.items()}
-    (output / "reliability.json").write_text(json.dumps(reliability_json, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    (output / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8")
+    (output / "reliability.json").write_text(json.dumps(reliability_json, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
+    (output / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8", newline="\n")
     with (output / "window_aggregates.csv").open("w", encoding="utf-8", newline="") as handle:
         fields = ["window_id", "work_id", "pair", "p_ac", "p_switch", "l_obs", "t_obs", "d_obs", "median_l_obs", "median_t_obs", "median_d_obs", "rating_count"]
         writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")

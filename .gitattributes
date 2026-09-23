@@ -1,0 +1,4 @@
+# Evidence hashes must not change with Git's platform newline conversion.
+*.md text eol=lf
+*.json text eol=lf
+*.csv text eol=lf

@@ -55,7 +55,7 @@ Target 16 eligible raters per work. A window requires at least 12 raters with va
 
 ## Frozen rating instrument
 
-All responses use an integer 0–100 continuous slider. Japanese wording, anchors, and administration instructions are frozen in `TENSION_BRIDGE_RATING_FORM_v1.0.md` and may not change after the main experiment starts.
+All responses use an integer 0–100 continuous slider. Japanese wording, anchors, and administration instructions are versioned in `TENSION_BRIDGE_RATING_FORM_v1.1.md` and may not change after its independent pilot begins. Both pilot and confirmatory artifacts record the entire form's SHA-256.
 
 For each window/rater, deterministically randomize the order of `L/T/D` from a predeclared master seed using SHA-256. Never use Python `hash()`. Preserve `question_order` in raw data and reject a row that does not match its planned order.
 
@@ -139,7 +139,7 @@ Before activation, the responsible study operator must document applicable conse
 
 The same rater supplies `L_obs`, `T_obs`, and `D_obs` at one endpoint. Question-order randomization reduces order effects but does not eliminate shared-rater/common-method covariance. The primary analysis must report this limitation and must not interpret a positive `P_AC` coefficient as proof that the constructs are psychometrically independent. Split-rater or multi-method replication is a v2.1 candidate, not an unregistered rescue analysis.
 
-`T_obs` / `D_obs` discriminant validity is frozen separately in `TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.1.md`. Before the first confirmatory rating, that independent pilot must return `PILOT_PASS`. The confirmatory work manifest stores the exact generated pilot-result SHA-256, and the runner also verifies that the result's protocol hash matches the current pilot specification. Pilot works and raters cannot be reused. Until these checks pass, this experiment remains inactive; the implementation must not use the confirmatory correlation to choose or revise the threshold.
+`T_obs` / `D_obs` discriminant validity is specified separately in `TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.2.md`. Before the first confirmatory rating, the single fixed-plan pilot must return `PILOT_PASS`; a complete, sealed history must enumerate all results including failures. The confirmatory work manifest stores the exact selected-result SHA-256 and history SHA-256. The runner checks every listed result, requires every status to pass, verifies unchanged form/protocol/plan hashes, and rejects pilot work/rater reuse. A changed plan cannot replace a failed pilot. Until these checks pass, status is `PILOT_NOT_PASSED` and this experiment remains inactive; the implementation must not use the confirmatory correlation to choose or revise the threshold. Empty templates remain `NO_DATA` with unassessed independence. The completeness declaration requires external provenance: hashes cannot detect concealed external runs.
 
 ## Reproducibility and freeze discipline
 

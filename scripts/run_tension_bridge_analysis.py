@@ -15,10 +15,12 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-DISCRIMINANT_PROTOCOL = ROOT / "protocols" / "TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.1.md"
+DISCRIMINANT_PROTOCOL = ROOT / "protocols" / "TENSION_BRIDGE_DISCRIMINANT_PILOT_v0.2.md"
+INSTRUMENT = ROOT / "protocols" / "TENSION_BRIDGE_RATING_FORM_v1.1.md"
 
 import numpy as np
 import scipy
+from rcwe.pilot_audit import INSTRUMENT_VERSION, audit_pilot_history
 
 from rcwe.tension_bridge import (
     ChannelIE,
@@ -48,6 +50,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--ratings", type=Path, default=ROOT / "data" / "tension_bridge_ratings_template.csv")
     parser.add_argument("--manifest", type=Path, default=ROOT / "data" / "tension_bridge_work_manifest_template.csv")
     parser.add_argument("--pilot-result", type=Path, default=ROOT / "results" / "tension_bridge_discriminant_pilot" / "summary.json")
+    parser.add_argument("--pilot-history", type=Path, default=ROOT / "data" / "tension_bridge_pilot_history_template.json")
     parser.add_argument("--master-seed", default="RCWE-TB-v1.0")
     parser.add_argument("--output", type=Path, default=ROOT / "results" / "tension_bridge")
     return parser.parse_args()
@@ -83,7 +86,7 @@ def git_sha() -> str:
 
 
 def dump_json(path: Path, value) -> None:
-    path.write_text(json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8", newline="\n")
 
 
 def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, object]]) -> None:
@@ -246,17 +249,22 @@ def validate_discriminant_pilot(
     *,
     result_hash: str | None,
     protocol_hash: str,
+    instrument_hash: str,
     manifest_hashes: set[str],
     confirmatory_work_ids: set[str],
     confirmatory_rater_ids: set[str],
-) -> tuple[bool, bool]:
+) -> tuple[bool, bool | None]:
     pilot_work_ids = set(pilot_result.get("pilot_work_ids", []))
     pilot_rater_hashes = set(pilot_result.get("pilot_rater_id_hashes", []))
+    if not pilot_work_ids or not pilot_rater_hashes or pilot_result.get("status") == "NO_DATA":
+        return False, None
     confirmatory_rater_hashes = {hashlib.sha256(rater_id.encode()).hexdigest() for rater_id in confirmatory_rater_ids}
     independent = not (pilot_work_ids & confirmatory_work_ids) and not (pilot_rater_hashes & confirmatory_rater_hashes)
     ready = (
         pilot_result.get("status") == "PILOT_PASS"
         and pilot_result.get("protocol_sha256") == protocol_hash
+        and pilot_result.get("instrument_sha256") == instrument_hash
+        and pilot_result.get("instrument_version") == INSTRUMENT_VERSION
         and result_hash is not None
         and manifest_hashes == {result_hash}
         and independent
@@ -277,12 +285,15 @@ def main() -> int:
     pilot_result = json.loads(pilot_result_raw) if pilot_result_raw else {"status": "NO_DATA"}
     pilot_result_hash = file_hash(pilot_result_raw) if pilot_result_raw else None
     discriminant_protocol_hash = file_hash(DISCRIMINANT_PROTOCOL.read_bytes())
+    instrument_hash = file_hash(INSTRUMENT.read_bytes())
     input_hashes = {
         "channels_sha256": file_hash(channel_raw),
         "windows_sha256": file_hash(window_raw),
         "ratings_sha256": file_hash(rating_raw),
         "manifest_sha256": file_hash(manifest_raw),
         "pilot_result_sha256": pilot_result_hash,
+        "instrument_sha256": instrument_hash,
+        "discriminant_protocol_sha256": discriminant_protocol_hash,
     }
     channel_ies, channel_metadata, raw_coders, raw_adjudicators, channel_reliability_result = parse_channels(channel_rows)
     windows, window_freeze_times = parse_windows(window_rows, build_windows(channel_ies), channel_metadata)
@@ -299,10 +310,21 @@ def main() -> int:
         pilot_result,
         result_hash=pilot_result_hash,
         protocol_hash=discriminant_protocol_hash,
+        instrument_hash=instrument_hash,
         manifest_hashes=pilot_result_hashes,
         confirmatory_work_ids=confirmatory_work_ids,
         confirmatory_rater_ids={rating.rater_id for rating in ratings},
     )
+    history_audit = audit_pilot_history(
+        args.pilot_history.resolve(),
+        expected_history_hashes={row.get("discriminant_pilot_history_sha256", "").strip() for row in manifest_rows},
+        selected_result_hash=pilot_result_hash, instrument_hash=instrument_hash,
+        protocol_hash=discriminant_protocol_hash, first_confirmatory_rating=first_rating_time,
+        confirmatory_works=confirmatory_work_ids,
+        confirmatory_raters={rating.rater_id for rating in ratings},
+    )
+    pilot_ready = pilot_ready and bool(history_audit["ready"])
+    input_hashes["pilot_history_sha256"] = history_audit["history_sha256"]
     command = " ".join([Path(sys.executable).name, *sys.argv])
     config = {
         "command": command,
@@ -313,6 +335,7 @@ def main() -> int:
             "ratings": str(args.ratings.resolve()),
             "manifest": str(args.manifest.resolve()),
             "pilot_result": str(pilot_result_path),
+            "pilot_history": str(args.pilot_history.resolve()),
         },
         "input_hashes": input_hashes,
         "window_size": 5,
@@ -332,7 +355,11 @@ def main() -> int:
         "status": pilot_result.get("status"),
         "protocol_sha256": discriminant_protocol_hash,
         "result_sha256": pilot_result_hash,
-        "independence_passed": pilot_independence_passed,
+        "selected_result_independence_passed": pilot_independence_passed,
+        "independence_passed": history_audit["independence_passed"],
+        "instrument_sha256": instrument_hash,
+        "instrument_version": INSTRUMENT_VERSION,
+        "history": history_audit,
     }
     exclusions = {"non_primary_ratings": 0, "window_status": {}}
     fold_rows: list[dict[str, object]] = []
@@ -366,7 +393,7 @@ def main() -> int:
             aggregates,
             reliability,
             channel_reliability_passed=bool(channel_reliability_result["passed"]),
-            manifest_frozen=freeze_ready and ethics_ready and pilot_ready,
+            manifest_frozen=freeze_ready and ethics_ready,
             role_separation_passed=role_separation_passed,
         )
         static = static_tension_challenge(aggregates)
@@ -381,7 +408,15 @@ def main() -> int:
                 "t_obs": aggregate.t_obs if aggregate else "",
                 "d_obs": aggregate.d_obs if aggregate else "",
             })
-        if gate.passed:
+        if not pilot_ready:
+            status = "PILOT_NOT_PASSED"
+            model_summary = {"status": status, "activation_gate": gate.as_dict(),
+                             "discriminant_pilot": pilot_audit, "scores": None,
+                             "channel_reliability": channel_reliability_result,
+                             "delta_ls_primary": None, "delta_ls_love": None,
+                             "beta_pac_full": None, "static_tension_challenge": None}
+            warnings.append("Pilot evidence did not pass; confirmatory models were not fitted.")
+        elif gate.passed:
             try:
                 analysis = leave_one_work_out(aggregates)
                 fold_rows = analysis.pop("predictions")
