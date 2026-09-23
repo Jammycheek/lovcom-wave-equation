@@ -1,6 +1,9 @@
 {
   "abs_r_td": null,
-  "completed_at": "2026-09-23T02:05:05.731505+00:00",
+  "completed_at": "2026-09-23T03:31:16.510557+00:00",
+  "cutoff_export_operator_id": null,
+  "cutoff_registered_at": null,
+  "cutoff_registration_locator": null,
   "exclusions": {
     "answered_cells": 0,
     "late_answered_cells": 0,
@@ -8,16 +11,18 @@
     "planned_cells": 0
   },
   "input_hashes": {
+    "cutoff_export_sha256": "61f0a063b3e8b140205da4983e3c33c238d4d959c6c54768df0965406cea6ab8",
+    "cutoff_receipt_sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
     "instrument_sha256": "17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1",
     "manifest_sha256": "92beb79eb67fcc64fee355ad99ad7c07979b68c05d4b91e12db238c0b8f8add7",
-    "protocol_sha256": "d18bf3292137478df3cc59ebf82886003f580088eae1301b8e53a9750ecf2da0",
-    "ratings_sha256": "52ceccfc9460039eef7796f8ce26ed0e48c667bf6df2b4da0b839d019546d556"
+    "protocol_sha256": "1c9f454f3e9c6c12ccbacf71bfcc2c3e1c8580f3e27b691238c98e330a325c86",
+    "ratings_sha256": "61f0a063b3e8b140205da4983e3c33c238d4d959c6c54768df0965406cea6ab8"
   },
   "instrument_sha256": "17ffbc794595035a163d11fc8d8fc5833c34cf7aac3efe85369fe3dad5476ed1",
   "instrument_version": "1.1",
   "pilot_rater_id_hashes": [],
   "pilot_work_ids": [],
-  "protocol_sha256": "d18bf3292137478df3cc59ebf82886003f580088eae1301b8e53a9750ecf2da0",
+  "protocol_sha256": "1c9f454f3e9c6c12ccbacf71bfcc2c3e1c8580f3e27b691238c98e330a325c86",
   "recruitment_closes_at": null,
   "status": "NO_DATA",
   "upper_95_abs_r_td": null
